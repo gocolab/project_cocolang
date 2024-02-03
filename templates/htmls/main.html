@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Technology Grid</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+        .vertical-lines-table td, .vertical-lines-table th {
+            border: none; /* Removes default Bootstrap borders */
+            border-left: 1px solid #dee2e6; /* Adds vertical border to the left of each cell */
+        }
+        .vertical-lines-table tr:first-child th {
+            border-top: none; /* Removes top border for the first row */
+        }
+        .vertical-lines-table {
+            border-collapse: separate;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-12">
+            <table class="table  vertical-lines-table" id="interactiveTable" >
+                <thead class="text-center">
+                    <tr>
+                        <th>Entity Framework</th>
+                        <th>Biz</th>
+                        <th>Publishing</th>
+                        <th>Vue Templates</th>
+                        <th>Controller Framework</th>
+                        <th>Model</th>
+                        <th>Security Features</th>
+                        <th>Databases</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">Java</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Board</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Html</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Razor</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">ASP.NET MVC</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">JPA, Hibernate</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Authentication</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">MySQL</button></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">PHP</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Poll</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">CSS</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">JSP</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Spring</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Laravel Eloquent</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Authorization</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">MongoDB</button></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">Python</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Shopping</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">JS</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Smarty</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Laravel</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Django ORM</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">CORS</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">PostgreSQL</button></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">Ruby on Rails</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Community</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Ajax</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Django</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Django</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">ActiveRecord</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">OAuth</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">Node.js</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">HR</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">jQuery</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">ERB</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">ActionController</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Mongoose</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">JSON Web Tokens (JWT)</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">React</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">MES</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Bootstrap</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">EJS</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Express.js</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Redux</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing security info -->
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">Angular</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Academy</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing markup/styles info -->
+                        <td><button type="button" class="btn btn-light btn-block">JSX</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">React Router</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">RxJS</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing security info -->
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">Vue.js</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing application area info -->
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing markup/styles info -->
+                        <td><button type="button" class="btn btn-light btn-block">Angular Templates</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Angular Router</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Vuex</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing security info -->
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="btn btn-light btn-block">Vue.js</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing application area info -->
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing markup/styles info -->
+                        <td><button type="button" class="btn btn-light btn-block">Vue Templates</button></td>
+                        <td><button type="button" class="btn btn-light btn-block">Vue Router</button></td>
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing ORM/database abstraction info -->
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing security info -->
+                        <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var buttons = document.querySelectorAll("#interactiveTable button");
+        buttons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            this.classList.toggle("btn-light");
+            this.classList.toggle("btn-primary");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
