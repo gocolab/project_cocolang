@@ -1,0 +1,44 @@
+{% extends "main_template.html"%}
+
+<title>회원 상세보기</title>
+{% block main_container %}
+
+<h2>회원 상세보기</h2>
+<!-- {{ user }} -->
+<form action="">
+    <div class="mb-3 mt-3">
+        <label for="email" class="form-label">Email:</label>
+        {{ user.email }}
+    </div>
+    <div class="mb-3">
+        <label for="pwd" class="form-label">Password:</label>
+        ******************
+    </div>
+    <div class="form-check mb-3">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="manager" disabled 
+            {{ 'checked' if user.manager=='on' else '' }}> 
+            관리자 여부
+        </label>
+    </div>
+    <div class="mb-3">
+        <label for="sel1" class="form-label">Select list (select one):</label>
+        <select class="form-select" id="sel1" name="sellist1" disabled>
+            <option value="Option1" {{ 'selected' if user.sellist1=='Option1' else '' }}>1</option>
+            <option value="Option2" {{ 'selected' if user.sellist1=='Option2' else '' }}>2</option>
+            <option value="Option3" {{ 'selected' if user.sellist1=='Option3' else '' }}>3</option>
+            <option value="Option4" {{ 'selected' if user.sellist1=='Option4' else '' }}>4</option>
+        </select>
+    </div>
+    <div>
+        <label for="comment">Comments:</label>
+        <textarea class="form-control" rows="5" id="comment" name="text" disabled>
+            {{ user.text}}
+        </textarea>
+    </div>
+    <div class="m-3 text-end">
+        <button type="submit" class="btn btn-primary" formaction="/user/list" formmethod="get">List</button>
+        <button type="submit" class="btn btn-danger" formaction="/user/list" formmethod="post">Delete</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "main_withpagination_template.html"%}
+{% block title %}
+회원 리스트
+{% endblock %}
+
+{% block main_container %}
+  <!-- 검색 항목 추가 필요 -->
+  <h2>검색</h2>
+  <div class="row">
+    <div class="col-2">
+      <select class="form-control" name="key_name">
+        <option value="name" {{ 'selected' if request._query_params.key_name=='name' else '' }}>name</option>
+        <option value="email" {{ 'selected' if request._query_params.key_name=='email' else '' }}>email</option>
+      </select>
+    </div>
+    <div class="col-6">
+      <input class="form-control" placeholder="Enter Search!" name="word" value="{{request._query_params.word}}">
+    </div>
+    <div class="col-4">
+      <button type="submit" class="btn btn-primary" formaction="/user/list_jinja_pagination"
+        formmethod="get">검색</button>
+    </div>
+  </div>
+  <h2>회원 리스트</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+        <th>Read</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{pagination.start_record_number + loop.index}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.email | length}}, {{user.email}}</td>
+        <td><button formaction="/user/read/{{user.id}}">read</button></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
