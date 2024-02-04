@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        함께 즐기는 코딩 리뷰 
+        {% endblock %}
+    </title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Customize CSS -->
+    <link rel="stylesheet" href="css\commons.css">
+    {% block customize_css %}
+    {% endblock %}
+
+    {% block head_javascripts %}
+    {% endblock %}    
+</head>
+
+<body>
+    <!-- navigations -->
+    <header class="container">
+        <nav class="navbar navbar-expand-lg navbar-light menu-background">
+            <div class="container-fluid">
+                <!-- Brand image -->
+                <a class="navbar-brand" href="#">
+                    <img src="images/brand_icon.png" alt="Brand" class="brand-image">
+                </a>
+        
+                <!-- Toggler for mobile view -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!-- Left menu items -->
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" href="#">Biz Template</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle menu-item" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Communication
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">Site usage</a></li>
+                                <li><a class="dropdown-item" href="#">Blog</a></li>
+                                <li><a class="dropdown-item" href="#">Code reviews</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- Right menu items -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" href="#">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" href="#">Register</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- main -->
+    <main class="container">
+        {% block main_container %}
+        main_container
+        {% endblock %}
+    </main>
+
+    <!-- footer -->
+    <footer class="container">
+        {% block footer_container %}
+        footer
+        {% endblock %}
+    </footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% block foot_javascripts %}
+{% endblock %}
+
+</html>
