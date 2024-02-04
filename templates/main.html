@@ -1,185 +1,122 @@
-{% extends "tmplates/main_template.html"%}
+{% extends "templates/main_template.html"%}
 
 <!-- Customize CSS -->
 {% block customize_css %}
 <style>
-    .menu-background {
-        background-color: rgba(255, 165, 0, 0.2); /* Light orange with high transparency */
-    }
-    .menu-item:hover {
-        background-color: lightblue; /* Light blue background on hover */
-    }
-    .brand-image {
-        height: 40px; /* Adjust based on your brand image */
-        width: auto;
-    }
+  .vertical-lines-table td,
+  .vertical-lines-table th {
+    border: none; /* Removes default Bootstrap borders */
+    border-left: 1px solid #dee2e6; /* Adds vertical border to the left of each cell */
+    border-right: 1px solid #dee2e6; /* Adds vertical border to the left of each cell */
+  }
+  .vertical-lines-table tr:first-child th {
+    border-top: none; /* Removes top border for the first row */
+  }
+  .vertical-lines-table {
+    border-collapse: separate;
+  }
 </style>
-{% endblock %}
-
-{% block main_container %}
+{% endblock %} {% block main_container %}
 <div class="row">
-    <div class="col-12">
-        <table class="table  vertical-lines-table" id="interactiveTable" >
-            <thead class="text-center">
-                <tr>
-                    <th>Entity Framework</th>
-                    <th>Biz</th>
-                    <th>Publishing</th>
-                    <th>Vue Templates</th>
-                    <th>Controller Framework</th>
-                    <th>Model</th>
-                    <th>Security Features</th>
-                    <th>Databases</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">Java</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Board</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Html</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Razor</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">ASP.NET MVC</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">JPA, Hibernate</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Authentication</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">MySQL</button></td>
-                </tr>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">PHP</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Poll</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">CSS</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">JSP</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Spring</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Laravel Eloquent</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Authorization</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">MongoDB</button></td>
-                </tr>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">Python</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Shopping</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">JS</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Smarty</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Laravel</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Django ORM</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">CORS</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">PostgreSQL</button></td>
-                </tr>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">Ruby on Rails</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Community</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Ajax</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Django</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Django</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">ActiveRecord</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">OAuth</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
-                </tr>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">Node.js</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">HR</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">jQuery</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">ERB</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">ActionController</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Mongoose</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">JSON Web Tokens (JWT)</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
-                </tr>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">React</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">MES</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Bootstrap</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">EJS</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Express.js</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Redux</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing security info -->
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
-                </tr>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">Angular</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Academy</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing markup/styles info -->
-                    <td><button type="button" class="btn btn-light btn-block">JSX</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">React Router</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">RxJS</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing security info -->
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
-                </tr>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">Vue.js</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing application area info -->
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing markup/styles info -->
-                    <td><button type="button" class="btn btn-light btn-block">Angular Templates</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Angular Router</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Vuex</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing security info -->
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
-                </tr>
-                <tr>
-                    <td><button type="button" class="btn btn-light btn-block">Vue.js</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing application area info -->
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing markup/styles info -->
-                    <td><button type="button" class="btn btn-light btn-block">Vue Templates</button></td>
-                    <td><button type="button" class="btn btn-light btn-block">Vue Router</button></td>
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing ORM/database abstraction info -->
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing security info -->
-                    <td><button type="button" class="btn btn-light btn-block"></button></td> <!-- Empty cell for missing database info -->
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="col-6 row">
-        <div class="co-12">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-              <span class="text-primary">Your cart</span>
-              <span class="badge bg-primary rounded-pill">3</span>
-            </h4>
-            <ul class="list-group mb-3">
-              <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                  <h6 class="my-0">Product name</h6>
-                  <small class="text-body-secondary">Brief description</small>
-                </div>
-                <span class="text-body-secondary">$12</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                  <h6 class="my-0">Second product</h6>
-                  <small class="text-body-secondary">Brief description</small>
-                </div>
-                <span class="text-body-secondary">$8</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                  <h6 class="my-0">Third item</h6>
-                  <small class="text-body-secondary">Brief description</small>
-                </div>
-                <span class="text-body-secondary">$5</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
-                <div class="text-success">
-                  <h6 class="my-0">Promo code</h6>
-                  <small>EXAMPLECODE</small>
-                </div>
-                <span class="text-success">−$5</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span>Total (USD)</span>
-                <strong>$20</strong>
-              </li>
-            </ul>
-    
-            <form class="card p-2">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Promo code">
-                <button type="submit" class="btn btn-secondary">Redeem</button>
-              </div>
-            </form>
-          </div>        
-    </div>
-
+  <div class="col-6">
+    <table class="table text-center vertical-lines-table" id="interactiveTable">
+      <thead class="">
+        <tr>
+          <th>Langauge</th>
+          <th>Framework</th>
+          <th>Databases</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><button type="button" class="btn btn-light">Java</button></td>
+          <td>
+            <button type="button" class="btn btn-light">ASP.NET MVC</button>
+          </td>
+          <td><button type="button" class="btn btn-light">MySQL</button></td>
+        </tr>
+        <tr>
+          <td><button type="button" class="btn btn-light">PHP</button></td>
+          <td><button type="button" class="btn btn-light">Spring</button></td>
+          <td><button type="button" class="btn btn-light">MongoDB</button></td>
+        </tr>
+        <tr>
+          <td><button type="button" class="btn btn-light">Python</button></td>
+          <td>
+            <button type="button" class="btn btn-light">Django ORM</button>
+          </td>
+          <td>
+            <button type="button" class="btn btn-light">PostgreSQL</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button type="button" class="btn btn-light">Javascript</button>
+          </td>
+          <td><button type="button" class="btn btn-light">Ajax</button></td>
+          <td><button type="button" class="btn btn-light">Mongoose</button></td>
+        </tr>
+        <tr>
+          <td><button type="button" class="btn btn-light">Node.js</button></td>
+          <td><button type="button" class="btn btn-light">React</button></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-{% endblock %}
-
-{% block foot_javascripts %}
+  <div class="col-6 row">
+    <div class="co-12">
+      <div class="card p-2">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Promo code" />
+          <button type="submit" class="btn btn-secondary">Redeem</button>
+        </div>
+      </div>
+      <nav class="mt-1" aria-label="Page navigation">
+        <ul class="pagination pagination-sm justify-content-center">
+          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </nav>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <div>
+            <h6 class="my-0">Product name</h6>
+            <small class="text-body-secondary">Brief description</small>
+          </div>
+          <span class="text-body-secondary">$12</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <div>
+            <h6 class="my-0">Second product</h6>
+            <small class="text-body-secondary">Brief description</small>
+          </div>
+          <span class="text-body-secondary">$8</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+          <div>
+            <h6 class="my-0">Third item</h6>
+            <small class="text-body-secondary">Brief description</small>
+          </div>
+          <span class="text-body-secondary">$5</span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between bg-body-tertiary"
+        >
+          <div class="text-success">
+            <h6 class="my-0">Promo code</h6>
+            <small>EXAMPLECODE</small>
+          </div>
+          <span class="text-success">−$5</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block foot_javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 
 <script>
@@ -194,4 +131,3 @@
   });
 </script>
 {% endblock %}
-
