@@ -1,4 +1,4 @@
-{% extends "main_template.html"%}
+{% extends "templates/main_template.html"%}
 
 {% block title %}
 회원가입
@@ -17,12 +17,6 @@
 {% endblock %}
 
 {% block main_container %}
-<!-- <h4>연산 exp : {{ 2 + 1 }}</h4>
-<h4>논리 exp : {{ 10 <= 5 }}</h4>
-<h4>first 변수 받기 : {{ first }} </h4>
-<h4>second 변수 받기 : {{ second }} </h4>
-<h4>변수 끼리 합산 : {{ first + second }} </h4>
-<h2>회원가입</h2> -->
 <form action="" id="form_first">
     <div class="mb-3 mt-3">
         <label for="name" class="form-label">Name:</label>
@@ -54,16 +48,10 @@
         <label for="comment">Comments:</label>
         <textarea class="form-control" rows="5" id="comment" name="text"></textarea>
     </div>
-    <div>
-        <label for="comment">Comments with Quill:</label>
-        <!-- Quill 편집기를 적용할 div 요소 -->
-        <input type="hidden" name="editorContent" id="editorContent">
-        <div id="editor"></div>
-    </div>
     <div class="m-3">
-        <button type="submit" class="btn btn-primary" formaction="/user/list" formmethod="post">리스트</button>
-        <button type="submit" class="btn btn-danger" formaction="/user/insert" formmethod="post">가입</button>
-        <button type="submit" class="btn btn-primary" formaction="/">취소</button>
+        <button type="submit" class="btn btn-primary" formaction="/user/list" formmethod="post">List</button>
+        <button type="submit" class="btn btn-danger" formaction="/user/insert" formmethod="post">Register</button>
+        <button type="submit" class="btn btn-primary" formaction="/">Cancel</button>
     </div>
 
 </form>

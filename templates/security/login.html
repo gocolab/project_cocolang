@@ -1,4 +1,4 @@
-{% extends "main_template.html"%}
+{% extends "templates/main_template.html"%}
 
 <title>로그인</title>
 {% block main_container %}
@@ -6,9 +6,6 @@
 <h2>로그인</h2>
 <!-- html 주석 -->
 {# jinja 주석 #}
-manager : {{form_data.manager}}
-, select list : {{ form_data.sellist1 }}
-, test : {{ form_data.text }}
 <form action="">
   <div class="mb-3 mt-3">
     <label for="email" class="form-label">Email:</label>

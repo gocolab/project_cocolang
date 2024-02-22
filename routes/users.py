@@ -57,47 +57,28 @@ templates = Jinja2Templates(directory="templates/")
 
 @router.get("/form") # 펑션 호출 방식
 async def insert(request:Request):
-    print(dict(request._query_params))
+    # print(dict(request._query_params))
     return templates.TemplateResponse(name="users/inserts.html"
                                       , context={'request':request
                                                  , 'first': 5, 'second':6})
 
-@router.post("/login", response_class=HTMLResponse) # 펑션 호출 방식
-async def insert(request:Request):
-    form_data = await request.form()
-    dict_form_data = dict(form_data)
-    print(dict_form_data)
-    return templates.TemplateResponse(name="users/login.html"
-                                      , context={'request':request
-                                                 , 'form_data' : dict_form_data
-                                                 , 'first' : 'text'})
-
-@router.post("/login", response_class=HTMLResponse) # 펑션 호출 방식
-async def insert(request:Request):
-    form_data = await request.form()
-    dict_form_data = dict(form_data)
-    print(dict_form_data)
-    return templates.TemplateResponse(name="users/login.html"
-                                      , context={'request':request
-                                                 , 'form_data' : dict_form_data
-                                                 , 'first' : 'text'})
-
 @router.get("/login", response_class=HTMLResponse) # 펑션 호출 방식
 async def insert(request:Request):
     print(dict(request._query_params))
-    return templates.TemplateResponse(name="users/login.html", context={'request':request})
+    return templates.TemplateResponse(name="users/login.html"
+    , context={'request':request})
 
 # 회원 가입 /users/insert -> users/login.html
 @router.get("/insert") # 펑션 호출 방식
 async def insert(request:Request):
     print(dict(request._query_params))
-    return templates.TemplateResponse(name="users/login.html", context={'request':request})
+    return templates.TemplateResponse(name="users/login.html"
+                                      , context={'request':request})
 
 # 회원 가입 /users/insert -> users/login.html
 @router.post("/insert") # 펑션 호출 방식
 async def insert_post(request:Request):
     user_dict = dict(await request.form())
-    print(user_dict)
     # 저장
     user = User(**user_dict)
     await collection_user.save(user)
