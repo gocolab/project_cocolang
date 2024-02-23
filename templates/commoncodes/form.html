@@ -1,0 +1,29 @@
+{% extends "base_template.html" %}
+
+{% block title %}Common Codes Management{% endblock %}
+
+{% block main_content %}
+<form action="/common-codes/create" method="post">
+    <div class="form-group">
+        <label for="codeCategory">Code Category:</label>
+        <input type="text" class="form-control" id="codeCategory" name="code_category" placeholder="Enter Code Category">
+    </div>
+    <div class="form-group">
+        <label for="codeClassification">Code Classification:</label>
+        <input type="text" class="form-control" id="codeClassification" name="code_classification" placeholder="Enter Code Classification">
+    </div>
+    <div class="form-group">
+        <label for="order">Order:</label>
+        <input type="number" class="form-control" id="order" name="order" placeholder="Enter Order">
+    </div>
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Description"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

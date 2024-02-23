@@ -1,0 +1,33 @@
+{% extends "templates/main_template.html"%}
+
+<title>Common Code Detail View</title>
+{% block main_container %}
+
+<h3>Common Code Detail View</h3>
+<form action="">
+    <div class="mb-3 mt-3">
+        <label for="codeCategory" class="form-label">Code Category:</label>
+        {{ common_code.code_category }}
+    </div>
+    <div class="mb-3">
+        <label for="codeClassification" class="form-label">Code Classification:</label>
+        {{ common_code.code_classification }}
+    </div>
+    <div class="mb-3">
+        <label for="order" class="form-label">Order:</label>
+        {{ common_code.order }}
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Name:</label>
+        {{ common_code.name }}
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        {{ common_code.description }}
+    </div>
+    <div class="m-3 text-end">
+        <button type="submit" class="btn btn-primary" formaction="/common-codes/list" formmethod="get">List</button>
+        <button type="submit" class="btn btn-danger" formaction="/common-codes/delete/{{common_code.id}}" formmethod="post">Delete</button>
+    </div>
+</form>
+{% endblock %}
