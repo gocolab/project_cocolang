@@ -1,0 +1,33 @@
+{% extends "base_template.html" %}
+
+{% block title %}CoModules Management{% endblock %}
+
+{% block main_content %}
+<form action="/comodules/create" method="post">
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Enter Title">
+    </div>
+    <div class="form-group">
+        <label for="language_id">Language ID:</label>
+        <input type="text" class="form-control" id="language_id" name="language_id" placeholder="Enter Language ID">
+    </div>
+    <div class="form-group">
+        <label for="framework_id">Framework ID:</label>
+        <input type="text" class="form-control" id="framework_id" name="framework_id" placeholder="Enter Framework ID">
+    </div>
+    <div class="form-group">
+        <label for="databases_id">Databases ID:</label>
+        <input type="text" class="form-control" id="databases_id" name="databases_id" placeholder="Enter Databases ID">
+    </div>
+    <div class="form-group">
+        <label for="docker_files_links">Docker File Links:</label>
+        <input type="text" class="form-control" id="docker_files_links" name="docker_files_links" placeholder="Enter Docker File Links">
+    </div>
+    <div class="form-group">
+        <label for="required_packages_versions">Required Package Versions:</label>
+        <input type="text" class="form-control" id="required_packages_versions" name="required_packages_versions" placeholder="Enter Required Package Versions">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
