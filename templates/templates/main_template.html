@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
         {% block title %}
-        함께 즐기는 코딩 리뷰 
+        함께 즐기는 코딩 허브
         {% endblock %}
     </title>
     <!-- Bootstrap CSS -->
@@ -39,7 +39,7 @@
         <nav class="navbar navbar-expand-lg navbar-light menu-background">
             <div class="container-fluid">
                 <!-- Brand image -->
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/">
                     <img src="images/brand_icon.png" alt="Brand" class="brand-image">
                 </a>
         
@@ -52,7 +52,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <!-- Left menu items -->
                         <li class="nav-item">
-                            <a class="nav-link menu-item" href="#">Biz Template</a>
+                            <a class="nav-link menu-item" href="/">Biz Template</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle menu-item" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -89,9 +89,9 @@
     </main>
 
     <!-- footer -->
-    <footer class="container">
+    <footer class="container my-1">
         {% block footer_container %}
-        <div class="h3">Footer</div>
+        <div class="h3 text-center">Footer</div>
         {% endblock %}
     </footer>
 </body>

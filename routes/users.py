@@ -44,8 +44,8 @@ async def insert(request:Request):
     return templates.TemplateResponse(name="security/login.html"
     , context={'request':request})
 
-@router.post("/signin", response_model=TokenResponse)
-async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
+@router.post("/signin")
+async def sign_user_in(request:Request, user: OAuth2PasswordRequestForm = Depends()):
     user_exist = await User.find_one(User.email == user.username)
     if not user_exist:
         raise HTTPException(
@@ -54,10 +54,13 @@ async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
         )
     if hash_password.verify_hash(user.password, user_exist.password):
         access_token = create_access_token(user_exist.email)
-        return {
+        access_auths = {
             "access_token": access_token,
             "token_type": "Bearer"
         }
+        return templates.TemplateResponse(name="main.html"
+                            , context={'request':request
+                                       , 'access_auths':access_auths})
 
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -68,7 +71,7 @@ async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
 @router.get("/form") 
 async def insert(request:Request):
     # print(dict(request._query_params))
-    return templates.TemplateResponse(name="users/forms.html"
+    return templates.TemplateResponse(name="users/form.html"
                                       , context={'request':request})
 
 from typing import Optional
@@ -91,17 +94,17 @@ async def list(request:Request, page_number: Optional[int] = 1):
 
     user_list, pagination = await collection_user.getsbyconditionswithpagination(conditions
                                                                      ,page_number)
-    return templates.TemplateResponse(name="/users/list.html"
+    return templates.TemplateResponse(name="users/list.html"
                                       , context={'request':request
                                                  , 'users' : user_list
                                                   ,'pagination' : pagination })
 from beanie import PydanticObjectId
-# 회원 상세정보 /users/read -> users/reads.html
+# 회원 상세정보 /users/read -> users/read.html
 # Path parameters : /users/read/id or /users/read/uniqe_name
 @router.get("/read/{object_id}") # 펑션 호출 방식
-async def reads(request:Request, object_id:PydanticObjectId):
+async def read(request:Request, object_id:PydanticObjectId):
     print(dict(request._query_params))
     user = await collection_user.get(object_id)
-    return templates.TemplateResponse(name="users/reads.html"
+    return templates.TemplateResponse(name="users/read.html"
                                       , context={'request':request
                                                  , 'user':user})
