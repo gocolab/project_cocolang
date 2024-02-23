@@ -3,7 +3,7 @@
 <title>회원 상세보기</title>
 {% block main_container %}
 
-<h2>회원 상세보기</h2>
+<h3>회원 상세보기</h3>
 <!-- {{ user }} -->
 <form action="">
     <div class="mb-3 mt-3">
@@ -38,7 +38,7 @@
     </div>
     <div class="m-3 text-end">
         <button type="submit" class="btn btn-primary" formaction="/users/list" formmethod="get">List</button>
-        <button type="submit" class="btn btn-danger" formaction="/users/list" formmethod="post">Delete</button>
+        <button type="submit" class="btn btn-danger" formaction="/users/{{user.id}}" formmethod="post">Delete</button>
     </div>
 </form>
 {% endblock %}

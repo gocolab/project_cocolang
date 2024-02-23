@@ -101,10 +101,16 @@ async def list(request:Request, page_number: Optional[int] = 1):
 from beanie import PydanticObjectId
 # 회원 상세정보 /users/read -> users/read.html
 # Path parameters : /users/read/id or /users/read/uniqe_name
-@router.get("/read/{object_id}") # 펑션 호출 방식
+@router.get("/read/{object_id}")
 async def read(request:Request, object_id:PydanticObjectId):
     print(dict(request._query_params))
     user = await collection_user.get(object_id)
     return templates.TemplateResponse(name="users/read.html"
                                       , context={'request':request
                                                  , 'user':user})
+
+@router.post("/{object_id}")
+async def read(request:Request, object_id:PydanticObjectId):
+    delete_check = await collection_user.delete(object_id)
+    return templates.TemplateResponse(name="users/list.html"
+                                      , context={'request':request})
