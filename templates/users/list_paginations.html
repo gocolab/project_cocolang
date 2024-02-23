@@ -1,4 +1,4 @@
-{% extends "main_withpagination_template.html"%}
+{% extends "main_template.html"%}
 {% block title %}
 회원 리스트
 {% endblock %}
@@ -17,7 +17,7 @@
       <input class="form-control" placeholder="Enter Search!" name="word" value="{{request._query_params.word}}">
     </div>
     <div class="col-4">
-      <button type="submit" class="btn btn-primary" formaction="/user/list_jinja_pagination"
+      <button type="submit" class="btn btn-primary" formaction="/users/list_jinja_pagination"
         formmethod="get">검색</button>
     </div>
   </div>
@@ -37,7 +37,7 @@
         <td>{{pagination.start_record_number + loop.index}}</td>
         <td>{{user.name}}</td>
         <td>{{user.email | length}}, {{user.email}}</td>
-        <td><button formaction="/user/read/{{user.id}}">read</button></td>
+        <td><button formaction="/users/read/{{user.id}}">read</button></td>
       </tr>
       {% endfor %}
     </tbody>

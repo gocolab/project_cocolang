@@ -26,7 +26,7 @@ from routes.events import event_router
 from routes.events_api import router as event_api_router
 from routes.users import router as user_router
 
-app.include_router(user_router, prefix="/user")
+app.include_router(user_router, prefix="/users")
 app.include_router(event_router, prefix="/event")
 app.include_router(event_api_router, prefix="/events_api")
 

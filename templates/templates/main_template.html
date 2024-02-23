@@ -68,10 +68,10 @@
                     <!-- Right menu items -->
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link menu-item" href="/user/login">Login</a>
+                            <a class="nav-link menu-item" href="/users/login">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-item" href="/user/insert">Register</a>
+                            <a class="nav-link menu-item" href="/users/form">Register</a>
                         </li>
                     </ul>
                 </div>
@@ -83,11 +83,15 @@
         {% block main_container %}
         main_container
         {% endblock %}
+        <!-- paginations -->
+        {% block paginations_container %}
+        {% endblock %}
     </main>
 
     <!-- footer -->
     <footer class="container">
         {% block footer_container %}
+        <div class="h3">Footer</div>
         {% endblock %}
     </footer>
 </body>

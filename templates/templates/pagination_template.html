@@ -30,16 +30,16 @@
                     <a class="nav-link" href="/home/list">Home list</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link" href="/user/form">회원가입 폼</a>
+                    <a class="nav-link" href="/users/form">회원가입 폼</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Users</a>
                     <ul class="dropdown-menu">
-                        <li class="nav-item"><a href="/user/form">form</a></li>
-                        <li class="nav-item"><a href="/user/list">list</a></li>
-                        <li class="nav-item"><a href="/user/list_jinja">list_jinja</a></li>
-                        <li class="nav-item"><a href="/user/search">search</a></li>
-                        <li class="nav-item"><a href="/user/list_jinja_pagination">list_jinja_pagination</a></li>
+                        <li class="nav-item"><a href="/users/form">form</a></li>
+                        <li class="nav-item"><a href="/users/list">list</a></li>
+                        <li class="nav-item"><a href="/users/list_jinja">list_jinja</a></li>
+                        <li class="nav-item"><a href="/users/search">search</a></li>
+                        <li class="nav-item"><a href="/users/list_jinja_pagination">list_jinja_pagination</a></li>
                     </ul>
                 </li>
             </ul>
@@ -59,29 +59,29 @@
             <nav aria-label="Page navigation">
               <ul class="pagination justify-content-center">
                   <li class="page-item {{ '' if pagination.has_previous_block else 'disabled' }}">
-                    <button type="submit" class="page-link" formaction="/user/list_jinja_pagination/{{pagination.first_page}}">
+                    <button type="submit" class="page-link" formaction="/users/list_jinja_pagination/{{pagination.first_page}}">
                       맨 처음
                     </button>
         
                   </li>
                   <li class="page-item {{ '' if pagination.has_previous_page else 'disabled' }}">
                     <button type="submit" class="page-link"
-                      formaction="/user/list_jinja_pagination/{{pagination.previous_page}}">이전</button>
+                      formaction="/users/list_jinja_pagination/{{pagination.previous_page}}">이전</button>
                   </li>
                   {% for page_num in pagination.current_page_range %}
                   <li class="page-item {{ 'active' if page_num == pagination.current_page else '' }}">
-                    <button type="submit" class="page-link" formaction="/user/list_jinja_pagination/{{ page_num }}"> 
+                    <button type="submit" class="page-link" formaction="/users/list_jinja_pagination/{{ page_num }}"> 
                       {{page_num}}
                     </button>
                   </li>
                   {% endfor %}
                   <li class="page-item {{ '' if pagination.has_next_page else 'disabled' }}">
                     <button type="submit" class="page-link"
-                      formaction="/user/list_jinja_pagination/{{ pagination.next_page }}">다음</button>
+                      formaction="/users/list_jinja_pagination/{{ pagination.next_page }}">다음</button>
                   </li>
                   <li class="page-item {{ '' if pagination.has_next_block else 'disabled' }}">
                     <button type="submit" class="page-link"
-                      formaction="/user/list_jinja_pagination/{{ pagination.last_page }}">
+                      formaction="/users/list_jinja_pagination/{{ pagination.last_page }}">
                       맨 끝
                     </button>
                   </li>
