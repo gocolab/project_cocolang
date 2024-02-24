@@ -18,3 +18,13 @@ selenium
 urllib3
 scrapy
 webdriver_manager
+
+# fastapi
+fastapi
+pydantic
+uvicorn
+jinja2
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+pydantic-settings

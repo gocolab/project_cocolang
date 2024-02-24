@@ -2,7 +2,7 @@ version: '3.9'
 services:
   jupyter_fastapi:
     container_name: ${CONTAINER_NAME}_jupyter_fastapi
-    image: template_${CONTAINER_NAME}  # Specifies the name for the built image.
+    image: project_${CONTAINER_NAME}  # Specifies the name for the built image.
     build:
       context: .
       args:
