@@ -1,4 +1,3 @@
-from auth.hash_password import HashPassword
 from database.connection import Database
 from fastapi import APIRouter, Depends, HTTPException, status
 
@@ -8,38 +7,47 @@ router = APIRouter(
 
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
+from beanie import PydanticObjectId
+
 
 templates = Jinja2Templates(directory="templates/")
 
 from database.connection import Database
 from models.common_codes import CommonCode
-collection_user = Database(CommonCode)
+collection_CommonCode = Database(CommonCode)
 
-@router.post("/", response_model=CommonCodeInDB)
-async def create_common_code(common_code: CommonCodeCreate):
-    common_code_doc = CommonCode(**common_code.dict())
-    await common_code_doc.insert()
-    return common_code_doc
+@router.post("/")
+async def create_common_code(request:Request):
+    _dict = dict(await request.form())
+    # 저장
+    _model = CommonCode(**_dict)
 
-@router.get("/{code_id}", response_model=CommonCodeInDB)
-async def get_common_code(code_id: PydanticObjectId):
-    common_code = await CommonCode.get(code_id)
+    await _model.insert()
+    return templates.TemplateResponse(name="/commoncodes/list.html"
+                        , context={'request':request})
+
+@router.get("/{object_id}")
+async def get_common_code(object_id: PydanticObjectId):
+    common_code = await CommonCode.get(object_id)
     if not common_code:
         raise HTTPException(status_code=404, detail="CommonCode not found")
     return common_code
 
-@router.put("/{code_id}", response_model=CommonCodeInDB)
-async def update_common_code(code_id: PydanticObjectId, common_code: CommonCodeUpdate):
-    common_code_doc = await CommonCode.get(code_id)
+@router.put("/{object_id}")
+async def update_common_code(object_id: PydanticObjectId, request:Request):
+    _dict = dict(await request.form())
+    # 저장
+    _model = CommonCode(**_dict)
+    common_code_doc = await CommonCode.get(object_id)
     if not common_code_doc:
         raise HTTPException(status_code=404, detail="CommonCode not found")
-    update_data = common_code.dict(exclude_unset=True)
-    await common_code_doc.set(update_data)
+    # update_data = _model.dict(exclude_unset=True)
+    await common_code_doc.set(_model)
     return common_code_doc
 
-@router.delete("/{code_id}")
-async def delete_common_code(code_id: PydanticObjectId):
-    common_code_doc = await CommonCode.get(code_id)
+@router.delete("/{object_id}")
+async def delete_common_code(object_id: PydanticObjectId):
+    common_code_doc = await CommonCode.get(object_id)
     if not common_code_doc:
         raise HTTPException(status_code=404, detail="CommonCode not found")
     await common_code_doc.delete()
