@@ -36,7 +36,7 @@ async def sign_user_up(request:Request):
     hashed_password = hash_password.create_hash(user.password)
     user.password = hashed_password
     await collection_user.save(user)
-    return templates.TemplateResponse(name="users/login.html"
+    return templates.TemplateResponse(name="security/login.html"
                         , context={'request':request})
 
 @router.get("/login") # 펑션 호출 방식

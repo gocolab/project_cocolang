@@ -1,12 +1,15 @@
 from typing import Any, List, Optional
 
 from beanie import init_beanie, PydanticObjectId
-from models.events import Event
-from models.users import User
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
+
+from models.events import Event
+from models.users import User
+from models.common_codes import CommonCode
+from models.comodules import CoModule
 
 class Settings(BaseSettings):
     DATABASE_URL: Optional[str] = None
@@ -15,7 +18,7 @@ class Settings(BaseSettings):
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(database=client.get_default_database(), 
-        document_models=[Event, User])
+        document_models=[Event, User, CommonCode, CoModule])
 
     class Config:
         env_file = ".env"
@@ -87,7 +90,10 @@ class Database:
     async def getsbyconditionswithpagination(self
                                              , conditions:dict, page_number) -> [Any]:
         # find({})
-        total = await self.model.find(conditions).count()
+        try:
+            total = await self.model.find(conditions).count()
+        except:
+            total = 0
         pagination = Paginations(total_records=total, current_page=page_number)
         documents = await self.model.find(conditions).skip(pagination.start_record_number).limit(pagination.records_per_page).to_list()
         if documents:
