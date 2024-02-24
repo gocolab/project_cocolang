@@ -17,8 +17,6 @@ services:
       - 8000:8000
     depends_on:
       - mongodb
-    networks:
-      - app-network      
     command:
       - "jupyter"
       - "lab"
@@ -34,8 +32,3 @@ services:
     restart: always
     ports:
       - 27017:27017
-    networks:
-      - app-network  
-networks:
-  app-network:
-    driver: bridge      
