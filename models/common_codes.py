@@ -9,7 +9,7 @@ class CommonCode(Document):
     description: Optional[str] = None
 
     class Settings:
-        name = "CommonCodes"
+        name = "common_codes"
 
     class Config:
         json_schema_extra = {

@@ -11,7 +11,7 @@ class CoModule(Document):
     required_packages_versions: List[str] = []
 
     class Settings:
-        name = "coModules"
+        name = "comodules"
 
     class Config:
         json_schema_extra = {
