@@ -13,7 +13,6 @@ collection_comodule = Database(CoModule)
 
 @router.get("/form") 
 async def form(request:Request):
-    # print(dict(request._query_params))
     return templates.TemplateResponse(name="comodules/form.html"
                                       , context={'request':request})
 
