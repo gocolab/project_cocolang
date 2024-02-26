@@ -68,50 +68,50 @@
     <div class="co-12">
       <div class="card p-2">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Promo code" />
-          <button type="submit" class="btn btn-secondary">Redeem</button>
+          <input type="text" class="form-control" placeholder="검색어..." />
+          <button type="submit" class="btn btn-secondary">검색</button>
         </div>
       </div>
       <nav class="mt-1" aria-label="Page navigation">
-        <ul class="pagination pagination-sm justify-content-center">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
+    <ul class="pagination pagination-sm justify-content-center">
+        <li class="page-item {{ '' if pagination.has_previous_block else 'disabled' }}">
+          <button type="submit" class="page-link" formaction="/users/list/{{pagination.first_page}}">
+            맨 처음
+          </button>
+        </li>
+        <li class="page-item {{ '' if pagination.has_previous_page else 'disabled' }}">
+          <button type="submit" class="page-link"
+            formaction="/users/list/{{pagination.previous_page}}">이전</button>
+        </li>
+        {% for page_num in pagination.current_page_range %}
+        <li class="page-item {{ 'active' if page_num == pagination.current_page else '' }}">
+          <button type="submit" class="page-link" formaction="/users/list/{{ page_num }}"> 
+            {{page_num}}
+          </button>
+        </li>
+        {% endfor %}
+        <li class="page-item {{ '' if pagination.has_next_page else 'disabled' }}">
+          <button type="submit" class="page-link"
+            formaction="/users/list/{{ pagination.next_page }}">다음</button>
+        </li>
+        <li class="page-item {{ '' if pagination.has_next_block else 'disabled' }}">
+          <button type="submit" class="page-link"
+            formaction="/users/list/{{ pagination.last_page }}">
+            맨 끝
+          </button>
+        </li>
+    </ul>
       </nav>
       <ul class="list-group">
+        {% for comodule in comodules %}
         <li class="list-group-item d-flex justify-content-between lh-sm">
           <div>
-            <h6 class="my-0">Product name</h6>
-            <small class="text-body-secondary">Brief description</small>
+            <h6 class="my-0">{{comodule.title}}</h6>
+            <small class="text-body-secondary">{{comodule.description}}</small>
           </div>
-          <span class="text-body-secondary">$12</span>
+          <span class="text-body-secondary">{{pagination.start_record_number + loop.index}}</span>
         </li>
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <div>
-            <h6 class="my-0">Second product</h6>
-            <small class="text-body-secondary">Brief description</small>
-          </div>
-          <span class="text-body-secondary">$8</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between lh-sm">
-          <div>
-            <h6 class="my-0">Third item</h6>
-            <small class="text-body-secondary">Brief description</small>
-          </div>
-          <span class="text-body-secondary">$5</span>
-        </li>
-        <li
-          class="list-group-item d-flex justify-content-between bg-body-tertiary"
-        >
-          <div class="text-success">
-            <h6 class="my-0">Promo code</h6>
-            <small>EXAMPLECODE</small>
-          </div>
-          <span class="text-success">−$5</span>
-        </li>
+        {% endfor %}
       </ul>
     </div>
   </div>

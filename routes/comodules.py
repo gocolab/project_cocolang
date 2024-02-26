@@ -24,18 +24,6 @@ async def create(request: Request):
     await collection_comodule.save(comodule)
     return templates.TemplateResponse("comodules/list.html", {"request": request, "comodules": [comodule]})
 
-
-async def list(request: Request, page_number: Optional[int] = 1):
-    _dict = dict(request._query_params)
-    conditions = { }
-
-    try :
-        conditions = {_dict['key_name'] : { '$regex': _dict["word"] }}
-    except:
-        pass
-
-    comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
-                                                                     ,page_number)
 @router.get("/list/{page_number}")
 @router.get("/list") # 검색 with pagination
 async def list(request: Request, page_number: Optional[int] = 1):

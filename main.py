@@ -27,10 +27,12 @@ from routes.events_api import router as event_api_router
 from routes.users import router as user_router
 from routes.common_codes import router as common_codes_router
 from routes.comodules import router as comodules_router
+from routes.mains import router as mains_router
 
 app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
 app.include_router(comodules_router, prefix="/comodules")
+app.include_router(mains_router, prefix="/mains")
 
 app.include_router(event_router, prefix="/event")
 app.include_router(event_api_router, prefix="/events_api")
@@ -52,10 +54,10 @@ from fastapi.templating import Jinja2Templates
 # html 들이 있는 폴더 위치
 templates = Jinja2Templates(directory="templates/")
 
+from typing import List, Optional
 @app.get("/")
-async def root(request:Request):
-    return templates.TemplateResponse("main.html",{'request':request})
-
+async def root(request: Request, page_number: Optional[int] = 1):
+    return RedirectResponse(url=f"/mains/list/{page_number}")
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
