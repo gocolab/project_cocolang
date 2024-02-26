@@ -1,6 +1,6 @@
 {% extends "templates/main_template.html"%}
 {% block title %}
-회원 리스트
+Debugging Coding Test 
 {% endblock %}
 
 {% block main_container %}
@@ -9,8 +9,8 @@
   <div class="row">
     <div class="col-2">
       <select class="form-control" name="key_name">
-        <option value="name" {{ 'selected' if request._query_params.key_name=='name' else '' }}>name</option>
-        <option value="email" {{ 'selected' if request._query_params.key_name=='email' else '' }}>email</option>
+        <option value="title" {{ 'selected' if request._query_params.key_name=='title' else '' }}>title</option>
+        <option value="" {{ 'selected' if request._query_params.key_name=='email' else '' }}>email</option>
       </select>
     </div>
     <div class="col-6">
@@ -21,14 +21,14 @@
         formmethod="get">검색</button>
     </div>
   </div>
-  <h3>회원 리스트</h3>
   <table class="table table-hover">
     <thead>
       <tr>
+        <th>No.</th>
         <th>title</th>
-        <th>language_id</th>
-        <th>framework_id</th>
-        <th>databases_id</th>
+        <th>language</th>
+        <th>framework</th>
+        <th>databases</th>
         <th>Read</th>
       </tr>
     </thead>
@@ -37,9 +37,9 @@
       <tr>
         <td>{{pagination.start_record_number + loop.index}}</td>
         <td>{{comodule.title}}</td>
-        <td>{{comodule.language_id}}</td>
-        <td>{{comodule.framework_id}}</td>
-        <td>{{comodule.databases_id}}</td>
+        <td>{{comodule.language_name}}</td>
+        <td>{{comodule.framework_name}}</td>
+        <td>{{comodule.databases_name}}</td>
         <td><button formaction="/comodules/read/{{comodule.id}}">read</button></td>
       </tr>
       {% endfor %}

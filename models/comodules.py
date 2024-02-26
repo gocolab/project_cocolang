@@ -8,6 +8,9 @@ class CoModule(Document):
     language_id: Optional[str] = None
     framework_id: Optional[str] = None
     databases_id: Optional[str] = None
+    language_name: Optional[str] = None
+    framework_name: Optional[str] = None
+    databases_name: Optional[str] = None
     docker_files_links: List[str] = []
     required_packages_versions: List[str] = None
 

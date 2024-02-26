@@ -18,15 +18,27 @@ async def form(request:Request):
 
 # CRUD Operations
 @router.post("/create")
-async def create_comodule(request: Request):
+async def create(request: Request):
     comodule_data = await request.form()
     comodule = CoModule(**comodule_data)
     await collection_comodule.save(comodule)
     return templates.TemplateResponse("comodules/list.html", {"request": request, "comodules": [comodule]})
 
+
+async def list(request: Request, page_number: Optional[int] = 1):
+    _dict = dict(request._query_params)
+    conditions = { }
+
+    try :
+        conditions = {_dict['key_name'] : { '$regex': _dict["word"] }}
+    except:
+        pass
+
+    comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
+                                                                     ,page_number)
 @router.get("/list/{page_number}")
 @router.get("/list") # 검색 with pagination
-async def list_comodules(request: Request, page_number: Optional[int] = 1):
+async def list(request: Request, page_number: Optional[int] = 1):
     _dict = dict(request._query_params)
     conditions = { }
 
@@ -43,14 +55,14 @@ async def list_comodules(request: Request, page_number: Optional[int] = 1):
                                                   ,'pagination' : pagination })
 
 @router.get("/{comodule_id}")
-async def read_comodule(request: Request, comodule_id: str):
+async def read(request: Request, comodule_id: str):
     comodule = await collection_comodule.get(comodule_id)
     if comodule is None:
         raise HTTPException(status_code=404, detail="CoModule not found")
     return templates.TemplateResponse("comodules/read.html", {"request": request, "comodule": comodule})
 
 @router.post("/update/{comodule_id}")
-async def update_comodule(request: Request, comodule_id: str):
+async def update(request: Request, comodule_id: str):
     comodule_data = await request.form()
     comodule = await collection_comodule.get(comodule_id)
     if comodule:
@@ -61,6 +73,6 @@ async def update_comodule(request: Request, comodule_id: str):
         raise HTTPException(status_code=404, detail="CoModule not found")
 
 @router.post("/delete/{comodule_id}")
-async def delete_comodule(request: Request, comodule_id: str):
+async def delete(request: Request, comodule_id: str):
     await collection_comodule.delete(comodule_id)
     return templates.TemplateResponse("comodules/list.html", {"request": request})
