@@ -1,12 +1,12 @@
 [
     {
     "fields": "웹 개발",
-    "Title": "웹 프런트엔드 개발",
+    "title": "웹 프런트엔드 개발",
     "description": "웹 브라우저에서 동작하는 소프트웨어를 개발합니다.",
-    "Language ID": "65da04915c4b83ada4837bd3",
-    "Framework ID": "65da04915c4b83ada4837bd5",
-    "Databases ID": "65da04915c4b83ada4837bd7",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd3",
+    "framework_id": "65da04915c4b83ada4837bd5",
+    "databases_id": "65da04915c4b83ada4837bd7",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
@@ -14,12 +14,12 @@
     },
     {
     "fields": "웹 개발",
-    "Title": "웹 백엔드 개발",
+    "title": "웹 백엔드 개발",
     "description": "서버 측에서 동작하는 소프트웨어를 개발합니다.",
-    "Language ID": "65da04915c4b83ada4837bd3",
-    "Framework ID": "65da04915c4b83ada4837bd6",
-    "Databases ID": "65da04915c4b83ada4837bd8",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd3",
+    "framework_id": "65da04915c4b83ada4837bd6",
+    "databases_id": "65da04915c4b83ada4837bd8",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
@@ -27,12 +27,12 @@
     },
     {
     "fields": "데이터 사이언스 개발",
-    "Title": "데이터 전처리",
+    "title": "데이터 전처리",
     "description": "데이터를 정제하고 가공하여 분석에 사용할 준비를 합니다.",
-    "Language ID": "65da04915c4b83ada4837bd4",
-    "Framework ID": "65da04915c4b83ada4837bd5",
-    "Databases ID": "65da04915c4b83ada4837bd7",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd4",
+    "framework_id": "65da04915c4b83ada4837bd5",
+    "databases_id": "65da04915c4b83ada4837bd7",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
@@ -40,12 +40,12 @@
     },
     {
     "fields": "데이터 사이언스 개발",
-    "Title": "데이터 분석",
+    "title": "데이터 분석",
     "description": "통계적, 머신러닝, 딥러닝 등 다양한 기법을 적용하여 데이터를 분석합니다.",
-    "Language ID": "65da04915c4b83ada4837bd4",
-    "Framework ID": "65da04915c4b83ada4837bd5",
-    "Databases ID": "65da04915c4b83ada4837bd7",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd4",
+    "framework_id": "65da04915c4b83ada4837bd5",
+    "databases_id": "65da04915c4b83ada4837bd7",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
@@ -53,12 +53,12 @@
     },
     {
     "fields": "데이터 사이언스 개발",
-    "Title": "데이터 시각화",
+    "title": "데이터 시각화",
     "description": "분석 결과를 시각적으로 표현합니다.",
-    "Language ID": "65da04915c4b83ada4837bd4",
-    "Framework ID": "65da04915c4b83ada4837bd5",
-    "Databases ID": "65da04915c4b83ada4837bd7",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd4",
+    "framework_id": "65da04915c4b83ada4837bd5",
+    "databases_id": "65da04915c4b83ada4837bd7",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
@@ -66,12 +66,12 @@
     },
     {
     "fields": "모바일 앱 개발",
-    "Title": "iOS 앱 개발",
+    "title": "iOS 앱 개발",
     "description": "iPhone, iPad 등에서 동작하는 앱을 개발합니다.",
-    "Language ID": "65da04915c4b83ada4837bd3",
-    "Framework ID": "65da04915c4b83ada4837bd6",
-    "Databases ID": "65da04915c4b83ada4837bd8",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd3",
+    "framework_id": "65da04915c4b83ada4837bd6",
+    "databases_id": "65da04915c4b83ada4837bd8",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
@@ -79,12 +79,12 @@
     },
     {
     "fields": "모바일 앱 개발",
-    "Title": "Android 앱 개발",
+    "title": "Android 앱 개발",
     "description": "Android 기기에서 동작하는 앱을 개발합니다.",
-    "Language ID": "65da04915c4b83ada4837bd3",
-    "Framework ID": "65da04915c4b83ada4837bd6",
-    "Databases ID": "65da04915c4b83ada4837bd8",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd3",
+    "framework_id": "65da04915c4b83ada4837bd6",
+    "databases_id": "65da04915c4b83ada4837bd8",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
@@ -92,12 +92,12 @@
     },
     {
     "fields": "모바일 앱 개발",
-    "Title": "Flutter 앱 개발",
+    "title": "Flutter 앱 개발",
     "description": "다양한 플랫폼에서 동작하는 앱을 개발합니다.",
-    "Language ID": "65da04915c4b83ada4837bd3",
-    "Framework ID": "65da04915c4b83ada4837bd6",
-    "Databases ID": "65da04915c4b83ada4837bd8",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd3",
+    "framework_id": "65da04915c4b83ada4837bd6",
+    "databases_id": "65da04915c4b83ada4837bd8",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
@@ -105,12 +105,12 @@
     },
     {
     "fields": "기타",
-    "Title": "기타",
+    "title": "기타",
     "description": "기타 개발 분야입니다.",
-    "Language ID": "65da04915c4b83ada4837bd3",
-    "Framework ID": "65da04915c4b83ada4837bd6",
-    "Databases ID": "65da04915c4b83ada4837bd8",
-    "Docker File Links": [
+    "language_id": "65da04915c4b83ada4837bd3",
+    "framework_id": "65da04915c4b83ada4837bd6",
+    "databases_id": "65da04915c4b83ada4837bd8",
+    "docker_files_links": [
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/.env>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/Dockerfile>",
     "<https://github.com/gocolab/project_cocolabhub/blob/main/docksers/docker-compose.yml>"
