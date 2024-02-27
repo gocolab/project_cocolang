@@ -23,7 +23,8 @@ async def list(request: Request, page_number: Optional[int] = 1):
         pass
 
     comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
-                                                                     ,page_number)
+                                                                     ,page_number
+                                                                     ,5)
     conditions = [
         {
             "$group": {
@@ -48,8 +49,27 @@ async def list(request: Request, page_number: Optional[int] = 1):
     ]
     # 연관 관계 리스트
     comodules_relative_list = await collection_comodule.aggregatebyconditions(conditions)
+    comodules_unique_list = await unique_comodules(comodules_relative_list)
     return templates.TemplateResponse(name="main.html"
                                       , context={'request':request
                                                  , 'comodules' : comodules_list
                                                  , 'comodules_relative' : comodules_relative_list
+                                                 , 'comodules_unique' : comodules_unique_list
                                                   ,'pagination' : pagination })
+
+from itertools import zip_longest
+async def unique_comodules(original_list):
+
+    # Initialize sets for tracking uniqueness
+    unique_frameworks = {item['framework_name'] for item in original_list}
+    unique_languages = {item['language_name'] for item in original_list}
+    unique_databases = {item['databases_name'] for item in original_list}
+
+    # Use itertools.zip_longest to combine lists with padding of None automatically
+    combinations = [
+        {'language': lang if lang is not None else '', 
+        'framework': fw if fw is not None else '', 
+        'databases': db if db is not None else ''}  
+        for lang, fw, db in zip_longest(unique_languages, unique_frameworks, unique_databases)
+    ]
+    return combinations

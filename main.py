@@ -46,8 +46,10 @@ from fastapi.staticfiles import StaticFiles
 import os
 static_css_directory = os.path.join("resources", "css")
 static_images_directory = os.path.join("resources", "images")
+static_js_directory = os.path.join("resources", "js")
 app.mount("/css", StaticFiles(directory=static_css_directory), name="static_css")
 app.mount("/images", StaticFiles(directory=static_images_directory), name="static_images")
+app.mount("/js", StaticFiles(directory=static_js_directory), name="static_js")
 
 from fastapi import Request
 from fastapi.templating import Jinja2Templates

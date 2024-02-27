@@ -5,13 +5,19 @@
 <style>
   .vertical-lines-table td,
   .vertical-lines-table th {
-    border: none; /* Removes default Bootstrap borders */
-    border-left: 1px solid #dee2e6; /* Adds vertical border to the left of each cell */
-    border-right: 1px solid #dee2e6; /* Adds vertical border to the left of each cell */
+    border: none;
+    /* Removes default Bootstrap borders */
+    border-left: 1px solid #dee2e6;
+    /* Adds vertical border to the left of each cell */
+    border-right: 1px solid #dee2e6;
+    /* Adds vertical border to the left of each cell */
   }
+
   .vertical-lines-table tr:first-child th {
-    border-top: none; /* Removes top border for the first row */
+    border-top: none;
+    /* Removes top border for the first row */
   }
+
   .vertical-lines-table {
     border-collapse: separate;
   }
@@ -19,7 +25,7 @@
 {% endblock %} {% block main_container %}
 <div class="row">
   <div class="col-6">
-    <table class="table text-center vertical-lines-table" id="interactiveTable">
+    <table class="table table-sm text-center vertical-lines-table" id="interactiveTable">
       <thead class="">
         <tr>
           <th>Langauge</th>
@@ -28,80 +34,21 @@
         </tr>
       </thead>
       <tbody>
+        {% for comodule in comodules_unique %}
         <tr>
-          <td><button type="button" class="btn btn-light">Java</button></td>
-          <td>
-            <button type="button" class="btn btn-light">ASP.NET MVC</button>
-          </td>
-          <td><button type="button" class="btn btn-light">MySQL</button></td>
+          <td><button type="button" class="btn btn-sm btn-light language">{{comodule.language}}</button></td>
+          <td><button type="button" class="btn btn-sm btn-light framework">{{comodule.framework}}</button></td>
+          <td><button type="button" class="btn btn-sm btn-light database">{{comodule.databases}}</button></td>
         </tr>
-        <tr>
-          <td><button type="button" class="btn btn-light">PHP</button></td>
-          <td><button type="button" class="btn btn-light">Spring</button></td>
-          <td><button type="button" class="btn btn-light">MongoDB</button></td>
-        </tr>
-        <tr>
-          <td><button type="button" class="btn btn-light">Python</button></td>
-          <td>
-            <button type="button" class="btn btn-light">Django ORM</button>
-          </td>
-          <td>
-            <button type="button" class="btn btn-light">PostgreSQL</button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button type="button" class="btn btn-light">Javascript</button>
-          </td>
-          <td><button type="button" class="btn btn-light">Ajax</button></td>
-          <td><button type="button" class="btn btn-light">Mongoose</button></td>
-        </tr>
-        <tr>
-          <td><button type="button" class="btn btn-light">Node.js</button></td>
-          <td><button type="button" class="btn btn-light">React</button></td>
-          <td></td>
-        </tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>
   <div class="col-6 row">
-    <div class="co-12">
-      <div class="card p-2">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="검색어..." />
-          <button type="submit" class="btn btn-secondary">검색</button>
-        </div>
+    <div class="col-12">
+      <div class="card m-2">
+        <button type="submit" class="btn btn-sm btn-secondary" id="more_comodules_list">더보기</button>
       </div>
-      <nav class="mt-1" aria-label="Page navigation">
-    <ul class="pagination pagination-sm justify-content-center">
-        <li class="page-item {{ '' if pagination.has_previous_block else 'disabled' }}">
-          <button type="submit" class="page-link" formaction="/users/list/{{pagination.first_page}}">
-            맨 처음
-          </button>
-        </li>
-        <li class="page-item {{ '' if pagination.has_previous_page else 'disabled' }}">
-          <button type="submit" class="page-link"
-            formaction="/users/list/{{pagination.previous_page}}">이전</button>
-        </li>
-        {% for page_num in pagination.current_page_range %}
-        <li class="page-item {{ 'active' if page_num == pagination.current_page else '' }}">
-          <button type="submit" class="page-link" formaction="/users/list/{{ page_num }}"> 
-            {{page_num}}
-          </button>
-        </li>
-        {% endfor %}
-        <li class="page-item {{ '' if pagination.has_next_page else 'disabled' }}">
-          <button type="submit" class="page-link"
-            formaction="/users/list/{{ pagination.next_page }}">다음</button>
-        </li>
-        <li class="page-item {{ '' if pagination.has_next_block else 'disabled' }}">
-          <button type="submit" class="page-link"
-            formaction="/users/list/{{ pagination.last_page }}">
-            맨 끝
-          </button>
-        </li>
-    </ul>
-      </nav>
       <ul class="list-group">
         {% for comodule in comodules %}
         <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -118,16 +65,54 @@
 </div>
 {% endblock %} {% block foot_javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-
 <script>
+  let comodules_relative = JSON.parse('{{ comodules_relative | tojson | safe }}');
   document.addEventListener("DOMContentLoaded", function () {
-    var buttons = document.querySelectorAll("#interactiveTable button");
+    // Select the button by its ID
+    const moreComodulesBtn = document.querySelector('#more_comodules_list');
+
+    // Add a click event listener
+    moreComodulesBtn.addEventListener('click', function () {
+      // Redirect the user to /comodules/list
+      window.location.href = '/comodules/list';
+    });
+    
+    //   let associations = [
+    //       {'framework_name': 'Arduino', 'language_name': 'C', 'databases_name': 'InfluxDB'},
+    //       {'framework_name': 'D3.js', 'language_name': 'JavaScript', 'databases_name': 'PostgreSQL'},
+    //       {'framework_name': 'Vue.js', 'language_name': 'JavaScript', 'databases_name': 'MySQL'},
+    //       {'framework_name': 'Gin', 'language_name': 'Go', 'databases_name': 'Cloud Firestore'}
+    //   ];
+
+    let buttons = document.querySelectorAll("#interactiveTable button");
+
+    function toggleRelatedButtons(clickedButton, attribute) {
+      const attributeValue = clickedButton.textContent.trim();
+      comodules_relative.forEach(assoc => {
+        if (assoc[attribute + '_name'] === attributeValue) {
+          buttons.forEach(button => {
+            if (button.textContent.trim() === assoc.language_name ||
+              button.textContent.trim() === assoc.framework_name ||
+              button.textContent.trim() === assoc.databases_name) {
+              button.classList.toggle("btn-light");
+              button.classList.toggle("btn-primary");
+            }
+          });
+        }
+      });
+    }
+
     buttons.forEach(function (button) {
       button.addEventListener("click", function () {
-        this.classList.toggle("btn-light");
-        this.classList.toggle("btn-primary");
+        // Determine the type of button clicked based on a data attribute or its position (language, framework, database)
+        // For simplicity, this example assumes buttons are distinguishable by their content
+        // A better approach would be to use custom data attributes (data-type="language") in your HTML
+        const buttonType = button.className.includes('language') ? 'language' :
+          button.className.includes('framework') ? 'framework' : 'databases';
+        toggleRelatedButtons(this, buttonType);
       });
     });
   });
 </script>
+
 {% endblock %}

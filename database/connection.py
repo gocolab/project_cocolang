@@ -95,13 +95,16 @@ class Database:
 
     # column 값으로 여러 Documents with pagination 가져오기
     async def getsbyconditionswithpagination(self
-                                             , conditions:dict, page_number) -> [Any]:
+                                             , conditions:dict, page_number
+                                             , records_per_page=10, pages_per_block=5) -> [Any]:
         # find({})
         try:
             total = await self.model.find(conditions).count()
         except:
             total = 0
-        pagination = Paginations(total_records=total, current_page=page_number)
+        pagination = Paginations(total_records=total, current_page=page_number
+                                 , records_per_page=records_per_page
+                                 , pages_per_block=pages_per_block)
         documents = await self.model.find(conditions).skip(pagination.start_record_number).limit(pagination.records_per_page).to_list()
         if documents:
             return documents, pagination
