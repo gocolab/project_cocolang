@@ -22,8 +22,6 @@ app.add_middleware(
 )
 
 # 라우트 등록
-from routes.events import event_router
-from routes.events_api import router as event_api_router
 from routes.users import router as user_router
 from routes.common_codes import router as common_codes_router
 from routes.comodules import router as comodules_router
@@ -33,9 +31,6 @@ app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
 app.include_router(comodules_router, prefix="/comodules")
 app.include_router(mains_router, prefix="/mains")
-
-app.include_router(event_router, prefix="/event")
-app.include_router(event_api_router, prefix="/events_api")
 
 @app.on_event("startup")
 async def init_db():
@@ -47,9 +42,11 @@ import os
 static_css_directory = os.path.join("resources", "css")
 static_images_directory = os.path.join("resources", "images")
 static_js_directory = os.path.join("resources", "js")
+static_downloads_directory = os.path.join("resources", "downloads")
 app.mount("/css", StaticFiles(directory=static_css_directory), name="static_css")
 app.mount("/images", StaticFiles(directory=static_images_directory), name="static_images")
 app.mount("/js", StaticFiles(directory=static_js_directory), name="static_js")
+app.mount("/downloads", StaticFiles(directory=static_downloads_directory), name="static_downloads")
 
 from fastapi import Request
 from fastapi.templating import Jinja2Templates

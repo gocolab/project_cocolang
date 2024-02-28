@@ -1,0 +1,51 @@
+{% extends "templates/main_template.html" %}
+
+{% block title %}CoModule Details{% endblock %}
+
+{% block main_container %}
+<div class="container">
+    <h2>CoModule Details</h2>
+    <div class="row">
+        <div class="col-md-2 fw-bold">Title</div>
+        <div class="col-md-10">{{ comodule.title }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 fw-bold">Language</div>
+        <div class="col-md-10">{{ comodule.language_name }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 fw-bold">Framework</div>
+        <div class="col-md-10">{{ comodule.framework_name }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 fw-bold">Databases</div>
+        <div class="col-md-10">{{ comodule.databases_name }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 fw-bold">Docker File Links:</div>
+        <div class="col-md-10">
+            <a href="/comodules/download/{{ comodule.id }}" class="btn btn-primary" id="download_all">Download Docker Files</a>
+            {% for link in comodule.docker_files_links %}
+            <a href="{{ link }}" class="d-block download-link">{{ link.split('/')[-1] }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <a href="/comodules/list" class="btn btn-primary">Back to List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block foot_javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var downloadLink = document.querySelector('#download_all');
+    
+        downloadLink.addEventListener('click', function(e) {
+            e.preventDefault(); // 기본 링크 동작 방지
+            window.location.href = downloadLink.getAttribute('href'); // 파일 다운로드 시작
+        });
+    });
+    </script>
+{% endblock %}

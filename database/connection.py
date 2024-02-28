@@ -6,7 +6,6 @@ from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
 
-from models.events import Event
 from models.users import User
 from models.common_codes import CommonCode
 from models.comodules import CoModule
@@ -18,7 +17,7 @@ class Settings(BaseSettings):
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(database=client.get_default_database(), 
-        document_models=[Event, User, CommonCode, CoModule])
+        document_models=[User, CommonCode, CoModule])
 
     class Config:
         env_file = ".env"

@@ -64,3 +64,39 @@ async def update(request: Request, comodule_id: str):
 async def delete(request: Request, comodule_id: str):
     await collection_comodule.delete(comodule_id)
     return templates.TemplateResponse("comodules/list.html", {"request": request})
+
+from fastapi.responses import FileResponse
+import httpx
+import zipfile
+import os
+
+@router.get("/download/{comodule_id}")
+async def download_docker_files(request: Request, comodule_id: str):
+    comodule = await collection_comodule.get(comodule_id)
+    if comodule is None:
+        raise HTTPException(status_code=404, detail="CoModule not found")
+
+    # 도커 파일들의 외부 링크 리스트
+    # docker_files_urls = [
+    #     "https://raw.githubusercontent.com/gocolab/project_cocolabhub/main/docksers/Dockerfile",
+    #     "https://raw.githubusercontent.com/gocolab/project_cocolabhub/main/docksers/docker-compose.yml"
+    # ]
+    docker_files_urls = comodule.docker_files_links
+    zip_path = "dockers.zip"
+
+    async with httpx.AsyncClient() as client:
+        # ZIP 파일 생성
+        with zipfile.ZipFile(zip_path, 'w') as zipf:
+            for url in docker_files_urls:
+                # 파일 다운로드
+                response = await client.get(url)
+                file_name = url.split('/')[-1]  # URL에서 파일 이름 추출
+                # 다운로드된 내용을 임시 파일로 저장
+                with open(file_name, 'wb') as file:
+                    file.write(response.content)
+                # ZIP 파일에 추가
+                zipf.write(file_name, file_name)
+                # 임시 파일 삭제
+                os.remove(file_name)
+    
+    return FileResponse(path=zip_path, filename="dockers.zip", media_type='application/zip')
