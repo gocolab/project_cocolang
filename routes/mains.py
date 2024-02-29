@@ -25,6 +25,8 @@ async def list(request: Request, page_number: Optional[int] = 1):
     comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
                                                                      ,page_number
                                                                      ,5)
+    comodule = await collection_comodule.get(comodules_list[0].id)
+    
     conditions = [
         {
             "$group": {
@@ -52,6 +54,7 @@ async def list(request: Request, page_number: Optional[int] = 1):
     comodules_unique_list = await unique_comodules(comodules_relative_list)
     return templates.TemplateResponse(name="main.html"
                                       , context={'request':request
+                                                 , 'comodule' : comodule
                                                  , 'comodules' : comodules_list
                                                  , 'comodules_relative' : comodules_relative_list
                                                  , 'comodules_unique' : comodules_unique_list
