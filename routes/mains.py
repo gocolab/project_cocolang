@@ -26,7 +26,7 @@ async def list(request: Request, page_number: Optional[int] = 1):
                                                                      ,page_number
                                                                      ,5)
     comodule = await collection_comodule.get(comodules_list[0].id)
-    
+
     conditions = [
         {
             "$group": {

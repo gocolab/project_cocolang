@@ -41,6 +41,12 @@ async def list(request: Request, page_number: Optional[int] = 1):
                                       , context={'request':request
                                                  , 'comodules' : comodules_list
                                                   ,'pagination' : pagination })
+@router.get("/v1/{comodule_id}")
+async def read(request: Request, comodule_id: str):
+    comodule = await collection_comodule.get(comodule_id)
+    if comodule is None:
+        raise HTTPException(status_code=404, detail="CoModule not found")
+    return comodule
 
 @router.get("/{comodule_id}")
 async def read(request: Request, comodule_id: str):
@@ -82,7 +88,7 @@ async def download_docker_files(request: Request, comodule_id: str):
     #     "https://raw.githubusercontent.com/gocolab/project_cocolabhub/main/docksers/docker-compose.yml"
     # ]
     docker_files_urls = comodule.docker_files_links
-    zip_path = "dockers.zip"
+    zip_path = os.path.join("resources", "downloads", "dockers.zip")
 
     async with httpx.AsyncClient() as client:
         # ZIP 파일 생성
