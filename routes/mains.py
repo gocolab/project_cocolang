@@ -18,7 +18,8 @@ async def list(request: Request, page_number: Optional[int] = 1):
     conditions = { }
 
     try :
-        conditions = {_dict['key_name'] : { '$regex': _dict["word"] }}
+        main_router = request.url.path.split('/')[1]
+        conditions = [{'main_router':main_router},{_dict['key_name'] : { '$regex': _dict["word"] }}]
     except:
         pass
 
@@ -28,6 +29,11 @@ async def list(request: Request, page_number: Optional[int] = 1):
     comodule = await collection_comodule.get(comodules_list[0].id)
 
     conditions = [
+        {
+            "$match": {
+                "main_router": "comodules" 
+            }
+        },
         {
             "$group": {
                 "_id": {
@@ -58,7 +64,8 @@ async def list(request: Request, page_number: Optional[int] = 1):
                                                  , 'comodules' : comodules_list
                                                  , 'comodules_relative' : comodules_relative_list
                                                  , 'comodules_unique' : comodules_unique_list
-                                                  ,'pagination' : pagination })
+                                                  ,'pagination' : pagination
+                                                   , 'main_router':main_router })
 
 from itertools import zip_longest
 async def unique_comodules(original_list):

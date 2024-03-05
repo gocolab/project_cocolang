@@ -28,19 +28,24 @@ async def create(request: Request):
 @router.get("/list") # 검색 with pagination
 async def list(request: Request, page_number: Optional[int] = 1):
     _dict = dict(request._query_params)
-    conditions = { }
-
+    querys = []
+    main_router = request.url.path.split('/')[1]
+    querys.append({'main_router':main_router})
     try :
-        conditions = {_dict['key_name'] : { '$regex': _dict["word"] }}
+        search_word = _dict["word"].trim()
+        if search_word :
+            querys.append({_dict['key_name'] : { '$regex': search_word}})
     except:
         pass
 
+    conditions = {'$and':querys}
     comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
                                                                      ,page_number)
     return templates.TemplateResponse(name="comodules/list.html"
                                       , context={'request':request
                                                  , 'comodules' : comodules_list
-                                                  ,'pagination' : pagination })
+                                                  ,'pagination' : pagination
+                                                   , 'main_router':main_router })
 @router.get("/v1/{comodule_id}")
 async def read(request: Request, comodule_id: str):
     comodule = await collection_comodule.get(comodule_id)
@@ -88,7 +93,8 @@ async def download_docker_files(request: Request, comodule_id: str):
     #     "https://raw.githubusercontent.com/gocolab/project_cocolabhub/main/docksers/docker-compose.yml"
     # ]
     docker_files_urls = comodule.docker_files_links
-    zip_path = os.path.join("resources", "downloads", "dockers.zip")
+    zip_file_name = f"dockers_{comodule_id}.zip"
+    zip_path = os.path.join("resources", "downloads", zip_file_name)
 
     async with httpx.AsyncClient() as client:
         # ZIP 파일 생성

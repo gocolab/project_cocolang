@@ -4,29 +4,29 @@
   <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
         <li class="page-item {{ '' if pagination.has_previous_block else 'disabled' }}">
-          <button type="submit" class="page-link" formaction="/users/list/{{pagination.first_page}}">
+          <button type="submit" class="page-link" formaction="/{{main_router}}/list/{{pagination.first_page}}">
             맨 처음
           </button>
 
         </li>
         <li class="page-item {{ '' if pagination.has_previous_page else 'disabled' }}">
           <button type="submit" class="page-link"
-            formaction="/users/list/{{pagination.previous_page}}">이전</button>
+            formaction="/{{main_router}}/list/{{pagination.previous_page}}">이전</button>
         </li>
         {% for page_num in pagination.current_page_range %}
         <li class="page-item {{ 'active' if page_num == pagination.current_page else '' }}">
-          <button type="submit" class="page-link" formaction="/users/list/{{ page_num }}"> 
+          <button type="submit" class="page-link" formaction="/{{main_router}}/list/{{ page_num }}"> 
             {{page_num}}
           </button>
         </li>
         {% endfor %}
         <li class="page-item {{ '' if pagination.has_next_page else 'disabled' }}">
           <button type="submit" class="page-link"
-            formaction="/users/list/{{ pagination.next_page }}">다음</button>
+            formaction="/{{main_router}}/list/{{ pagination.next_page }}">다음</button>
         </li>
         <li class="page-item {{ '' if pagination.has_next_block else 'disabled' }}">
           <button type="submit" class="page-link"
-            formaction="/users/list/{{ pagination.last_page }}">
+            formaction="/{{main_router}}/list/{{ pagination.last_page }}">
             맨 끝
           </button>
         </li>

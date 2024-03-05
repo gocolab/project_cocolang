@@ -10,14 +10,16 @@ Debugging Coding Test
     <div class="col-2">
       <select class="form-control" name="key_name">
         <option value="title" {{ 'selected' if request._query_params.key_name=='title' else '' }}>title</option>
-        <option value="" {{ 'selected' if request._query_params.key_name=='email' else '' }}>email</option>
+        <option value="language_name" {{ 'selected' if request._query_params.key_name=='language_name' else '' }}>language</option>
+        <option value="framework_name" {{ 'selected' if request._query_params.key_name=='framework_name' else '' }}>framework</option>
+        <option value="databases_name" {{ 'selected' if request._query_params.key_name=='databases_name' else '' }}>email</option>
       </select>
     </div>
     <div class="col-6">
       <input class="form-control" placeholder="Enter Search!" name="word" value="{{request._query_params.word}}">
     </div>
     <div class="col-4">
-      <button type="submit" class="btn btn-primary" formaction="/comodules/list"
+      <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list"
         formmethod="get">검색</button>
     </div>
   </div>
@@ -40,7 +42,7 @@ Debugging Coding Test
         <td>{{comodule.language_name}}</td>
         <td>{{comodule.framework_name}}</td>
         <td>{{comodule.databases_name}}</td>
-        <td><button formaction="/comodules/{{comodule.id}}">read</button></td>
+        <td><button formaction="/{{main_router}}/{{comodule.id}}">read</button></td>
       </tr>
       {% endfor %}
     </tbody>

@@ -31,6 +31,7 @@ app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
 app.include_router(comodules_router, prefix="/comodules")
 app.include_router(mains_router, prefix="/mains")
+app.include_router(comodules_router, prefix="/devtemplates")
 
 @app.on_event("startup")
 async def init_db():
