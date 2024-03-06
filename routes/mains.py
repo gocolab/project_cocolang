@@ -39,11 +39,11 @@ async def list(request: Request, page_number: Optional[int] = 1):
                 "_id": {
                     "framework_name": "$framework_name",
                     "language_name": "$language_name",
-                    "databases_name": "$databases_name"
+                    "database_name": "$database_name"
                 },
                 "framework_name": {"$first": "$framework_name"},
                 "language_name": {"$first": "$language_name"},
-                "databases_name": {"$first": "$databases_name"}
+                "database_name": {"$first": "$database_name"}
             }
         },
         {
@@ -51,7 +51,7 @@ async def list(request: Request, page_number: Optional[int] = 1):
                 "_id": 0,
                 "framework_name": 1,
                 "language_name": 1,
-                "databases_name": 1
+                "database_name": 1
             }
         }
     ]
@@ -73,13 +73,13 @@ async def unique_comodules(original_list):
     # Initialize sets for tracking uniqueness
     unique_frameworks = {item['framework_name'] for item in original_list}
     unique_languages = {item['language_name'] for item in original_list}
-    unique_databases = {item['databases_name'] for item in original_list}
+    unique_database = {item['database_name'] for item in original_list}
 
     # Use itertools.zip_longest to combine lists with padding of None automatically
     combinations = [
         {'language': lang if lang is not None else '', 
         'framework': fw if fw is not None else '', 
-        'databases': db if db is not None else ''}  
-        for lang, fw, db in zip_longest(unique_languages, unique_frameworks, unique_databases)
+        'database': db if db is not None else ''}  
+        for lang, fw, db in zip_longest(unique_languages, unique_frameworks, unique_database)
     ]
     return combinations

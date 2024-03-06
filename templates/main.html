@@ -37,7 +37,7 @@
         <tr>
           <th>Langauge</th>
           <th>Framework</th>
-          <th>Databases</th>
+          <th>Database</th>
         </tr>
       </thead>
       <tbody id="interactiveTable">
@@ -45,7 +45,7 @@
         <tr>
           <td><button type="button" class="btn btn-sm btn-light language">{{comodule.language}}</button></td>
           <td><button type="button" class="btn btn-sm btn-light framework">{{comodule.framework}}</button></td>
-          <td><button type="button" class="btn btn-sm btn-light database">{{comodule.databases}}</button></td>
+          <td><button type="button" class="btn btn-sm btn-light database">{{comodule.database}}</button></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -87,8 +87,8 @@
           <div class="col-7">{{ comodule.framework_name }}</div>
         </div>
         <div class="row">
-          <div class="col-5 fw-bold">Databases</div>
-          <div class="col-7">{{ comodule.databases_name }}</div>
+          <div class="col-5 fw-bold">Database</div>
+          <div class="col-7">{{ comodule.database_name }}</div>
         </div>
         <div class="row py-2">
           <div class="col-5 fw-bold">Docker Files</div>
@@ -136,6 +136,7 @@
 
     let buttons = document.querySelectorAll("#interactiveTable button");
 
+    // 상호 관례 따른 button toggle
     function toggleRelatedButtons(clickedButton, attribute) {
       const attributeValue = clickedButton.textContent.trim();
       comodules_relative.forEach(assoc => {
@@ -143,7 +144,7 @@
           buttons.forEach(button => {
             if (button.textContent.trim() === assoc.language_name ||
               button.textContent.trim() === assoc.framework_name ||
-              button.textContent.trim() === assoc.databases_name) {
+              button.textContent.trim() === assoc.database_name) {
               button.classList.toggle("btn-light");
               button.classList.toggle("btn-primary");
             }
@@ -158,8 +159,12 @@
         // For simplicity, this example assumes buttons are distinguishable by their content
         // A better approach would be to use custom data attributes (data-type="language") in your HTML
         const buttonType = button.className.includes('language') ? 'language' :
-          button.className.includes('framework') ? 'framework' : 'databases';
-        toggleRelatedButtons(this, buttonType);
+          button.className.includes('framework') ? 'framework' : 'database';
+        button.classList.toggle("btn-light");
+        button.classList.toggle("btn-primary");
+        // toggleRelatedButtons(this, buttonType);
+        // Update the list after state change
+        updateList();
       });
     });
   });
@@ -177,7 +182,7 @@
   function updateComoduleDetails(data) {
     // HTML 요소 선택
     const cardBody = document.querySelector('#detail');
-  
+
     // 새로운 컨텐츠 생성
     const newContent = `
           <div class="row">
@@ -193,8 +198,8 @@
             <div class="col-7">${data.framework_name}</div>
           </div>
           <div class="row">
-            <div class="col-5 fw-bold">Databases</div>
-            <div class="col-7">${data.databases_name}</div>
+            <div class="col-5 fw-bold">Database</div>
+            <div class="col-7">${data.database_name}</div>
           </div>
           <div class="row py-2">
             <div class="col-5 fw-bold">Docker Files</div>
@@ -206,13 +211,13 @@
               </div>
               <div>
                 ${data.docker_files_links.map(link => {
-                  // 파일 이름을 '.' 기준으로 분리
-                  const parts = link.split('/');
-                  // 마지막 부분(확장자)만 추출
-                  const extension = parts[parts.length - 1];
-                  // 추출된 확장자를 사용하여 링크 텍스트 수정
-                  return `<a href="${link}" class="download-link">${extension}</a>`;
-                }).join('')}
+      // 파일 이름을 '.' 기준으로 분리
+      const parts = link.split('/');
+      // 마지막 부분(확장자)만 추출
+      const extension = parts[parts.length - 1];
+      // 추출된 확장자를 사용하여 링크 텍스트 수정
+      return `<a href="${link}" class="download-link">${extension}</a>`;
+    }).join('')}
               </div>
             </div>
           </div>
@@ -220,7 +225,46 @@
 
     // 기존 컨텐츠를 새로운 컨텐츠로 교체
     cardBody.innerHTML = newContent;
-  }  
+  }
+
+  // Function to update the list based on the selected buttons
+  function updateList() {
+    // Find all active buttons for each category
+    const activeLanguages = Array.from(document.querySelectorAll('.btn.language.btn-primary')).map(btn => btn.textContent.trim());
+    const activeFrameworks = Array.from(document.querySelectorAll('.btn.framework.btn-primary')).map(btn => btn.textContent.trim());
+    const activeDatabase = Array.from(document.querySelectorAll('.btn.database.btn-primary')).map(btn => btn.textContent.trim());
+
+    // Construct query parameters
+    const queryParams = new URLSearchParams({
+      language: activeLanguages.join(','),
+      framework: activeFrameworks.join(','),
+      database: activeDatabase.join(',')
+    });
+
+    // Fetch the updated list
+    fetch(`/comodules/v1/list/main?${queryParams}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const listGroup = document.querySelector('.list-group');
+        listGroup.innerHTML = ''; // Clear existing list
+        data.forEach(comodule => {
+          listGroup.innerHTML += `
+          <li class="list-group-item lh-sm" data-id="${comodule.id}">
+            <div>
+              <h6 class="my-0">${comodule.title}</h6>
+              <div class="text-body-secondary small">${comodule.description}</div>
+            </div>
+          </li>`;
+        });
+      })
+      .catch(error => console.error('Error fetching the list:', error));
+  }
+
 </script>
 
 {% endblock %}

@@ -46,13 +46,6 @@ async def list(request: Request, page_number: Optional[int] = 1):
                                                  , 'comodules' : comodules_list
                                                   ,'pagination' : pagination
                                                    , 'main_router':main_router })
-@router.get("/v1/{comodule_id}")
-async def read(request: Request, comodule_id: str):
-    comodule = await collection_comodule.get(comodule_id)
-    if comodule is None:
-        raise HTTPException(status_code=404, detail="CoModule not found")
-    return comodule
-
 @router.get("/{comodule_id}")
 async def read(request: Request, comodule_id: str):
     comodule = await collection_comodule.get(comodule_id)
@@ -80,6 +73,40 @@ from fastapi.responses import FileResponse
 import httpx
 import zipfile
 import os
+
+@router.get("/v1/{comodule_id}")
+async def read(request: Request, comodule_id: str):
+    comodule = await collection_comodule.get(comodule_id)
+    if comodule is None:
+        raise HTTPException(status_code=404, detail="CoModule not found")
+    return comodule
+
+@router.get("/v1/list/main")
+# async def get_list(language: List[str] = None, framework: List[str] = None, database: List[str] = None):
+async def get_list(request: Request):
+    _dict = dict(request._query_params)
+    language = _dict['language']
+    framework = _dict['framework']
+    database = _dict['database']
+    # Construct the query
+    query = {}
+    if language:
+        query['language_name'] = {"$in": language.split(',')}
+    if framework:
+        query['framework_name'] = {"$in": framework.split(',')}
+    if database:
+        query['database_name'] = {"$in": database.split(',')}
+
+    conditions = {}
+    if query:
+        conditions["$and"] = [query]
+
+    try:
+        comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions,1,5)
+        comodules_dict_list = [comodule.dict() for comodule in comodules_list]
+        return comodules_dict_list
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/download/{comodule_id}")
 async def download_docker_files(request: Request, comodule_id: str):
