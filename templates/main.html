@@ -54,7 +54,9 @@
   <div class="col-4">
     <div class="col-12">
       <div class="m-2 d-flex justify-content-end">
-        <button type="submit" class="btn btn-sm btn-secondary" id="more_comodules_list">더보기</button>
+        <button type="submit" class="btn btn-sm btn-secondary" id="more_comodules_list">
+          더보기 <span class="badge bg-success" id="total_records">{{pagination.total_records}}</span>
+        </button>
       </div>
       <ul class="list-group">
         {% for comodule in comodules %}
@@ -115,15 +117,16 @@
 <script>
   let comodules_relative = JSON.parse('{{ comodules_relative | tojson | safe }}');
   document.addEventListener("DOMContentLoaded", function () {
-    // 모든 리스트 항목을 선택
-    const items = document.querySelectorAll('.list-group-item');
-
-    items.forEach(item => {
-      // 각 항목에 클릭 이벤트 리스너 추가
-      item.addEventListener('click', function () {
-        const comoduleId = this.getAttribute('data-id');
+    // Event delegation on the parent list
+    document.querySelector('.list-group').addEventListener('click', function (event) {
+      let target = event.target;
+      while (target != this && !target.matches('.list-group-item')) {
+        target = target.parentNode;
+      }
+      if (target.matches('.list-group-item')) {
+        const comoduleId = target.getAttribute('data-id');
         fetchComoduleDetails(comoduleId);
-      });
+      }
     });
     // Select the button by its ID
     const moreComodulesBtn = document.querySelector('#more_comodules_list');
@@ -252,7 +255,7 @@
       .then(data => {
         const listGroup = document.querySelector('.list-group');
         listGroup.innerHTML = ''; // Clear existing list
-        data.forEach(comodule => {
+        data.comodules.forEach(comodule => {
           listGroup.innerHTML += `
           <li class="list-group-item lh-sm" data-id="${comodule.id}">
             <div>
@@ -261,6 +264,8 @@
             </div>
           </li>`;
         });
+        const total_records = document.querySelector('#total_records');
+        total_records.innerHTML = data.total_records;
       })
       .catch(error => console.error('Error fetching the list:', error));
   }

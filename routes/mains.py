@@ -15,11 +15,11 @@ collection_comodule = Database(CoModule)
 @router.get("/list") # 검색 with pagination
 async def list(request: Request, page_number: Optional[int] = 1):
     _dict = dict(request._query_params)
-    conditions = { }
+    conditions = {'main_router':'comodules'}
 
     try :
         main_router = request.url.path.split('/')[1]
-        conditions = [{'main_router':main_router},{_dict['key_name'] : { '$regex': _dict["word"] }}]
+        conditions[_dict['key_name']] = {'$regex': _dict["word"] }
     except:
         pass
 

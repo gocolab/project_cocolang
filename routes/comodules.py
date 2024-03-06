@@ -104,7 +104,7 @@ async def get_list(request: Request):
     try:
         comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions,1,5)
         comodules_dict_list = [comodule.dict() for comodule in comodules_list]
-        return comodules_dict_list
+        return {"comodules":comodules_dict_list, "total_records":pagination.total_records}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
