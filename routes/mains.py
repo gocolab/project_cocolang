@@ -4,6 +4,7 @@ from database.connection import Database  # Assume this handles your database co
 from models.comodules import CoModule  # This should be your CoModule model
 from pydantic import BaseModel, HttpUrl, Field
 from typing import List, Optional
+from auth.authenticate import authenticate
 
 router = APIRouter(tags=["CoModules"])
 templates = Jinja2Templates(directory="templates/")
@@ -14,6 +15,8 @@ collection_comodule = Database(CoModule)
 @router.get("/list/{page_number}")
 @router.get("/list") # 검색 with pagination
 async def list(request: Request, page_number: Optional[int] = 1):
+# async def list(request: Request, page_number: Optional[int] = 1, user=Depends(authenticate)):
+    # user = {}
     _dict = dict(request._query_params)
     conditions = {'main_router':'comodules'}
 
@@ -65,7 +68,8 @@ async def list(request: Request, page_number: Optional[int] = 1):
                                                  , 'comodules_relative' : comodules_relative_list
                                                  , 'comodules_unique' : comodules_unique_list
                                                   ,'pagination' : pagination
-                                                   , 'main_router':main_router })
+                                                   , 'main_router':main_router
+                                                    , 'user':user })
 
 from itertools import zip_longest
 async def unique_comodules(original_list):

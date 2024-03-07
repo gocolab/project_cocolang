@@ -4,6 +4,7 @@ import httpx
 from auth.hash_password import HashPassword
 from fastapi.security import OAuth2PasswordRequestForm
 from auth.jwt_handler import create_access_token
+from fastapi.responses import RedirectResponse
 
 router = APIRouter(tags=["securities"])
 
@@ -35,9 +36,7 @@ async def sign_user_in(request:Request, user: OAuth2PasswordRequestForm = Depend
             "access_token": access_token,
             "token_type": "Bearer"
         }
-        return templates.TemplateResponse(name="main.html"
-                            , context={'request':request
-                                       , 'access_auths':access_auths})
+        return RedirectResponse(url=f"/mains/list")
 
     context = {'request': request, 'error': "Invalid details passed."}
     return templates.TemplateResponse(name="securities/login.html", context=context)
