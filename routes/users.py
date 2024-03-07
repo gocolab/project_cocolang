@@ -36,36 +36,8 @@ async def sign_user_up(request:Request):
     hashed_password = hash_password.create_hash(user.password)
     user.password = hashed_password
     await collection_user.save(user)
-    return templates.TemplateResponse(name="security/login.html"
+    return templates.TemplateResponse(name="securities/login.html"
                         , context={'request':request})
-
-@router.get("/login") # 펑션 호출 방식
-async def insert(request:Request):
-    return templates.TemplateResponse(name="security/login.html"
-    , context={'request':request})
-
-@router.post("/signin")
-async def sign_user_in(request:Request, user: OAuth2PasswordRequestForm = Depends()):
-    user_exist = await User.find_one(User.email == user.username)
-    if not user_exist:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User with email does not exist."
-        )
-    if hash_password.verify_hash(user.password, user_exist.password):
-        access_token = create_access_token(user_exist.email)
-        access_auths = {
-            "access_token": access_token,
-            "token_type": "Bearer"
-        }
-        return templates.TemplateResponse(name="main.html"
-                            , context={'request':request
-                                       , 'access_auths':access_auths})
-
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid details passed."
-    )
 
 # 회원 가입 폼
 @router.get("/form") 

@@ -26,12 +26,14 @@ from routes.users import router as user_router
 from routes.common_codes import router as common_codes_router
 from routes.comodules import router as comodules_router
 from routes.mains import router as mains_router
+from routes.securities import router as securities_router
 
 app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
 app.include_router(comodules_router, prefix="/comodules")
 app.include_router(mains_router, prefix="/mains")
 app.include_router(comodules_router, prefix="/devtemplates")
+app.include_router(securities_router, prefix="/securities")
 
 @app.on_event("startup")
 async def init_db():
