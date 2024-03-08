@@ -11,6 +11,7 @@ class User(Document):
     manager: Optional[str] = None
     sellist1 : Optional[str] = None
     text : Optional[str] = None
+    role : Optional[str] = None
 
     class Settings:
         name = "users"
