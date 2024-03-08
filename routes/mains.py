@@ -5,6 +5,7 @@ from models.comodules import CoModule  # This should be your CoModule model
 from pydantic import BaseModel, HttpUrl, Field
 from typing import List, Optional
 from auth.authenticate import authenticate
+from models.users import User
 
 router = APIRouter(tags=["CoModules"])
 templates = Jinja2Templates(directory="templates/")
@@ -15,8 +16,11 @@ collection_comodule = Database(CoModule)
 @router.get("/list/{page_number}")
 @router.get("/list") # 검색 with pagination
 async def list(request: Request, page_number: Optional[int] = 1):
-# async def list(request: Request, page_number: Optional[int] = 1, user=Depends(authenticate)):
-    # user = {}
+    context = await main_list(request, page_number)
+    return templates.TemplateResponse(name="main.html"
+                                      , context=context)
+
+async def main_list(request: Request, page_number: Optional[int] = 1):
     _dict = dict(request._query_params)
     conditions = {'main_router':'comodules'}
 
@@ -61,15 +65,16 @@ async def list(request: Request, page_number: Optional[int] = 1):
     # 연관 관계 리스트
     comodules_relative_list = await collection_comodule.aggregatebyconditions(conditions)
     comodules_unique_list = await unique_comodules(comodules_relative_list)
-    return templates.TemplateResponse(name="main.html"
-                                      , context={'request':request
-                                                 , 'comodule' : comodule
-                                                 , 'comodules' : comodules_list
-                                                 , 'comodules_relative' : comodules_relative_list
-                                                 , 'comodules_unique' : comodules_unique_list
-                                                  ,'pagination' : pagination
-                                                   , 'main_router':main_router
-                                                    , 'user':user })
+    context={'request':request
+            , 'comodule' : comodule
+            , 'comodules' : comodules_list
+            , 'comodules_relative' : comodules_relative_list
+            , 'comodules_unique' : comodules_unique_list
+            ,'pagination' : pagination
+            , 'main_router':main_router
+            # , 'user':user 
+            }
+    return context
 
 from itertools import zip_longest
 async def unique_comodules(original_list):
