@@ -7,21 +7,22 @@ from jose import jwt, JWTError
 
 settings = Settings()
 
-
 def create_access_token(user: str):
     payload = {
         "user": user,
         # "expires": time.time() + 3600
-        "expires": time.time() + 60
+        "expires": time.time() + int(settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     }
 
-    token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+    token = jwt.encode(payload, settings.SECRET_KEY
+                       , algorithm=settings.ALGORITHM)
     return token
 
 
 def verify_access_token(token: str):
     try:
-        data = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        data = jwt.decode(token, settings.SECRET_KEY
+                          , algorithms=[settings.SECRET_KEY])
 
         expire = data.get("expires")
 

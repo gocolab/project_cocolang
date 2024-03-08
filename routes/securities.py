@@ -14,7 +14,7 @@ from fastapi import Request
 templates = Jinja2Templates(directory="templates/")
 
 from database.connection import Database
-from models.users import User
+from models.users import User, TokenResponse
 collection_user = Database(User)
 
 hash_password = HashPassword()
@@ -26,7 +26,7 @@ async def insert(request:Request):
 
 from routes.mains import main_list
 @router.post("/login")
-async def sign_user_in(request:Request, user: OAuth2PasswordRequestForm = Depends()):
+async def sign_in(request:Request, user: OAuth2PasswordRequestForm = Depends()):
     user_exist = await User.find_one(User.email == user.username)
     if not user_exist:
         context = {'request': request, 'error': "User with email does not exist."}
@@ -37,13 +37,14 @@ async def sign_user_in(request:Request, user: OAuth2PasswordRequestForm = Depend
         context = await main_list(request)
         response = templates.TemplateResponse(name="main.html"
                                         , context=context)
-        response.set_cookie(key="access_token", value=f"Bearer {access_token}")
+        response.set_cookie(key="access_token", value=f"{access_token}", httponly=True)
+        response.set_cookie(key="token_type", value=f"Bearer", httponly=True)
         return response        
 
     context = {'request': request, 'error': "Invalid password."}
     return templates.TemplateResponse(name="securities/login.html", context=context)
 
-@router.post("/signin")
+@router.post("/signin", response_model=TokenResponse)
 async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
     user_exist = await User.find_one(User.email == user.username)
     if not user_exist:

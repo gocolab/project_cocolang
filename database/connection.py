@@ -13,6 +13,9 @@ from models.comodules import CoModule
 class Settings(BaseSettings):
     DATABASE_URL: Optional[str] = None
     SECRET_KEY: Optional[str] = None
+    ALGORITHM: Optional[str] = None
+    ACCESS_TOKEN_EXPIRE_MINUTES: Optional[str] = None
+
 
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
