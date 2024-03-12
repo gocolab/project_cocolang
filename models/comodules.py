@@ -1,8 +1,10 @@
 from typing import Optional, List
 from beanie import Document
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, Field
+from datetime import datetime
 
 class CoModule(Document):
+    main_router: str
     title: Optional[str] = None
     description: Optional[str] = None
     language_id: Optional[str] = None
@@ -12,7 +14,8 @@ class CoModule(Document):
     framework_name: Optional[str] = None
     database_name: Optional[str] = None
     docker_files_links: List[str] = []
-    required_packages_versions: List[str] = None
+    required_packages_versions: Optional[List[str]] = None
+    create_date: datetime = Field(default_factory=datetime.now)
 
     class Settings:
         name = "comodules"

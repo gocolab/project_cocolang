@@ -50,8 +50,9 @@ Debugging Coding Test
             zip <i class="bi bi-cloud-download"></i>
           </a>
         </td>
-    <td>
-          <button class="btn btn-sm btn-outline-info">
+        <td>
+          <button class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip"
+            title="pkgs : {{ comodule.required_packages_versions or []|join(',') }}">
             <i class="bi bi-chat-left-dots"></i>
           </button>
         </td>
@@ -63,4 +64,14 @@ Debugging Coding Test
   {% block paginations_container %}
   {% include 'templates/pagination_template.html' %}
 </form>
+{% endblock %}
+
+{% block foot_javascripts %}
+<script>
+  // 모든 툴팁 활성화
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+</script>
 {% endblock %}

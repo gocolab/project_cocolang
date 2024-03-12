@@ -15,22 +15,57 @@ collection_comodule = Database(CoModule)
 
 @router.get("/form") 
 async def form(request:Request):
-    return templates.TemplateResponse(name="comodules/form.html"
-                                      , context={'request':request})
+    main_router = request.url.path.split('/')[1]
 
+    return templates.TemplateResponse(name="comodules/form.html"
+                                      , context={'request':request
+                                                 ,'main_router':main_router})
+
+async def extract_list_from_delta(input_str: str):
+    """
+    Quill Delta format으로부터 텍스트를 추출하여 리스트로 반환합니다.
+    """
+    # 문자열을 줄바꿈 기준으로 분리
+    lines = input_str.splitlines()
+    
+    # 빈 문자열을 제외하고 유효한 URL만을 리스트에 추가
+    list_input = [line.strip() for line in lines if line.strip()]
+    
+    # 리스트에서 중복된 URL 제거
+    list_result = list(dict.fromkeys(list_input))
+    
+    return list_input
+    
 # CRUD Operations
 @router.post("/create")
 async def create(request: Request):
-    comodule_data = await request.form()
+    comodule_data = dict(await request.form())
+    # Quill Delta format에서 텍스트 추출
+    comodule_data["docker_files_links"] = await extract_list_from_delta(comodule_data.get("docker_files_links_delta",""))
+    comodule_data["required_packages_versions"] = await extract_list_from_delta(comodule_data.get("required_packages_versions_delta",""))
+    # Pydantic 모델에 맞지 않는 키 제거
+    del comodule_data["docker_files_links_delta"]
+    del comodule_data["required_packages_versions_delta"]
+
     comodule = CoModule(**comodule_data)
-    await collection_comodule.save(comodule)
-    return templates.TemplateResponse("comodules/list.html", {"request": request, "comodules": [comodule]})
+    result_id = await collection_comodule.save(comodule)
+
+    context = await comodules_list(request, 1)
+    return templates.TemplateResponse("comodules/list.html"
+                                      , context=context)
 
 
 @router.get("/list/{page_number}")
 @router.get("/list") # 검색 with pagination
 async def list(request: Request, page_number: Optional[int] = 1
-               , user: str = Depends(authenticate)):
+            #    , user: str = Depends(authenticate)
+               ):
+    context = await comodules_list(request, page_number)
+    
+    return templates.TemplateResponse(name="comodules/list.html"
+                                      , context=context)
+
+async def comodules_list(request: Request, page_number: Optional[int] = 1):
     _dict = dict(request._query_params)
     querys = []
     main_router = request.url.path.split('/')[1]
@@ -45,11 +80,10 @@ async def list(request: Request, page_number: Optional[int] = 1
     conditions = {'$and':querys}
     comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
                                                                      ,page_number)
-    return templates.TemplateResponse(name="comodules/list.html"
-                                      , context={'request':request
-                                                 , 'comodules' : comodules_list
-                                                  ,'pagination' : pagination
-                                                   , 'main_router':main_router })
+    context={'request':request, 'comodules' : comodules_list
+             ,'pagination' : pagination, 'main_router':main_router }
+    return context
+
 @router.get("/{comodule_id}")
 async def read(request: Request, comodule_id: str):
     comodule = await collection_comodule.get(comodule_id)

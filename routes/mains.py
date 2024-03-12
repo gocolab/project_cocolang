@@ -24,8 +24,8 @@ async def main_list(request: Request, page_number: Optional[int] = 1):
     _dict = dict(request._query_params)
     conditions = {'main_router':'comodules'}
 
+    main_router = request.url.path.split('/')[1]
     try :
-        main_router = request.url.path.split('/')[1]
         conditions[_dict['key_name']] = {'$regex': _dict["word"] }
     except:
         pass
