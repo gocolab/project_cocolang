@@ -86,10 +86,15 @@ async def comodules_list(request: Request, page_number: Optional[int] = 1):
 
 @router.get("/{comodule_id}")
 async def read(request: Request, comodule_id: str):
+    main_router = request.url.path.split('/')[1]
+
     comodule = await collection_comodule.get(comodule_id)
     if comodule is None:
         raise HTTPException(status_code=404, detail="CoModule not found")
-    return templates.TemplateResponse("comodules/read.html", {"request": request, "comodule": comodule})
+    return templates.TemplateResponse("comodules/read.html"
+                                      , {"request": request
+                                         , "comodule": comodule
+                                         ,'main_router':main_router})
 
 @router.post("/update/{comodule_id}")
 async def update(request: Request, comodule_id: str):
@@ -102,10 +107,12 @@ async def update(request: Request, comodule_id: str):
     else:
         raise HTTPException(status_code=404, detail="CoModule not found")
 
-@router.post("/delete/{comodule_id}")
+@router.post("/{comodule_id}")
 async def delete(request: Request, comodule_id: str):
-    await collection_comodule.delete(comodule_id)
-    return templates.TemplateResponse("comodules/list.html", {"request": request})
+    result_id = await collection_comodule.delete(comodule_id)
+    context = await comodules_list(request, 1)
+    return templates.TemplateResponse(name="comodules/list.html"
+                                      , context=context)
 
 from fastapi.responses import FileResponse
 import httpx

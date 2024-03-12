@@ -3,49 +3,62 @@
 {% block title %}CoModule Details{% endblock %}
 
 {% block main_container %}
-<div class="container">
-    <h2>CoModule Details</h2>
+<form action="" method="post">
     <div class="row">
-        <div class="col-md-2 fw-bold">Title</div>
-        <div class="col-md-10">{{ comodule.title }}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 fw-bold">Language</div>
-        <div class="col-md-10">{{ comodule.language_name }}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 fw-bold">Framework</div>
-        <div class="col-md-10">{{ comodule.framework_name }}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 fw-bold">Database</div>
-        <div class="col-md-10">{{ comodule.database_name }}</div>
-    </div>
-    <div class="row">
-        <div class="col-md-2 fw-bold">Docker File Links:</div>
-        <div class="col-md-10">
-            <a href="/comodules/download/{{ comodule.id }}" class="btn btn-primary" id="download_all">Download Docker Files</a>
-            {% for link in comodule.docker_files_links %}
-            <a href="{{ link }}" class="d-block download-link">{{ link.split('/')[-1] }}</a>
-            {% endfor %}
+        <div class="col-3">
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-2 fw-bold">Title</div>
+                <div class="col-10">{{ comodule.title }}</div>
+            </div>
+            <div class="row">
+                <div class="col-2 fw-bold">Language</div>
+                <div class="col-10">{{ comodule.language_name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-2 fw-bold">Framework</div>
+                <div class="col-10">{{ comodule.framework_name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-2 fw-bold">Database</div>
+                <div class="col-10">{{ comodule.database_name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-2 fw-bold">Docker File Links:</div>
+                <div class="col-10">
+                    <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
+                        zip <i class="bi bi-cloud-download"></i>
+                      </a>
+                    {% for link in comodule.docker_files_links %}
+                    <div>
+                        <a href="{{ link }}" class="d-block download-link">{{ link.split('/')[-1] }}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-group m-2 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/create" formmethod="get">
+                    List
+                </button>
+                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}">
+                    Delete
+                </button>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <a href="/comodules/list" class="btn btn-primary">Back to List</a>
-        </div>
-    </div>
-</div>
+</form>
+
 {% endblock %}
 {% block foot_javascripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var downloadLink = document.querySelector('#download_all');
-    
-        downloadLink.addEventListener('click', function(e) {
+
+        downloadLink.addEventListener('click', function (e) {
             e.preventDefault(); // 기본 링크 동작 방지
             window.location.href = downloadLink.getAttribute('href'); // 파일 다운로드 시작
         });
     });
-    </script>
+</script>
 {% endblock %}
