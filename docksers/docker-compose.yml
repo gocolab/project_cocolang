@@ -1,7 +1,6 @@
 version: '3.9'
 services:
   jupyter_fastapi:
-    container_name: ${CONTAINER_NAME}_jupyter_fastapi
     image: ${CONTAINER_NAME}  # Specifies the name for the built image.
     build:
       context: .
@@ -28,7 +27,6 @@ services:
       - "--NotebookApp.notebook_dir='/app'"      
   mongodb:
     image: mongo:7
-    container_name: ${CONTAINER_NAME}_mongodb
     restart: always
     ports:
       - 27017:27017
