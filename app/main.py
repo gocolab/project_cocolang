@@ -54,7 +54,7 @@ app.mount("/downloads", StaticFiles(directory=static_downloads_directory), name=
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 # html 들이 있는 폴더 위치
-templates = Jinja2Templates(directory="templates/")
+templates = Jinja2Templates(directory="app/templates/")
 
 from typing import List, Optional
 @app.get("/")

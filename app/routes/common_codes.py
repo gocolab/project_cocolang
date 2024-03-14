@@ -10,7 +10,7 @@ from fastapi import Request
 from beanie import PydanticObjectId
 
 
-templates = Jinja2Templates(directory="templates/")
+templates = Jinja2Templates(directory="app/templates/")
 
 from app.database.connection import Database
 from app.models.common_codes import CommonCode

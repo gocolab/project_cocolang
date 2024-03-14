@@ -8,7 +8,7 @@ from app.auth.authenticate import authenticate
 from app.models.users import User
 
 router = APIRouter(tags=["CoModules"])
-templates = Jinja2Templates(directory="templates/")
+templates = Jinja2Templates(directory="app/templates/")
 
 # Assuming Database class and CoModule model are defined appropriately
 collection_comodule = Database(CoModule)

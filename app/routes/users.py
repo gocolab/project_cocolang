@@ -12,7 +12,7 @@ router = APIRouter(
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
 
-templates = Jinja2Templates(directory="templates/")
+templates = Jinja2Templates(directory="app/templates/")
 
 from app.database.connection import Database
 from app.models.users import User

@@ -8,7 +8,7 @@ from app.auth.authenticate import authenticate
 from app.models.users import User
 
 router = APIRouter(tags=["CoModules"])
-templates = Jinja2Templates(directory="templates/")
+templates = Jinja2Templates(directory="app/templates/")
 
 # Assuming Database class and CoModule model are defined appropriately
 collection_comodule = Database(CoModule)
@@ -153,6 +153,7 @@ async def get_list(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+from datetime import datetime
 @router.get("/download/{comodule_id}")
 async def download_docker_files(request: Request, comodule_id: str):
     comodule = await collection_comodule.get(comodule_id)
@@ -165,8 +166,11 @@ async def download_docker_files(request: Request, comodule_id: str):
     #     "https://raw.githubusercontent.com/gocolab/project_cocolabhub/main/docksers/docker-compose.yml"
     # ]
     docker_files_urls = comodule.docker_files_links
-    zip_file_name = f"dockers_{comodule_id}.zip"
-    zip_path = os.path.join("resources", "downloads", zip_file_name)
+
+    # 현재 시간을 "YYYYMMDD_HHMMSS" 포맷으로 변환
+    file_suffix = datetime.now().strftime("%H%M%S")
+    zip_file_name = f"dockers_{file_suffix}.zip"
+    zip_path = os.path.join("app","resources", "downloads", zip_file_name)
 
     async with httpx.AsyncClient() as client:
         # ZIP 파일 생성
@@ -183,4 +187,4 @@ async def download_docker_files(request: Request, comodule_id: str):
                 # 임시 파일 삭제
                 os.remove(file_name)
     
-    return FileResponse(path=zip_path, filename="dockers.zip", media_type='application/zip')
+    return FileResponse(path=zip_path, filename=zip_file_name, media_type='application/zip')
