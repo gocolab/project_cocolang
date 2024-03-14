@@ -1,11 +1,11 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException, status, Depends
 from fastapi.templating import Jinja2Templates
-from database.connection import Database  # Assume this handles your database connection
-from models.comodules import CoModule  # This should be your CoModule model
+from apps.database.connection import Database  # Assume this handles your database connection
+from apps.models.comodules import CoModule  # This should be your CoModule model
 from pydantic import BaseModel, HttpUrl, Field
 from typing import List, Optional
-from auth.authenticate import authenticate
-from models.users import User
+from apps.auth.authenticate import authenticate
+from apps.models.users import User
 
 router = APIRouter(tags=["CoModules"])
 templates = Jinja2Templates(directory="templates/")

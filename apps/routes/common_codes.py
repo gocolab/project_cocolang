@@ -1,4 +1,4 @@
-from database.connection import Database
+from apps.database.connection import Database
 from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter(
@@ -12,8 +12,8 @@ from beanie import PydanticObjectId
 
 templates = Jinja2Templates(directory="templates/")
 
-from database.connection import Database
-from models.common_codes import CommonCode
+from apps.database.connection import Database
+from apps.models.common_codes import CommonCode
 collection_CommonCode = Database(CommonCode)
 
 @router.post("/")

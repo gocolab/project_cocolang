@@ -30,3 +30,4 @@ passlib[bcrypt]
 pydantic-settings
 beanie
 pydantic[email]
+httpx
