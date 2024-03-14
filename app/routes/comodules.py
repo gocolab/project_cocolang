@@ -31,9 +31,6 @@ async def extract_list_from_delta(input_str: str):
     # 빈 문자열을 제외하고 유효한 URL만을 리스트에 추가
     list_input = [line.strip() for line in lines if line.strip()]
     
-    # 리스트에서 중복된 URL 제거
-    list_result = list(dict.fromkeys(list_input))
-    
     return list_input
     
 # CRUD Operations
