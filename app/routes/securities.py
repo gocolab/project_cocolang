@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2AuthorizationCodeBearer
 import httpx
-from apps.auth.hash_password import HashPassword
+from app.auth.hash_password import HashPassword
 from fastapi.security import OAuth2PasswordRequestForm
-from apps.auth.jwt_handler import create_access_token
+from app.auth.jwt_handler import create_access_token
 from fastapi.responses import RedirectResponse
 
 router = APIRouter(tags=["securities"])
@@ -13,8 +13,8 @@ from fastapi import Request
 
 templates = Jinja2Templates(directory="templates/")
 
-from apps.database.connection import Database
-from apps.models.users import User, TokenResponse
+from app.database.connection import Database
+from app.models.users import User, TokenResponse
 collection_user = Database(User)
 
 hash_password = HashPassword()
@@ -24,7 +24,7 @@ async def insert(request:Request):
     return templates.TemplateResponse(name="securities/login.html"
     , context={'request':request})
 
-from apps.routes.mains import main_list
+from app.routes.mains import main_list
 @router.post("/login")
 async def sign_in(request:Request, user: OAuth2PasswordRequestForm = Depends()):
     user_exist = await User.find_one(User.email == user.username)

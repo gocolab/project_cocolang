@@ -1,9 +1,9 @@
-from apps.auth.hash_password import HashPassword
-from apps.auth.jwt_handler import create_access_token
-from apps.database.connection import Database
+from app.auth.hash_password import HashPassword
+from app.auth.jwt_handler import create_access_token
+from app.database.connection import Database
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from apps.models.users import User, TokenResponse
+from app.models.users import User, TokenResponse
 
 router = APIRouter(
     tags=["User"],
@@ -14,8 +14,8 @@ from fastapi import Request
 
 templates = Jinja2Templates(directory="templates/")
 
-from apps.database.connection import Database
-from apps.models.users import User
+from app.database.connection import Database
+from app.models.users import User
 collection_user = Database(User)
 
 hash_password = HashPassword()

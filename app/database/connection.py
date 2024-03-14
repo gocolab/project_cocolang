@@ -6,10 +6,11 @@ from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
 
-from apps.models.users import User
-from apps.models.common_codes import CommonCode
-from apps.models.comodules import CoModule
+from app.models.users import User
+from app.models.common_codes import CommonCode
+from app.models.comodules import CoModule
 
+import os
 class Settings(BaseSettings):
     DATABASE_URL: Optional[str] = None
     SECRET_KEY: Optional[str] = None
@@ -23,9 +24,9 @@ class Settings(BaseSettings):
         document_models=[User, CommonCode, CoModule])
 
     class Config:
-        env_file = ".env"
+        env_file = os.path.join("app",".env")
 
-from apps.utils.paginations import Paginations
+from app.utils.paginations import Paginations
 
 import json
 class Database:

@@ -1,7 +1,7 @@
 import time
 from datetime import datetime
 
-from apps.database.connection import Settings
+from app.database.connection import Settings
 from fastapi import HTTPException, status
 from jose import jwt, JWTError
 

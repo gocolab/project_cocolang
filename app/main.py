@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from apps.database.connection import Settings
+from app.database.connection import Settings
 
 app = FastAPI()
 
@@ -22,11 +22,11 @@ app.add_middleware(
 )
 
 # 라우트 등록
-from apps.routes.users import router as user_router
-from apps.routes.common_codes import router as common_codes_router
-from apps.routes.comodules import router as comodules_router
-from apps.routes.mains import router as mains_router
-from apps.routes.securities import router as securities_router
+from app.routes.users import router as user_router
+from app.routes.common_codes import router as common_codes_router
+from app.routes.comodules import router as comodules_router
+from app.routes.mains import router as mains_router
+from app.routes.securities import router as securities_router
 
 app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
@@ -42,10 +42,10 @@ async def init_db():
 from fastapi.staticfiles import StaticFiles
 # url 경로, 자원 물리 경로, 프로그램밍 측면
 import os
-static_css_directory = os.path.join("resources", "css")
-static_images_directory = os.path.join("resources", "images")
-static_js_directory = os.path.join("resources", "js")
-static_downloads_directory = os.path.join("resources", "downloads")
+static_css_directory = os.path.join("app", "resources", "css")
+static_images_directory = os.path.join("app", "resources", "images")
+static_js_directory = os.path.join("app", "resources", "js")
+static_downloads_directory = os.path.join("app", "resources", "downloads")
 app.mount("/css", StaticFiles(directory=static_css_directory), name="static_css")
 app.mount("/images", StaticFiles(directory=static_images_directory), name="static_images")
 app.mount("/js", StaticFiles(directory=static_js_directory), name="static_js")
