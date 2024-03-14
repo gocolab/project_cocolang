@@ -9,6 +9,7 @@ from pydantic_settings import BaseSettings
 from app.models.users import User
 from app.models.common_codes import CommonCode
 from app.models.comodules import CoModule
+from app.models.request_log import RequestLog
 
 import os
 class Settings(BaseSettings):
@@ -21,7 +22,7 @@ class Settings(BaseSettings):
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(database=client.get_default_database(), 
-        document_models=[User, CommonCode, CoModule])
+        document_models=[User, CommonCode, CoModule, RequestLog])
 
     class Config:
         env_file = os.path.join("app",".env")
@@ -113,7 +114,7 @@ class Database:
         documents = await self.model.find(conditions).sort(f'-{sort_field}').skip(pagination.start_record_number).limit(pagination.records_per_page).to_list()
         if documents:
             return documents, pagination
-        return False    
+        return [], pagination     
 
 
 if __name__ == '__main__':

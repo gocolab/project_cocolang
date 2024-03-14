@@ -68,7 +68,7 @@ async def comodules_list(request: Request, page_number: Optional[int] = 1):
     main_router = request.url.path.split('/')[1]
     querys.append({'main_router':main_router})
     try :
-        search_word = _dict["word"].trim()
+        search_word = _dict["word"].strip()
         if search_word :
             querys.append({_dict['key_name'] : { '$regex': search_word}})
     except:
@@ -127,11 +127,13 @@ async def read(request: Request, comodule_id: str):
 # async def get_list(language: List[str] = None, framework: List[str] = None, database: List[str] = None):
 async def get_list(request: Request):
     _dict = dict(request._query_params)
-    language = _dict['language']
-    framework = _dict['framework']
-    database = _dict['database']
+    language = _dict.get('language')
+    framework = _dict.get('framework')
+    database = _dict.get('database')
+
     # Construct the query
-    query = {}
+    query = {'main_router':"comodules"}
+
     if language:
         query['language_name'] = {"$in": language.split(',')}
     if framework:
