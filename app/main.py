@@ -39,10 +39,34 @@ app.include_router(securities_router, prefix="/securities")
 async def init_db():
     await settings.initialize_database()
 
+from app.auth.jwt_handler import verify_access_token
+# 제외할 URL 경로 목록
+EXCLUDE_PATHS = [
+    "/css", "/images", "/js", "/downloads",
+    "/favicon.ico"
+    "/docs",   # Swagger 문서
+    "/openapi.json",  # OpenAPI 스펙
+]
+# Middleware for token verification
+@app.middleware("http")
+async def auth_middleware(request: Request, call_next):
+    request.state.user = None
+    # 요청 URL 확인
+    if not any(path for path in EXCLUDE_PATHS if request.url.path.startswith(path)):
+        authorization = request.cookies.get("Authorization")
+
+        if authorization:
+            token = authorization.split(" ")[1]
+            # credentials_exception = HTTPException(status_code=401, detail="Could not validate credentials")
+            user = await verify_access_token(token)
+            request.state.user = user
+    response = await call_next(request)
+    return response
+
 import time
 from app.models.request_log import RequestLog  # 로그 모델 임포트
 # 미들웨어를 사용하여 요청과 응답 로그를 MongoDB에 저장
-@app.middleware("http")
+# @app.middleware("http")
 async def log_request_response(request: Request, call_next):
     # 요청 처리 전 시간 측정
     start_time = time.time()

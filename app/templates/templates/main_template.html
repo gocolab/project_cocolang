@@ -76,11 +76,13 @@
                         #}
                     </ul>
                     <!-- Right menu items -->
-                    {#
                     <ul class="navbar-nav">
-                        {% if user %}
+                        {% if request.state.user %}
                         <li class="nav-item">
-                            <a class="nav-link menu-item">{{user}}</a>
+                            <a class="nav-link menu-item">{{request.state.user.name}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-item" href="/securities/logout">Logout</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
@@ -91,7 +93,6 @@
                         </li>
                         {% endif %}
                     </ul>
-                    #}
                 </div>
             </div>
         </nav>

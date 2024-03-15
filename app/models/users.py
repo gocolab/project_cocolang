@@ -8,10 +8,7 @@ class User(Document):
     name: Optional[str] = None
     email: EmailStr
     password: str
-    manager: Optional[str] = None
-    sellist1 : Optional[str] = None
-    text : Optional[str] = None
-    role : Optional[str] = None
+    roles : Optional[List[str]] = None
 
     class Settings:
         name = "users"
