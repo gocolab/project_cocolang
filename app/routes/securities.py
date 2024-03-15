@@ -40,7 +40,11 @@ async def sign_in(request:Request, user: OAuth2PasswordRequestForm = Depends()):
         # response.set_cookie(key="Authorization", value=f"Bearer {access_token}", httponly=True)
         response = templates.TemplateResponse(name="main.html"
                                         , context=context)
-        response.set_cookie(key="Authorization", value=f"Bearer {access_token}")
+        response.set_cookie(key="Authorization", value=f"Bearer {access_token}"
+                            ,httponly=True  # Prevents client-side JS from accessing the cookie
+                            ,samesite="Lax"  # Controls cross-site cookie sending
+                            ,secure=True  # Ensures cookie is sent over HTTPS only
+                            )
         return response        
 
     context = {'request': request, 'error': "Invalid password."}

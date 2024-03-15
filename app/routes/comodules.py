@@ -54,9 +54,7 @@ async def create(request: Request):
 
 @router.get("/list/{page_number}")
 @router.get("/list") # 검색 with pagination
-async def list(request: Request, page_number: Optional[int] = 1
-               , user: dict = Depends(authenticate)
-               ):
+async def list(request: Request, page_number: Optional[int] = 1):
     context = await comodules_list(request, page_number)
     
     return templates.TemplateResponse(name="comodules/list.html"

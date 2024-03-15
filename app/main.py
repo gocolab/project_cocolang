@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database.connection import Settings
@@ -27,6 +27,7 @@ from app.routes.common_codes import router as common_codes_router
 from app.routes.comodules import router as comodules_router
 from app.routes.mains import router as mains_router
 from app.routes.securities import router as securities_router
+from app.routes.errors import router as errors_router
 
 app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
@@ -34,6 +35,7 @@ app.include_router(comodules_router, prefix="/comodules")
 app.include_router(mains_router, prefix="/mains")
 app.include_router(comodules_router, prefix="/devtemplates")
 app.include_router(securities_router, prefix="/securities")
+app.include_router(errors_router, prefix="/errors")
 
 @app.on_event("startup")
 async def init_db():
@@ -44,22 +46,42 @@ from app.auth.jwt_handler import verify_access_token
 EXCLUDE_PATHS = [
     "/css", "/images", "/js", "/downloads",
     "/favicon.ico"
-    "/docs",   # Swagger 문서
-    "/openapi.json",  # OpenAPI 스펙
+    # "/docs",   # Swagger 문서
+    # "/openapi.json",  # OpenAPI 스펙
 ]
+
+# Role-based URL access configuration
+ROLE_BASED_ACCESS = {
+    "GUEST": ["/list", "/read"],
+    "ADMIN": ["/insert", "/form"]
+}
 # Middleware for token verification
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
-    request.state.user = None
-    # 요청 URL 확인
-    if not any(path for path in EXCLUDE_PATHS if request.url.path.startswith(path)):
+    # Exclude certain paths from role-based access control
+    if not any(request.url.path.startswith(path) for path in EXCLUDE_PATHS):
         authorization = request.cookies.get("Authorization")
-
         if authorization:
             token = authorization.split(" ")[1]
-            # credentials_exception = HTTPException(status_code=401, detail="Could not validate credentials")
-            user = await verify_access_token(token)
-            request.state.user = user
+            try:
+                user = await verify_access_token(token)
+                request.state.user = user
+            except Exception as e:
+                return HTMLResponse(content=str(e), status_code=401)
+                
+            # Role-based access control
+            user_roles: List[str] = user.get("roles", [])
+            path_allowed = False
+            for role in user_roles:
+                if any(request.url.path.startswith(path) for path in ROLE_BASED_ACCESS.get(role, [])):
+                    path_allowed = True
+                    break
+            
+            if not path_allowed:
+                # Redirect user to a "permission denied" page if they have no access
+                return RedirectResponse(url="/errors/permission-denied")
+
+    # Continue with the next middleware or route handler
     response = await call_next(request)
     return response
 
