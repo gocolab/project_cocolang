@@ -34,7 +34,7 @@ async def extract_list_from_delta(input_str: str):
     return list_input
     
 # CRUD Operations
-@router.post("/create")
+@router.post("/insert")
 async def create(request: Request):
     comodule_data = dict(await request.form())
     # Quill Delta format에서 텍스트 추출

@@ -44,42 +44,50 @@ async def init_db():
 from app.auth.jwt_handler import verify_access_token
 # 제외할 URL 경로 목록
 EXCLUDE_PATHS = [
-    "/css", "/images", "/js", "/downloads",
-    "/favicon.ico"
+    "/css", "/images", "/js"
+    , "/favicon.ico", "/errors"
+    , '/users/form', '/mains/list'
+    ,"/devtemplates/list"
+    , "/comodules/list", '/comodules/v1'
+    , '/securities/login'
     # "/docs",   # Swagger 문서
     # "/openapi.json",  # OpenAPI 스펙
 ]
 
 # Role-based URL access configuration
 ROLE_BASED_ACCESS = {
-    "GUEST": ["/list", "/read"],
-    "ADMIN": ["/insert", "/form"]
+    "GUEST": ["/comodules/download"
+              , "/securities", '/users/read']
+    ,"PARTNER": ["/comodules", "/devtemplates", ]
+    ,"ADMIN": ["/admins", '/commoncodes', '/users']
 }
 # Middleware for token verification
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
     # Exclude certain paths from role-based access control
-    if not any(request.url.path.startswith(path) for path in EXCLUDE_PATHS):
-        authorization = request.cookies.get("Authorization")
-        if authorization:
-            token = authorization.split(" ")[1]
-            try:
-                user = await verify_access_token(token)
-                request.state.user = user
-            except Exception as e:
-                return HTMLResponse(content=str(e), status_code=401)
-                
-            # Role-based access control
-            user_roles: List[str] = user.get("roles", [])
-            path_allowed = False
-            for role in user_roles:
-                if any(request.url.path.startswith(path) for path in ROLE_BASED_ACCESS.get(role, [])):
-                    path_allowed = True
-                    break
-            
-            if not path_allowed:
-                # Redirect user to a "permission denied" page if they have no access
-                return RedirectResponse(url="/errors/permission-denied")
+    authorization = request.cookies.get("Authorization")
+    user = {}
+    if authorization:
+        token = authorization.split(" ")[1]
+        try:
+            user = await verify_access_token(token)
+            request.state.user = user
+        except Exception as e:
+            return HTMLResponse(content=str(e), status_code=401)
+    if not (any(request.url.path.startswith(path) for path in EXCLUDE_PATHS) 
+            or request.url.path == '/'):
+        # Role-based access control
+        user_roles: List[str] = user.get("roles", [])
+        path_allowed = False
+        for role in user_roles:
+            if any(request.url.path.startswith(path) for path in ROLE_BASED_ACCESS.get(role, [])):
+                path_allowed = True
+                break
+        
+        if not path_allowed:
+            # Redirect user to a "permission denied" page if they have no access
+            # return RedirectResponse(url="/errors/permission-denied")
+            return RedirectResponse(url="/securities/login")
 
     # Continue with the next middleware or route handler
     response = await call_next(request)

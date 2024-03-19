@@ -5,14 +5,17 @@ from datetime import datetime
 
 class CoModule(Document):
     main_router: str
-    title: Optional[str] = None
+    title: str = None
     description: Optional[str] = None
     language_id: Optional[str] = None
     language_name: Optional[str] = None
+    language_version: Optional[str] = None
     framework_id: Optional[str] = None
     framework_name: Optional[str] = None
+    framework_version: Optional[str] = None
     database_id: Optional[str] = None
     database_name: Optional[str] = None
+    database_version: Optional[str] = None
     docker_files_links: List[str] = []
     required_packages_versions: Optional[List[str]] = None
     create_date: datetime = Field(default_factory=datetime.now)

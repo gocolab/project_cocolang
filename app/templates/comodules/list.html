@@ -23,7 +23,7 @@ Debugging Coding Test
     </div>
     <div class="col-4">
       <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">검색</button>
-      {% if request.state.user and "ADMIN" in request.state.user.roles %}
+      {% if request.state.user and "PARTNER" in request.state.user.roles %}
       <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/form" formmethod="get">Insert</button>
       {% endif %}
     </div>
