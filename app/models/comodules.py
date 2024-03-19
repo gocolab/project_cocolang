@@ -4,6 +4,7 @@ from pydantic import BaseModel, HttpUrl, Field
 from datetime import datetime
 
 class CoModule(Document):
+    fields: Optional[str] = None
     main_router: str
     title: str = None
     language_id: Optional[str] = None

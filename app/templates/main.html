@@ -112,6 +112,7 @@
                 zip <i class="bi bi-cloud-download"></i>
               </a>
             </div>
+            {#
             <div>
               {% for link in comodule.docker_files_links %}
               <div>
@@ -119,25 +120,19 @@
               </div>
               {% endfor %}
             </div>
+            #}
           </div>
         </div>
         <div class="row py-2">
           <div class="col-5 fw-bold">Packages</div>
           <div class="col-7">
-            <div>
-              {% if comodule.required_packages_versions %}
-              {% for package in comodule.required_packages_versions %}
-              <div>{{ package }}</div>
-              {% endfor %}
-              {% else %}
-              <div>No packages specified.</div>
-              {% endif %}
-            </div>
+            {{ comodule.required_packages_versions }}
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </div>
 </div>
 {% endblock %} {% block foot_javascripts %}
@@ -240,27 +235,13 @@
                   zip <i class="bi bi-cloud-download"></i>
                 </a>
               </div>
-              <div>
-                ${data.docker_files_links.map(link => {
-      // 파일 이름을 '.' 기준으로 분리
-      const parts = link.split('/');
-      // 마지막 부분(확장자)만 추출
-      const extension = parts[parts.length - 1];
-      // 추출된 확장자를 사용하여 링크 텍스트 수정
-      return `<div><a href="${link}" class="download-link">${extension}</a></div>`;
-    }).join('')}
-              </div>
             </div>
-            <div class="row py-2">
-              <div class="col-5 fw-bold">Packages</div>
-              <div class="col-7">
-                <div>
-                  ${data.required_packages_versions && Array.isArray(data.required_packages_versions)
-        ? data.required_packages_versions.map(package => `<div>${package}</div>`).join('')
-        : '<div>No packages specified.</div>'
-      }
-                </div>
-              </div>
+          </div>
+          <div class="row py-2">
+            <div class="col-5 fw-bold">Packages</div>
+            <div class="col-7">
+              ${data.required_packages_versions}
+            </div>
           </div>
     `;
 
