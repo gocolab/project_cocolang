@@ -6,7 +6,6 @@ from datetime import datetime
 class CoModule(Document):
     main_router: str
     title: str = None
-    description: Optional[str] = None
     language_id: Optional[str] = None
     language_name: Optional[str] = None
     language_version: Optional[str] = None
@@ -16,9 +15,12 @@ class CoModule(Document):
     database_id: Optional[str] = None
     database_name: Optional[str] = None
     database_version: Optional[str] = None
-    docker_files_links: List[str] = []
-    required_packages_versions: Optional[List[str]] = None
+    docker_files_links: str
+    required_packages_versions: Optional[str] = None
+    description: Optional[str] = None
     create_date: datetime = Field(default_factory=datetime.now)
+    create_user_id:Optional[str] = None
+    create_user_name:Optional[str] = None
 
     class Settings:
         name = "comodules"

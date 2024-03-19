@@ -13,61 +13,67 @@
 
 {% block main_container %}
 <form action="" method="post">
-    <div class="container">
-        <div class="row gap-3">
-            <div class="form-group col-12">
-                <label class="form-label" for="title">Title:</label>
-                <input type="text" class="form-control" id="title" name="title" required value="Test My CoModule">
+    <div class="row gap-3 px-5">
+        <div class="form-group col-12">
+            <label class="form-label" for="title">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" required value="Test My CoModule">
+        </div>
+        <div class="form-group row">
+            <label for="language_name" class="col-2 form-label">Language:</label>
+            <div class="col-6">
+                <input type="text" class="form-control" id="language_name" name="language_name" required
+                    value="T-Python">
             </div>
-            <div class="form-group row">
-                <label for="language_name" class="col-2 form-label">Language:</label>
-                <div class="col-6">
-                    <input type="text" class="form-control" id="language_name" name="language_name" required
-                        value="T-Python">
-                </div>
-                <div class="col-3">
-                    <input type="text" class="form-control" name="language_version" value="3.11">
-                </div>
+            <div class="col-3">
+                <input type="text" class="form-control" name="language_version" value="3.11">
             </div>
-            <div class="form-group row">
-                <label class="form-label col-2" for="framework_name">Framework:</label>
-                <div class="col-6">
-                    <input type="text" class="form-control" id="framework_name" name="framework_name" value="T-Django">
-                </div>
-                <div class="col-3">
-                    <input type="text" class="form-control" name="language_version" value="10.11">
-                </div>
+        </div>
+        <div class="form-group row">
+            <label class="form-label col-2" for="framework_name">Framework:</label>
+            <div class="col-6">
+                <input type="text" class="form-control" id="framework_name" name="framework_name" value="T-Django">
             </div>
-            <div class="form-group row">
-                <label class="form-label col-2" for="database_name">Database:</label>
-                <div class="col-6">
-                    <input type="text" class="form-control" id="database_name" name="database_name" value="T-MySQL">
-                </div>
-                <div class="col-3">
-                    <input type="text" class="form-control" name="language_version" value="8.11">
-                </div>
+            <div class="col-3">
+                <input type="text" class="form-control" name="language_version" value="10.11">
             </div>
-            <div class="form-group col-12">
-                <label class="form-label">Docker File Links:</label>
-                <div id="docker_files_links" class="quill-editor"></div>
-                <input type="hidden" name="docker_files_links_delta" id="docker_files_links_delta">
+        </div>
+        <div class="form-group row">
+            <label class="form-label col-2" for="database_name">Database:</label>
+            <div class="col-6">
+                <input type="text" class="form-control" id="database_name" name="database_name" value="T-MySQL">
             </div>
-            <div class="form-group col-12">
-                <label class="form-label">Required Package Versions:</label>
-                <div id="required_packages_versions" class="quill-editor"></div>
-                <input type="hidden" name="required_packages_versions_delta" id="required_packages_versions_delta">
+            <div class="col-3">
+                <input type="text" class="form-control" name="language_version" value="8.11">
             </div>
-            <div class="form-group col-12">
-                <label class="form-label">Description</label>
-                <div id="description" class="quill-editor"></div>
-                <input type="hidden" name="description_delta" id="description_delta">
-            </div>
-            <div class="form-group col-12 d-flex justify-content-end">
-                <input type="hidden" name="main_router" value="{{main_router}}">
-                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/insert">
-                    Insert
-                </button>
-            </div>
+        </div>
+        <div class="form-group col-12">
+            <label class="form-label">Docker File Links:</label>
+            <textarea class="form-control quill-editor" name="docker_files_links">
+https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env
+https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile
+https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml
+
+
+            </textarea>
+        </div>
+        <div class="form-group col-12">
+            <label class="form-label">Required Package Versions:</label>
+            <textarea class="form-control quill-editor" name="required_packages_versions">
+Django=5.22
+React=16.11
+jupyterlab=2.1
+            </textarea>
+        </div>
+        <div class="form-group col-12">
+            <label class="form-label">Description</label>
+            <div id="description" class="quill-editor"></div>
+            <input type="hidden" name="description_delta" id="description_delta">
+        </div>
+        <div class="col-12 d-flex justify-content-end">
+            <input type="hidden" name="main_router" value="{{main_router}}">
+            <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/insert">
+                Insert
+            </button>
         </div>
     </div>
 </form>
@@ -79,35 +85,15 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var quillDockerLinks = new Quill('#docker_files_links', {
-            theme: 'snow'
-        });
-        var quillPackageVersions = new Quill('#required_packages_versions', {
-            theme: 'snow'
-        });
         var quillDescription = new Quill('#description', {
             theme: 'snow'
         });
 
-        // 테스트 위한 임시 데이터
-        // 테스트용 Delta format 값 적용
-        var dockerLinksDelta = 'https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env\r\n\rhttps://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile\r\n\rhttps://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml\r\n\r\r\n\r';
-        var packageVersionsDelta = '\r\n\rDjango\r\n\r\r\n\rReact\r\n\rjupyterlab\r\n\r';
-
         // Delta 값을 편집기에 적용
-        quillDockerLinks.setContents(dockerLinksDelta);
-        quillPackageVersions.setContents(packageVersionsDelta);
         quillDescription.setContents('insert value\r\nupdate value');
         // Submit handler
         var form = document.querySelector('form');
         form.onsubmit = function (event) {
-            // Populate hidden form on submit
-            var dockerLinksDelta = document.querySelector('input[name=docker_files_links_delta]');
-            dockerLinksDelta.value = JSON.stringify(quillDockerLinks.getContents());
-
-            var packageVersionsDelta = document.querySelector('input[name=required_packages_versions_delta]');
-            packageVersionsDelta.value = JSON.stringify(quillPackageVersions.getContents());
-
             var description_delta = document.querySelector('input[name=description_delta]');
             description_delta.value = JSON.stringify(quillDescription.getContents());
             return true; // return false to cancel form action

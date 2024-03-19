@@ -61,21 +61,14 @@ ROLE_BASED_ACCESS = {
     ,"PARTNER": ["/comodules", "/devtemplates", ]
     ,"ADMIN": ["/admins", '/commoncodes', '/users']
 }
+
+from app.auth.authenticate import userfromauthenticate
 # Middleware for token verification
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
-    # Exclude certain paths from role-based access control
-    authorization = request.cookies.get("Authorization")
-    user = {}
-    if authorization:
-        token = authorization.split(" ")[1]
-        try:
-            user = await verify_access_token(token)
-            request.state.user = user
-        except Exception as e:
-            return HTMLResponse(content=str(e), status_code=401)
     if not (any(request.url.path.startswith(path) for path in EXCLUDE_PATHS) 
             or request.url.path == '/'):
+        user = userfromauthenticate(request)
         # Role-based access control
         user_roles: List[str] = user.get("roles", [])
         path_allowed = False

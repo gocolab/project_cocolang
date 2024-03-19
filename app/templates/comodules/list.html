@@ -32,10 +32,10 @@ Debugging Coding Test
     <thead>
       <tr>
         <th>No.</th>
-        <th>title</th>
-        <th>language</th>
-        <th>framework</th>
-        <th>database</th>
+        <th>Title</th>
+        <th>Language</th>
+        <th>Framework</th>
+        <th>Database</th>
         <th>Download</th>
         <th>More</th>
       </tr>
@@ -44,10 +44,22 @@ Debugging Coding Test
       {% for comodule in comodules %}
       <tr>
         <td>{{pagination.start_record_number + loop.index}}</td>
-        <td>{{comodule.title}}</td>
-        <td>{{comodule.language_name}}</td>
-        <td>{{comodule.framework_name}}</td>
-        <td>{{comodule.database_name}}</td>
+        <td>
+          {% if request.state.user and "PARTNER" in request.state.user.roles %}
+          <a href="/{{main_router}}/{{ comodule.id }}" class="text-decoration-none">{{ comodule.title }}</a>
+          {% else %}
+          {{ comodule.title }}
+          {% endif %}
+        </td>
+        <td>
+          {{comodule.language_name}}{{ "(" + comodule.language_version + ")" if comodule.language_version else "" }}
+        </td>
+        <td>
+          {{comodule.framework_name}}{{ "(" + comodule.framework_version + ")" if comodule.framework_version else "" }}
+        </td>
+        <td>
+          {{comodule.database_name}}{{ "(" + comodule.database_version + ")" if comodule.database_version else "" }}
+        </td>
         <td class="text-center">
           <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
             zip <i class="bi bi-cloud-download"></i>

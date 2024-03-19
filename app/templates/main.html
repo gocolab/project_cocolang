@@ -23,7 +23,7 @@
   }
 
   .list-group-item:hover {
-    background-color: greenyellow;
+    background-color: gainsboro;
     /* 마우스 오버 시 배경색 변경 */
     cursor: pointer;
     /* 마우스 오버 시 커서 모양 변경 */
@@ -43,9 +43,21 @@
       <tbody id="interactiveTable">
         {% for comodule in comodules_unique %}
         <tr>
-          <td><button type="button" class="btn btn-sm btn-light language">{{comodule.language}}</button></td>
-          <td><button type="button" class="btn btn-sm btn-light framework">{{comodule.framework}}</button></td>
-          <td><button type="button" class="btn btn-sm btn-light database">{{comodule.database}}</button></td>
+          <td>
+            <button type="button" class="btn btn-sm btn-light language">
+              {{comodule.language}}
+            </button>
+          </td>
+          <td>
+            <button type="button" class="btn btn-sm btn-light framework">
+              {{comodule.framework}}
+            </button>
+          </td>
+          <td>
+            <button type="button" class="btn btn-sm btn-light database">
+              {{comodule.database}}
+            </button>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -73,7 +85,7 @@
   <div class="col-4">
     <div class="col-12">
       <div class="m-2 d-flex justify-content-center">
-        <button class="btn btn-sm btn-outline-link" disabled>상세보기</button>
+        <div class="btn btn-sm" disabled>상세보기</div>
       </div>
       <div class="card card-body" id="detail">
         <div class="row">
@@ -243,11 +255,10 @@
               <div class="col-5 fw-bold">Packages</div>
               <div class="col-7">
                 <div>
-                  ${
-                    data.required_packages_versions && Array.isArray(data.required_packages_versions)
-                    ? data.required_packages_versions.map(package => `<div>${package}</div>`).join('')
-                    : '<div>No packages specified.</div>'
-                  }
+                  ${data.required_packages_versions && Array.isArray(data.required_packages_versions)
+        ? data.required_packages_versions.map(package => `<div>${package}</div>`).join('')
+        : '<div>No packages specified.</div>'
+      }
                 </div>
               </div>
           </div>

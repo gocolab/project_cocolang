@@ -4,51 +4,59 @@
 
 {% block main_container %}
 <form action="" method="post">
-    <div class="row">
-        <div class="col-3">
+    <div class="row gap-3 px-5">
+        <div class="col-12">
+            <strong>Title:</strong> {{ comodule.title }}
         </div>
-        <div class="col-6">
-            <div class="row">
-                <div class="col-2 fw-bold">Title</div>
-                <div class="col-10">{{ comodule.title }}</div>
+        <div class="row">
+            <div class="col-2"><strong>Language:</strong></div>
+            <div class="col-6">{{ comodule.language_name }}</div>
+            <div class="col-3">{{ comodule.language_version }}</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><strong>Framework:</strong></div>
+            <div class="col-6">{{ comodule.framework_name }}</div>
+            <div class="col-3">{{ comodule.framework_version }}</div>
+        </div>
+        <div class="row">
+            <div class="col-2"><strong>Database:</strong></div>
+            <div class="col-6">{{ comodule.database_name }}</div>
+            <div class="col-3">{{ comodule.database_version }}</div>
+        </div>
+        <div class="col-12">
+            <label class="form-label">
+                Docker File Links:
+                <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
+                    zip <i class="bi bi-cloud-download"></i>
+                </a>
+            </label>
+            <div class="form-control bg-transparent border-0" readonly>
+                {{ comodule.docker_files_links_content }}
             </div>
-            <div class="row">
-                <div class="col-2 fw-bold">Language</div>
-                <div class="col-10">{{ comodule.language_name }}</div>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Required Package Versions:</label>
+            <div class="form-control bg-transparent border-0" readonly>
+                {{ comodule.required_packages_versions_content }}
             </div>
-            <div class="row">
-                <div class="col-2 fw-bold">Framework</div>
-                <div class="col-10">{{ comodule.framework_name }}</div>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Description:</label>
+            <div class="form-control bg-transparent border-0" readonly>
+                {{ comodule.description_content }}
             </div>
-            <div class="row">
-                <div class="col-2 fw-bold">Database</div>
-                <div class="col-10">{{ comodule.database_name }}</div>
-            </div>
-            <div class="row">
-                <div class="col-2 fw-bold">Docker File Links:</div>
-                <div class="col-10">
-                    <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
-                        zip <i class="bi bi-cloud-download"></i>
-                      </a>
-                    {% for link in comodule.docker_files_links %}
-                    <div>
-                        <a href="{{ link }}" class="d-block download-link">{{ link.split('/')[-1] }}</a>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="form-group m-2 d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/insert" formmethod="get">
-                    List
-                </button>
-                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}">
-                    Delete
-                </button>
-            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
+                List
+            </button>
+            <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}"
+                formmethod="post">
+                Delete
+            </button>
         </div>
     </div>
 </form>
-
 {% endblock %}
 {% block foot_javascripts %}
 <script>

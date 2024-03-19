@@ -32,17 +32,19 @@ async def extract_list_from_delta(input_str: str):
     list_input = [line.strip() for line in lines if line.strip()]
     
     return list_input
-    
+
+from app.auth.authenticate import userfromauthenticate
 # CRUD Operations
 @router.post("/insert")
 async def create(request: Request):
     comodule_data = dict(await request.form())
     # Quill Delta format에서 텍스트 추출
-    comodule_data["docker_files_links"] = await extract_list_from_delta(comodule_data.get("docker_files_links_delta",""))
-    comodule_data["required_packages_versions"] = await extract_list_from_delta(comodule_data.get("required_packages_versions_delta",""))
+    comodule_data["description"] = await extract_list_from_delta(comodule_data.get("description_delta",""))
+    user = userfromauthenticate(request)
+    comodule_data["create_user_id"] = user.name
+    comodule_data["create_user_name"] = user.id
     # Pydantic 모델에 맞지 않는 키 제거
-    del comodule_data["docker_files_links_delta"]
-    del comodule_data["required_packages_versions_delta"]
+    del comodule_data["description_delta"]
 
     comodule = CoModule(**comodule_data)
     result_id = await collection_comodule.save(comodule)
@@ -93,12 +95,14 @@ async def read(request: Request, comodule_id: str):
 
 @router.post("/update/{comodule_id}")
 async def update(request: Request, comodule_id: str):
+    
     comodule_data = await request.form()
     comodule = await collection_comodule.get(comodule_id)
     if comodule:
         updated_comodule = {**comodule.dict(), **comodule_data}
         await collection_comodule.save(updated_comodule)
-        return templates.TemplateResponse("comodules/read.html", {"request": request, "comodule": updated_comodule})
+        return templates.TemplateResponse("comodules/read.html"
+                                          , {"request": request, "comodule": updated_comodule})
     else:
         raise HTTPException(status_code=404, detail="CoModule not found")
 

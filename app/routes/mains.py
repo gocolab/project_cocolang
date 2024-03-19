@@ -33,7 +33,9 @@ async def main_list(request: Request, page_number: Optional[int] = 1):
     comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
                                                                      ,page_number
                                                                      ,5)
-    comodule = await collection_comodule.get(comodules_list[0].id)
+    comodule = {}
+    if comodules_list:
+        comodule = await collection_comodule.get(comodules_list[0].id)
 
     conditions = [
         {
