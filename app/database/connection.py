@@ -53,7 +53,8 @@ class Database:
         doc_id = id
 
         # des_body = {k: v for k, v in des_body.items() if v is not None}
-        update_query = {"$set": {**body}}
+        # update_query = {"$set": {**body}}
+        update_query = body
 
         doc = await self.get(doc_id)
         if not doc:

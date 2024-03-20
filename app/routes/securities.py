@@ -73,7 +73,7 @@ async def sign_user_in(user: OAuth2PasswordRequestForm = Depends()) -> dict:
 # 로그아웃 처리
 @router.get("/logout")
 async def logout(request: Request):
-    request.state.user = None
+    request.state.user = {}
     context = await main_list(request, page_number=1)
 
     response = templates.TemplateResponse("main.html"

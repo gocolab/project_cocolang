@@ -29,7 +29,9 @@
     /* 마우스 오버 시 커서 모양 변경 */
   }
 </style>
-{% endblock %} {% block main_container %}
+{% endblock %} 
+
+{% block main_container %}
 <div class="row">
   <div class="col-4">
     <table class="table table-sm text-center vertical-lines-table">
@@ -75,7 +77,10 @@
         <li class="list-group-item lh-sm" data-id="{{comodule.id}}">
           <div>
             <h6 class="my-0">{{comodule.title}}</h6>
-            <div class="text-body-secondary small">{{comodule.description}}</div>
+            <div class="text-body-secondary small">
+              {{comodule.language_name}}{{ "(" + comodule.language_version + ")" if comodule.language_version else "" }}
+              {{comodule.framework_name}}{{ "(" + comodule.framework_version + ")" if comodule.framework_version else "" }}
+              {{comodule.database_name}}{{ "(" + comodule.database_version + ")" if comodule.database_version else "" }}
           </div>
         </li>
         {% endfor %}
@@ -127,6 +132,12 @@
           <div class="col-5 fw-bold">Packages</div>
           <div class="col-7">
             {{ comodule.required_packages_versions }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5 fw-bold">Enroll</div>
+          <div class="col-7">
+            {{ comodule.user_name }}
           </div>
         </div>
       </div>
@@ -243,6 +254,13 @@
               ${data.required_packages_versions}
             </div>
           </div>
+          <div class="row">
+            <div class="col-5 fw-bold">Enroll</div>
+            <div class="col-7">
+              ${data.user_name}
+            </div>
+          </div>
+  
     `;
 
     // 기존 컨텐츠를 새로운 컨텐츠로 교체
@@ -275,11 +293,17 @@
         const listGroup = document.querySelector('.list-group');
         listGroup.innerHTML = ''; // Clear existing list
         data.comodules.forEach(comodule => {
+          let languageInfo = comodule.language_name + (comodule.language_version ? ` (${comodule.language_version})` : "");
+          let frameworkInfo = comodule.framework_name + (comodule.framework_version ? ` (${comodule.framework_version})` : "");
+          let databaseInfo = comodule.database_name + (comodule.database_version ? ` (${comodule.database_version})` : "");
+
           listGroup.innerHTML += `
           <li class="list-group-item lh-sm" data-id="${comodule.id}">
             <div>
               <h6 class="my-0">${comodule.title}</h6>
-              <div class="text-body-secondary small">${comodule.description}</div>
+              <div class="text-body-secondary small">
+                ${languageInfo} ${frameworkInfo} ${databaseInfo}
+              </div>
             </div>
           </li>`;
         });

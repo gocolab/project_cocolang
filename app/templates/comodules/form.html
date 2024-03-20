@@ -34,7 +34,7 @@
                 <input type="text" class="form-control" id="framework_name" name="framework_name" value="T-Django">
             </div>
             <div class="col-3">
-                <input type="text" class="form-control" name="language_version" value="10.11">
+                <input type="text" class="form-control" name="framework_version" value="10.11">
             </div>
         </div>
         <div class="form-group row">
@@ -43,7 +43,7 @@
                 <input type="text" class="form-control" id="database_name" name="database_name" value="T-MySQL">
             </div>
             <div class="col-3">
-                <input type="text" class="form-control" name="language_version" value="8.11">
+                <input type="text" class="form-control" name="database_version" value="8.11">
             </div>
         </div>
         <div class="form-group col-12">
@@ -66,8 +66,8 @@ jupyterlab=2.1
         </div>
         <div class="form-group col-12">
             <label class="form-label">Description</label>
-            <div id="description" class="quill-editor"></div>
-            <input type="hidden" name="description_delta" id="description_delta">
+            <div id="description_delta" class="quill-editor"></div>
+            <input type="hidden" name="description" id="description">
         </div>
         <div class="col-12 d-flex justify-content-end">
             <input type="hidden" name="main_router" value="{{main_router}}">
@@ -85,7 +85,7 @@ jupyterlab=2.1
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var quillDescription = new Quill('#description', {
+        var quillDescription = new Quill('#description_delta', {
             theme: 'snow'
         });
 
@@ -94,7 +94,7 @@ jupyterlab=2.1
         // Submit handler
         var form = document.querySelector('form');
         form.onsubmit = function (event) {
-            var description_delta = document.querySelector('input[name=description_delta]');
+            var description_delta = document.querySelector('#description');
             description_delta.value = JSON.stringify(quillDescription.getContents());
             return true; // return false to cancel form action
         };

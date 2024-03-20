@@ -66,9 +66,11 @@ from app.auth.authenticate import userfromauthenticate
 # Middleware for token verification
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
+    user = await userfromauthenticate(request)
+    request.state.user = user
+
     if not (any(request.url.path.startswith(path) for path in EXCLUDE_PATHS) 
             or request.url.path == '/'):
-        user = userfromauthenticate(request)
         # Role-based access control
         user_roles: List[str] = user.get("roles", [])
         path_allowed = False

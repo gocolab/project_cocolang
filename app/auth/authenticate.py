@@ -27,7 +27,6 @@ async def userfromauthenticate(request: Request):
         token = authorization.split(" ")[1]
         try:
             user = await verify_access_token(token)
-            request.state.user = user
         except Exception as e:
             return HTMLResponse(content=str(e), status_code=401)
     return user
