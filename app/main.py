@@ -49,7 +49,7 @@ EXCLUDE_PATHS = [
     , '/users/form', '/mains/list'
     ,"/devtemplates/list"
     , "/comodules/list", '/comodules/v1'
-    , '/securities/login'
+    , '/securities/login', '/users/signup'
     # "/docs",   # Swagger 문서
     # "/openapi.json",  # OpenAPI 스펙
 ]

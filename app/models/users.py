@@ -5,10 +5,10 @@ from pydantic import BaseModel, EmailStr
 
 
 class User(Document):
-    name: Optional[str] = None
+    name: str = None
     email: EmailStr
     password: str
-    roles : Optional[List[str]] = None
+    roles :List[str] = ['GUEST']
 
     class Settings:
         name = "users"
