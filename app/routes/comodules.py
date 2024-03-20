@@ -223,5 +223,9 @@ async def update_comodule_approach(comodule_id, user):
     # approach 필드에 새로운 항목을 추가합니다.
     await collection_comodule.update_withjson(
         comodule_id,
-        {"$push": {"approach": [download_date, user_id, user_name]}}
+        {"$push": {
+            "approach": {
+                'download_date':download_date
+                , 'user_id':user_id
+                , 'user_name':user_name}}}
     )
