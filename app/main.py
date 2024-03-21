@@ -41,7 +41,7 @@ app.include_router(errors_router, prefix="/errors")
 async def init_db():
     await settings.initialize_database()
 
-from app.auth.jwt_handler import verify_access_token
+# middleware for auth
 # 제외할 URL 경로 목록
 EXCLUDE_PATHS = [
     "/css", "/images", "/js"
@@ -90,7 +90,6 @@ async def auth_middleware(request: Request, call_next):
     return response
 
 import time
-import json
 from app.models.request_log import RequestLog  # 로그 모델 임포트
 async def log_request_response(request: Request, response: Response, user):
     # 요청 처리 전 시간 측정
@@ -100,20 +99,6 @@ async def log_request_response(request: Request, response: Response, user):
     parameters = {}
     if request.method == "GET":
         parameters = dict(request.query_params)
-    # elif request.method in ["POST", "PUT", "DELETE"]:
-    #     # Accumulate request body data into a bytearray
-    #     # request_body = bytearray()
-    #     # async for chunk in request.stream():
-    #     #     request_body.extend(chunk)
-    #     # # Decode the bytearray as JSON
-    #     # parameters = json.loads(request_body.decode())
-    # else:
-
-    # async def response_bytes(response):
-    #     async for chunk in response.body_iterator:
-    #         yield chunk
-    
-    # response_body = b''.join([chunk async for chunk in response_bytes(response)])
     
     end_time = time.time()
     duration = end_time - start_time
@@ -137,7 +122,7 @@ async def log_request_response(request: Request, response: Response, user):
     # MongoDB에 로그 데이터 저장
     await log_data.insert()
 
-
+# setup resources
 from fastapi.staticfiles import StaticFiles
 # url 경로, 자원 물리 경로, 프로그램밍 측면
 import os
@@ -159,6 +144,34 @@ from typing import List, Optional
 @app.get("/")
 async def root(request: Request, page_number: Optional[int] = 1):
     return RedirectResponse(url=f"/mains/list/{page_number}")
+
+# Error Handler
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi import HTTPException
+from pydantic import ValidationError
+
+@app.exception_handler(RequestValidationError)
+@app.exception_handler(StarletteHTTPException)
+@app.exception_handler(ValidationError)
+async def http_exception_handler(request: Request, exc: Exception):
+    status_code = 500  # 기본값으로 설정
+
+    if isinstance(exc, HTTPException):
+        status_code = exc.status_code
+        message = exc.detail
+    elif isinstance(exc, RequestValidationError) or isinstance(exc, ValidationError):
+        status_code = 400
+        message = "Validation Error"
+    elif isinstance(exc, StarletteHTTPException):
+        status_code = exc.status_code
+        message = exc.detail
+    else:
+        message = "Internal Server Error"
+    return templates.TemplateResponse("/errors/errors.html"
+                                      , {"request": request
+                                        , "message": message}
+                                      , status_code=status_code)
 
 if __name__ == '__main__':
     pass
