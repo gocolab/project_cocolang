@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 **/__init__.py
 temp.txt
+app/.env
