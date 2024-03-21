@@ -27,7 +27,7 @@ async def insert(request:Request):
 from app.routes.mains import main_list
 @router.post("/login")
 async def sign_in(request:Request, user: OAuth2PasswordRequestForm = Depends()):
-    user_exist = await User.find_one(User.email == user.email)
+    user_exist = await User.find_one(User.email == user.username)
     if not user_exist:
         context = {'request': request, 'error': "User with email does not exist."}
         return templates.TemplateResponse(name="securities/login.html"

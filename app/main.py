@@ -86,56 +86,57 @@ async def auth_middleware(request: Request, call_next):
 
     # Continue with the next middleware or route handler
     response = await call_next(request)
+    await log_request_response(request, response, user)
     return response
 
 import time
+import json
 from app.models.request_log import RequestLog  # 로그 모델 임포트
-# 미들웨어를 사용하여 요청과 응답 로그를 MongoDB에 저장
-# @app.middleware("http")
-async def log_request_response(request: Request, call_next):
+async def log_request_response(request: Request, response: Response, user):
     # 요청 처리 전 시간 측정
     start_time = time.time()
+ 
+     # Extract parameters based on the request method
+    parameters = {}
+    if request.method == "GET":
+        parameters = dict(request.query_params)
+    # elif request.method in ["POST", "PUT", "DELETE"]:
+    #     # Accumulate request body data into a bytearray
+    #     # request_body = bytearray()
+    #     # async for chunk in request.stream():
+    #     #     request_body.extend(chunk)
+    #     # # Decode the bytearray as JSON
+    #     # parameters = json.loads(request_body.decode())
+    # else:
 
-    # 요청 처리
-    original_response  = await call_next(request)
-
-    # 요청 처리 후 시간 측정
+    # async def response_bytes(response):
+    #     async for chunk in response.body_iterator:
+    #         yield chunk
+    
+    # response_body = b''.join([chunk async for chunk in response_bytes(response)])
+    
     end_time = time.time()
-
-    # 처리 시간 계산 (초 단위)
     duration = end_time - start_time
-
-    # 응답의 본문을 읽음 (스트리밍 응답을 처리하기 위해)
-    response_body = b''
-    async for chunk in original_response.body_iterator:
-        response_body += chunk
-    # 새로운 응답 생성
-    new_response = Response(content=response_body
-                            , status_code=original_response.status_code
-                            , headers=dict(original_response.headers))
     
     # 로그 데이터 준비 및 저장
     log_data = RequestLog(
         request={
-            "method": request.method,
-            "url": str(request.url),
-            "body": (await request.body())
+            "method": request.method
+            ,'header': dict(request.headers)
+            , "parameters": parameters
+            # ,"body": (await request.body())
         },
         response={
-            "status_code": original_response.status_code,
-            "body": response_body,  # 여기서는 'utf-8' 대신 적절한 인코딩을 사용해야 할 수도 있음
+            "status_code": response.status_code,
+            # "body": response_body,  # 여기서는 'utf-8' 대신 적절한 인코딩을 사용해야 할 수도 있음
         }
         ,duration=duration
+        ,user=user
     )
 
     # MongoDB에 로그 데이터 저장
     await log_data.insert()
 
-    return new_response
-
-@app.get("/items/")
-async def read_items(item_id: str):
-    return {"item_id": item_id}
 
 from fastapi.staticfiles import StaticFiles
 # url 경로, 자원 물리 경로, 프로그램밍 측면

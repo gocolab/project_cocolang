@@ -7,6 +7,7 @@ class RequestLog(Document):
     response: Dict
     create_timestamp: datetime = datetime.now()
     duration : datetime
+    user :Optional[Dict]=None
 
     class Settings:
         name = "request_logs"
