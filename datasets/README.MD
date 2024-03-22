@@ -3,8 +3,8 @@
 
 ```
 ~$ docker exec project_cocolabhub-mongodb-1 mongodump --uri "mongodb://127.0.0.1:27017/project_cocolabhub" --out=/data/dump/
-~$ docker cp project_cocolabhub-fastapi-1:/data/dump/ .
-~$ docker cp ./dump project_cocolabhub-mongodb-1:/
+~$ docker cp project_cocolabhub-fastapi-1:/data/dump/ ./datasets
+~$ docker cp ./dump project_cocolabhub-fastapi-1:/
 ~$ docker exec project_cocolabhub-mongodb-1 mongorestore --uri "mongodb://mongodb:27017/project_cocolabhub" /dump/project_cocolabhub
 
 
