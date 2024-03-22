@@ -1,138 +1,191 @@
-[
+[{
+  "_id": {
+    "$oid": "65f94db5d75da47c35648c26"
+  },
+  "fields": "T웹 개발",
+  "main_router": "comodules",
+  "title": "T풀스택 웹 개발",
+  "description": "T클라이언트와 서버 사이드 모두에서 작동하는 어플리케이션 개발.",
+  "language_name": "TJavaScript",
+  "framework_name": "TVue.js",
+  "database_name": "TPostgreSQL",
+  "docker_files_links": "https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env",
+  "required_packages_versions": "JavaScript=11.2",
+  "approach": [
     {
-      "fields": "웹 개발",
-      "title": "풀스택 웹 개발",
-      "description": "클라이언트와 서버 사이드 모두에서 작동하는 어플리케이션 개발.",
-      "language_name": "JavaScript",
-      "framework_name": "Vue.js",
-      "database_name": "PostgreSQL",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "모바일 개발",
-      "title": "안드로이드 앱 개발",
-      "description": "안드로이드 운영 체제를 위한 모바일 어플리케이션 개발.",
-      "language_name": "Kotlin",
-      "framework_name": "Android Studio",
-      "database_name": "SQLite",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "데이터 과학",
-      "title": "데이터 분석",
-      "description": "데이터를 분석하여 의미있는 인사이트를 제공합니다.",
-      "language_name": "Python",
-      "framework_name": "Pandas",
-      "database_name": "MySQL",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "게임 개발",
-      "title": "게임 엔진 개발",
-      "description": "고성능 게임 엔진 개발.",
-      "language_name": "C++",
-      "framework_name": "Unreal Engine",
-      "database_name": "Firebase",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "인공지능",
-      "title": "머신러닝 모델 개발",
-      "description": "예측 모델링과 데이터 마이닝을 위한 머신러닝 모델 개발.",
-      "language_name": "Python",
-      "framework_name": "TensorFlow",
-      "database_name": "MongoDB",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "클라우드 컴퓨팅",
-      "title": "클라우드 인프라 구축",
-      "description": "클라우드 기반 서비스와 어플리케이션을 위한 인프라 구축.",
-      "language_name": "Python",
-      "framework_name": "Docker",
-      "database_name": "Cassandra",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "사이버 보안",
-      "title": "보안 프로토콜 개발",
-      "description": "데이터 보호를 위한 보안 프로토콜 개발.",
-      "language_name": "Rust",
-      "framework_name": "Rocket",
-      "database_name": "Redis",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "블록체인",
-      "title": "스마트 컨트랙트 개발",
-      "description": "블록체인 기술을 활용한 스마트 컨트랙트 개발.",
-      "language_name": "Solidity",
-      "framework_name": "Truffle",
-      "database_name": "Ethereum",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "사물인터넷(IoT)",
-      "title": "IoT 디바이스 개발",
-      "description": "연결된 디바이스와 시스템을 위한 사물인터넷 솔루션 개발.",
-      "language_name": "C",
-      "framework_name": "Arduino",
-      "database_name": "InfluxDB",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields":"웹 개발",
-      "title": "서버리스 백엔드 개발",
-      "description": "서버리스 아키텍처를 사용하여 백엔드 시스템 개발.",
-      "language_name": "Node.js",
-      "framework_name": "Serverless Framework",
-      "database_name": "DynamoDB",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "데스크탑 개발",
-      "title": "크로스 플랫폼 데스크탑 애플리케이션",
-      "description": "여러 운영 체제에서 실행되는 데스크탑 애플리케이션 개발.",
-      "language_name": "C#",
-      "framework_name": "Electron",
-      "database_name": "SQLite",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "데이터 시각화",
-      "title": "대시보드 개발",
-      "description": "비즈니스 인텔리전스 대시보드 개발.",
-      "language_name": "JavaScript",
-      "framework_name": "D3.js",
-      "database_name": "PostgreSQL",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "API 개발",
-      "title": "RESTful API 개발",
-      "description": "다양한 플랫폼과 언어에서 사용할 수 있는 RESTful API 개발.",
-      "language_name": "Python",
-      "framework_name": "Flask",
-      "database_name": "MySQL",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "클라우드 서비스",
-      "title": "클라우드 기반 API 관리",
-      "description": "클라우드 환경에서 API를 관리하고 모니터링하는 서비스 개발.",
-      "language_name": "Go",
-      "framework_name": "Gin",
-      "database_name": "Cloud Firestore",
-      "docker_files_links": ["<links>"]
-    },
-    {
-      "fields": "UI/UX 디자인",
-      "title": "인터랙티브 웹 디자인",
-      "description": "사용자 경험을 중심으로 한 인터랙티브 웹 사이트 디자인.",
-      "language_name": "JavaScript",
-      "framework_name": "Figma",
-      "database_name": "none",
-      "docker_files_links": ["<links>"]
+      "download_date": "20240320024702",
+      "user_id": "65e950f3846a3ffab52d0ff9",
+      "user_name": "test 01"
     }
   ]
-  
+},
+{
+  "_id": {
+    "$oid": "65f94db5d75da47c35648c28"
+  },
+  "fields": "T모바일 개발",
+  "main_router": "comodules",
+  "title": "T안드로이드 앱 개발",
+  "description": "T안드로이드 운영 체제를 위한 모바일 어플리케이션 개발.",
+  "language_name": "TKotlin",
+  "framework_name": "TAndroid Studio",
+  "database_name": "TSQLite",
+  "docker_files_links": "https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env",
+  "required_packages_versions": "Kotlin=5.6",
+  "approach": [
+    {
+      "download_date": "20240320024700",
+      "user_id": "65e950f3846a3ffab52d0ff9",
+      "user_name": "test 01"
+    },
+    {
+      "download_date": "20240320024701",
+      "user_id": "65e950f3846a3ffab52d0ff9",
+      "user_name": "test 01"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "65fa328a9d3e58bcd31ed5ad"
+  },
+  "fields": null,
+  "main_router": "comodules",
+  "title": "Test My CoModule",
+  "language_id": null,
+  "language_name": "T-Python",
+  "language_version": "8.11",
+  "framework_id": null,
+  "framework_name": "T-Django",
+  "framework_version": null,
+  "database_id": null,
+  "database_name": "T-MySQL",
+  "database_version": null,
+  "docker_files_links": "https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml\r\n\r\n\r\n            ",
+  "required_packages_versions": "Django=5.22\r\nReact=16.11\r\njupyterlab=2.1\r\n            ",
+  "description": "{\"ops\":[{\"insert\":\"연습\\n연습\\n\"}]}",
+  "create_date": {
+    "$date": "2024-03-20T00:49:14.816Z"
+  },
+  "create_user_id": "test 01",
+  "create_user_name": "65e950f3846a3ffab52d0ff9",
+  "approach": [
+    {
+      "download_date": "20240320024704",
+      "user_id": "65e950f3846a3ffab52d0ff9",
+      "user_name": "test 01"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "65fa4e64c90a681cfb1ec948"
+  },
+  "fields": null,
+  "main_router": "comodules",
+  "title": "Test Python",
+  "language_id": null,
+  "language_name": "T-Python",
+  "language_version": "3.11",
+  "framework_id": null,
+  "framework_name": "T-Django",
+  "framework_version": "10.11",
+  "database_id": null,
+  "database_name": "T-MySQL",
+  "database_version": "8.11",
+  "docker_files_links": "https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml\r\n\r\n\r\n            ",
+  "required_packages_versions": "Django=5.22\r\nReact=16.11\r\njupyterlab=2.1\r\n            ",
+  "description": "{\"ops\":[{\"insert\":\"python \\n연습\\n\"}]}",
+  "create_date": {
+    "$date": "2024-03-20T02:48:04.510Z"
+  },
+  "create_user_id": "test 01",
+  "create_user_name": "65e950f3846a3ffab52d0ff9",
+  "approach": [
+    {
+      "download_date": "20240321032800",
+      "user_id": "65e950f3846a3ffab52d0ff9",
+      "user_name": "test 01"
+    },
+    {
+      "download_date": "20240321032816",
+      "user_id": "65e950f3846a3ffab52d0ff9",
+      "user_name": "test 01"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "65fa9daf97d416cfa79e6c9e"
+  },
+  "fields": null,
+  "main_router": "devtemplates",
+  "title": "co_data_analysis",
+  "language_id": null,
+  "language_name": "Python",
+  "language_version": "3.11",
+  "framework_id": null,
+  "framework_name": "",
+  "framework_version": "",
+  "database_id": null,
+  "database_name": "Mongo",
+  "database_version": "7",
+  "docker_files_links": "https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml",
+  "required_packages_versions": "jupyterlab \r\npyarrow\r\npandas \r\nnumpy \r\nmatplotlib\r\nseaborn\r\nscipy\r\nscikit-learn\r\nwget\r\nkonlpy\r\npymongo\r\npython-mecab-ko \r\npyLDAvis",
+  "description": "{\"ops\":[{\"insert\":\"## co_data_analysis\\n#### Main package\\n- python:3.11\\n- mongo:7\\n\\n#### CLI with Dockerfile and compose.xml : duration 150.4s\\n```\\n# --project-name is docker container name\\n~$ docker-compose --project-name data_analysis up -d --build\\n```\\n#### connect remote Docker container\\n@ http://localhost:8888/\\n@ mongodb://localhost:27017/ or mongodb://mongodb:27017/\\n\\n#### samples\\n- [samples\\\\sample_mongodb_connection.ipynb](./samples/sample_mongodb_connection.ipynb)\\n\\n\"}]}",
+  "create_date": {
+    "$date": "2024-03-20T08:26:23.477Z"
+  },
+  "create_user_id": "yoju lab",
+  "create_user_name": "65fa9921a633f1f80c9fba35"
+},
+{
+  "_id": {
+    "$oid": "65faa13d97d416cfa79e6c9f"
+  },
+  "fields": null,
+  "main_router": "devtemplates",
+  "title": "co data_engineers",
+  "language_id": null,
+  "language_name": "Python",
+  "language_version": "3.11",
+  "framework_id": null,
+  "framework_name": "fastapi",
+  "framework_version": "0.110.0",
+  "database_id": null,
+  "database_name": "Mongo",
+  "database_version": "7",
+  "docker_files_links": "https://raw.githubusercontent.com/gocolab/co_templates/data_engineers/.env\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/data_engineers/Dockerfile\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/data_engineers/docker-compose.yml",
+  "required_packages_versions": "# data analysis\r\njupyterlab\r\npyarrow\r\npandas\r\nnumpy\r\nmatplotlib\r\nseaborn\r\nscipy\r\nscikit-learn\r\nwget\r\nkonlpy\r\npymongo\r\npython-mecab-ko\r\npyLDAvis\r\n# fastapi\r\nfastapi\r\npydantic\r\nuvicorn\r\njinja2\r\npython-multipart\r\npydantic-settings\r\n# web scrapping\r\nrequests\r\nbeautifulsoup4\r\nlxml\r\nselenium\r\nurllib3\r\nscrapy\r\nwebdriver_manager",
+  "description": "{\"ops\":[{\"insert\":\"## co_data_engineers\\n\\n#### Main package\\n- python:3.11\\n- mongo:7\\n- fastapi\\n- selenium\\n#### CLI with Dockerfile and compose.xml : duration 150.4s\\n```\\n# --project-name is docker container name\\n~$ docker-compose --project-name data_engineers up -d --build\\n```\\n#### connect remote Docker container\\n- @ http://localhost:8888/\\n- @ mongodb://localhost:27017/ or mongodb://mongodb:27017/\\n\\n#### samples\\n- [samples\\\\sample_mongodb_connection.ipynb](./samples/sample_mongodb_connection.ipynb)\\n- [samples\\\\sample_selenium.py](./samples/sample_selenium.py)\\n- [apps/main.py](./apps/main.py)\\n\\n\"}]}",
+  "create_date": {
+    "$date": "2024-03-20T08:41:33.278Z"
+  },
+  "create_user_id": "yoju lab",
+  "create_user_name": "65fa9921a633f1f80c9fba35"
+},
+{
+  "_id": {
+    "$oid": "65faa1cd97d416cfa79e6ca0"
+  },
+  "fields": null,
+  "main_router": "devtemplates",
+  "title": "co_web_scrapings",
+  "language_id": null,
+  "language_name": "Python",
+  "language_version": "3.11",
+  "framework_id": null,
+  "framework_name": "",
+  "framework_version": "",
+  "database_id": null,
+  "database_name": "Mongo",
+  "database_version": "7",
+  "docker_files_links": "https://raw.githubusercontent.com/gocolab/co_templates/web_scrapings/.env\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/web_scrapings/Dockerfile\r\nhttps://raw.githubusercontent.com/gocolab/co_templates/web_scrapings/docker-compose.yml",
+  "required_packages_versions": "# data analysis\r\njupyterlab\r\npyarrow\r\npandas\r\nnumpy\r\nmatplotlib\r\nseaborn\r\nscipy\r\nwget\r\npymongo\r\n\r\n# web scrapping\r\nrequests\r\nbeautifulsoup4\r\nlxml\r\npandas\r\nselenium\r\nurllib3\r\nscrapy\r\nwebdriver_manager",
+  "description": "{\"ops\":[{\"insert\":\"## co_web_scrapings\\n\\n#### Main package\\n- python:3.11\\n- mongo:7\\n- selenium\\n\\n#### CLI with Dockerfile and compose.xml : duration 150.4s\\n```\\n# --project-name is docker container name\\n~$ docker-compose --project-name web_scrapings up -d --build\\n```\\n#### connect remote Docker container\\n- @ http://localhost:8888/\\n- @ mongodb://localhost:27017/ or mongodb://mongodb:27017/\\n\\n#### samples\\n- [samples\\\\sample_mongodb_connection.ipynb](./samples/sample_mongodb_connection.ipynb)\\n- [samples\\\\sample_selenium.py](./samples/sample_selenium.py)\\n\\n\"}]}",
+  "create_date": {
+    "$date": "2024-03-20T08:43:57.200Z"
+  },
+  "create_user_id": "yoju lab",
+  "create_user_name": "65fa9921a633f1f80c9fba35"
+}]
