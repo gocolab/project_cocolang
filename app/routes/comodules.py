@@ -166,9 +166,9 @@ async def format_comodule_details(comodule):
     - A string that contains the formatted details.
     """
     # 각 컴포넌트의 이름과 버전을 조합합니다. 버전 정보가 없는 경우 이름만 사용합니다.
-    language_details = f"{comodule.language_name}" + (f"({comodule.language_version})" if comodule.language_version else "")
-    framework_details = f"{comodule.framework_name}" + (f"({comodule.framework_version})" if comodule.framework_version else "")
-    database_details = f"{comodule.database_name}" + (f"({comodule.database_version})" if comodule.database_version else "")
+    language_details = f"{comodule.language_name}"
+    framework_details = f"{comodule.framework_name}"
+    database_details = f"{comodule.database_name}"
     # 모든 컴포넌트의 상세 정보를 하나의 문자열로 결합합니다.
     return f"{language_details}_{framework_details}_{database_details}"
 
