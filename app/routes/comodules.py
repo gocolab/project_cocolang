@@ -38,6 +38,8 @@ async def create(request: Request):
     user = await userfromauthenticate(request)
     comodule_data["create_user_id"] = user['name']
     comodule_data["create_user_name"] = user['id']
+    main_router = request.url.path.split('/')[1]
+    comodule_data["main_router"] = main_router
 
     comodule = CoModule(**comodule_data)
     result_id = await collection_comodule.save(comodule)
