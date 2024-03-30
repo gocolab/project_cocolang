@@ -3,7 +3,28 @@
 Debugging Coding Test
 {% endblock %}
 
+{% block customize_css %}
+<style>
+  #notification-container >.toast {
+    max-width: none;
+    /* 최대 넓이 제한 없애기 */
+    width: auto;
+    /* 내용에 따라 넓이 자동 조정 */
+  }
+  .td-setup-min-width {
+    min-width: 10rem; /* 원하는 최소 넓이 값으로 조정 */
+  }
+  
+</style>
+{% endblock %}
+
 {% block main_container %}
+<!-- <div id="notification-container"> -->
+<div id="notification-container" class="position-fixed start-50 translate-middle" style="z-index: 1050;">
+  <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+  </div>
+</div>
+
 <form>
   <!-- 검색 항목 추가 필요 -->
   <div class="row">
@@ -30,13 +51,13 @@ Debugging Coding Test
   </div>
   <table class="table table-hover">
     <thead>
-      <tr>
+      <tr class="text-center">
         <th>No.</th>
         <th>Title</th>
         <th>Language</th>
         <th>Framework</th>
         <th>Database</th>
-        <th>Download</th>
+        <th class="td-setup-min-width">Setup</th>
         <th>More</th>
       </tr>
     </thead>
@@ -64,6 +85,10 @@ Debugging Coding Test
           <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
             zip <i class="bi bi-cloud-download"></i>
           </a>
+          <button class="btn btn-sm btn-info copyButton"
+            value="{{comodule.language_name}}_{{comodule.framework_name}}_{{comodule.database_name}}">
+            copy <i class="bi bi-clipboard"></i>
+          </button>
         </td>
         <td>
           <button class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip"
@@ -82,10 +107,55 @@ Debugging Coding Test
 {% endblock %}
 
 {% block foot_javascripts %}
+
+<script>
+  document.querySelectorAll('.copyButton').forEach(button => {
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+
+      // 'this'를 다른 변수에 할당
+      const self = this;
+      createToast(self);
+    });
+  });
+
+  function createToast(thisButton) {
+    const buttonValue = thisButton.value; // 혹은 this.getAttribute('data-value') 등을 사용
+
+    let toastEl = document.querySelector('.toast');
+
+    let command = `docker-compose --project-name ${thisButton.value} up -d --build`;
+    // 클립보드에 명령어 복사
+    navigator.clipboard.writeText(command).then(function () {
+      const toastHtml = `
+            <div class="toast-body">
+              Docker 설치 명령어 copied<br>~$ ${command}
+            </div>
+        `;
+
+      // 알림 창 표시
+      toastEl.innerHTML = toastHtml;
+      let toast = new bootstrap.Toast(toastEl);
+
+      toast.show();
+      // 아이콘 변경
+      thisButton.innerHTML = 'copied <i class="bi bi-clipboard-check"></i>';
+    }, function (err) {
+      console.error('Async: Could not copy text: ', err);
+    });
+
+    // 알림 창이 사라진 후 아이콘 원래대로 변경
+    toastEl.addEventListener('hidden.bs.toast', function () {
+      thisButton.innerHTML = 'copy <i class="bi bi-clipboard"></i>';
+    });
+  }
+
+</script>
+
 <script>
   // 모든 툴팁 활성화
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   })
 </script>
