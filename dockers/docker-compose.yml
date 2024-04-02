@@ -15,6 +15,7 @@ services:
     depends_on:
       - mongodb
   mongodb:
+    container_name: ${CONTAINER_NAME_PREFIX}_mongodb
     image: mongo:7
     restart: always
     ports:
