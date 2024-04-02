@@ -129,7 +129,12 @@ Debugging Coding Test
     navigator.clipboard.writeText(command).then(function () {
       const toastHtml = `
             <div class="toast-body">
-              Docker 설치 명령어 copied<br>~$ ${command}
+              Docker installation command copied<br>
+              ~$ ${command}
+              <hr>
+              Docker reinstallation command copied<br>
+              ~$ docker-compose --project-name ${buttonValue} build --no-cache<br>
+              ~$ docker-compose --project-name ${buttonValue} up -d
             </div>
         `;
 
