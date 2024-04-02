@@ -43,7 +43,7 @@ Debugging Coding Test
       <input class="form-control" placeholder="Enter Search!" name="word" value="{{request._query_params.word}}">
     </div>
     <div class="col-4">
-      <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">검색</button>
+      <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">Search</button>
       {% if request.state.user and "PARTNER" in request.state.user.roles %}
       <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/form" formmethod="get">Insert</button>
       {% endif %}
