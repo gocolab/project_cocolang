@@ -120,11 +120,11 @@ Debugging Coding Test
   });
 
   function createToast(thisButton) {
-    const buttonValue = thisButton.value; // 혹은 this.getAttribute('data-value') 등을 사용
+    const buttonValue = thisButton.value.toLowerCase(); // 혹은 this.getAttribute('data-value') 등을 사용
 
     let toastEl = document.querySelector('.toast');
 
-    let command = `docker-compose --project-name ${thisButton.value} up -d --build`;
+    let command = `docker-compose --project-name ${buttonValue} up -d --build`;
     // 클립보드에 명령어 복사
     navigator.clipboard.writeText(command).then(function () {
       const toastHtml = `
