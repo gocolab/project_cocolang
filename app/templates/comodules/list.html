@@ -125,16 +125,23 @@ Debugging Coding Test
     let toastEl = document.querySelector('.toast');
 
     let command = `docker-compose --project-name ${buttonValue} up -d --build`;
+    const os = require('os');
+    
+    let command;
+    
+    if (os.platform() === 'win32') {
+        // Windows 운영 체제인 경우
+        command = 'docker-compose --project-name ${buttonValue} build --no-cache; docker-compose --project-name ${buttonValue} up -d';
+    } else {
+        // Linux 또는 macOS 운영 체제인 경우
+        command = 'docker-compose --project-name ${buttonValue} build --no-cache && docker-compose --project-name ${buttonValue} up -d';
+    }    
     // 클립보드에 명령어 복사
     navigator.clipboard.writeText(command).then(function () {
       const toastHtml = `
             <div class="toast-body">
               Docker installation command copied<br>
               ~$ ${command}
-              <hr>
-              Docker reinstallation command copied<br>
-              ~$ docker-compose --project-name ${buttonValue} build --no-cache<br>
-              ~$ docker-compose --project-name ${buttonValue} up -d
             </div>
         `;
 
