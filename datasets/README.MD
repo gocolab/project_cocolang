@@ -1,7 +1,19 @@
-### setup commands
+### install dockers
 ```
-~docker_db$ mongodump --uri "mongodb://127.0.0.1:27017/project_cocolabhub" --archive=./initial_data.archive
-~$ docker cp project_cocolabhub_mongodb:/home/initial_data.archive ./
-~$ docker cp ./initial_data.archive project_cocolabhub_jupyter_fastapi:/apps/project_cocolabhub/datasets
-~$ mongorestore --uri "mongodb://project_cocolabhub_mongodb:27017/project_cocolabhub" --archive=/apps/project_cocolabhub/datasets/initial_data.archive
+~% docker-compose --project-name test_cocolang build --no-cache
+~% docker-compose --project-name test_cocolang up -d
+```
+
+### setup initial mongodb datasets commands
+```
+~docker_db$ mongodump --uri "mongodb://cocolabhub_mongodb:27017/project_cocolabhub" --archive=./initial_data.archive
+~$ docker cp cocolabhub_mongodb:/home/initial_data.archive ./
+~$ docker cp ./initial_data.archive cocolabhub_jupyter_fastapi:/apps/project_cocolabhub/datasets
+~$ mongorestore --uri "mongodb://cocolabhub_mongodb:27017/project_cocolabhub" --archive=/apps/project_cocolabhub/datasets/initial_data.archive
+```
+
+### real server
+```
+~$ cd /apps/project_cocolabhub
+~$ uvicorn app.main:app --host 0.0.0.0 --port 8080
 ```
