@@ -7,8 +7,7 @@ After=network.target
 User=mahau_master
 Group=mahau_master
 WorkingDirectory=/apps/project_cocolabhub
-Environment="PATH=/apps/cocolangenv311/bin"
-ExecStart=/apps/cocolangenv311/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+ExecStart=python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 [Install]
 WantedBy=multi-user.target
