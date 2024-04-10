@@ -1,7 +1,7 @@
 ### install dockers
 ```
-~% docker-compose --project-name test_cocolang build --no-cache
-~% docker-compose --project-name test_cocolang up -d
+~% docker-compose --project-name project_cocolang build --no-cache
+~% docker-compose --project-name project_cocolang up -d
 ```
 
 ### setup initial mongodb datasets commands
