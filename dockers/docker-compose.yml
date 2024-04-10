@@ -11,7 +11,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8000:8000
-    command: sleep infinity      
+   volumes:
+      - ./cocolabhub.service:/etc/systemd/system/cocolabhub.service
+    command: 
+      - sleep infinity
+      - sudo systemctl enable cocolabhub.service
     depends_on:
       - mongodb
   mongodb:
