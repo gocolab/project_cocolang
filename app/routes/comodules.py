@@ -36,8 +36,8 @@ from app.auth.authenticate import userfromauthenticate
 async def create(request: Request):
     comodule_data = dict(await request.form())
     user = await userfromauthenticate(request)
-    comodule_data["create_user_id"] = user['name']
-    comodule_data["create_user_name"] = user['id']
+    comodule_data["create_user_id"] = user['id']
+    comodule_data["create_user_name"] = user['name']
     main_router = request.url.path.split('/')[1]
     comodule_data["main_router"] = main_router
 

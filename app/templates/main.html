@@ -128,16 +128,16 @@
             #}
           </div>
         </div>
-        <div class="row py-2">
+        <!-- <div class="row py-2">
           <div class="col-5 fw-bold">Packages</div>
           <div class="col-7">
             {{ comodule.required_packages_versions }}
           </div>
-        </div>
+        </div> -->
         <div class="row">
           <div class="col-5 fw-bold">Enroll</div>
           <div class="col-7">
-            {{ comodule.user_name }}
+            {{ comodule.create_user_name  | default("", True)}}
           </div>
         </div>
       </div>
@@ -248,16 +248,16 @@
               </div>
             </div>
           </div>
-          <div class="row py-2">
+          <!-- <div class="row py-2">
             <div class="col-5 fw-bold">Packages</div>
             <div class="col-7">
               ${data.required_packages_versions}
             </div>
-          </div>
+          </div> -->
           <div class="row">
             <div class="col-5 fw-bold">Enroll</div>
             <div class="col-7">
-              ${data.user_name}
+              ${data.create_user_name ? data.create_user_name : ""}
             </div>
           </div>
   
