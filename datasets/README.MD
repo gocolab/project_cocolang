@@ -2,6 +2,8 @@
 ```
 ~% docker-compose --project-name project_cocolang build --no-cache
 ~% docker-compose --project-name project_cocolang up -d
+~$ sudo docker exec -it project_cocolang_fastapi_1 bash
+# uvicorn app.main:app --host 0.0.0.0
 ```
 
 ### setup initial mongodb datasets commands
