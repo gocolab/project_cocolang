@@ -16,8 +16,8 @@ class CoModule(Document):
     database_id: Optional[str] = None
     database_name: Optional[str] = None
     database_version: Optional[str] = None
-    docker_files_links: list
-    required_packages_versions: Optional[list] = None
+    docker_files_links: str
+    required_packages_versions: Optional[str] = None
     description: Optional[str] = None
     create_date: datetime = Field(default_factory=datetime.now)
     create_user_id:Optional[str] = None
