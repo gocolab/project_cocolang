@@ -73,12 +73,14 @@
         </div>
         <div class="col-12 d-flex justify-content-start">
             <input type="hidden" name="main_router" placeholder="{{main_router}}">
-            <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
-                List
-            </button>
-            <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/insert">
-                Insert
-            </button>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
+                    List
+                </button>
+                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/insert">
+                    Insert
+                </button>
+            </div>
         </div>
     </div>
 </form>
@@ -116,9 +118,9 @@
                         let frameworkName = document.querySelector('#framework_name').value;
                         let databaseName = document.querySelector('#database_name').value;
 
-                        let isOneOfTechFieldsFilled = (languageName || frameworkName || databaseName).length > 0 ; // 적어도 하나 입력됐는지 확인
+                        let isOneOfTechFieldsFilled = (languageName || frameworkName || databaseName).length > 0; // 적어도 하나 입력됐는지 확인
 
-                        if (!isOneOfTechFieldsFilled || !form.checkValidity()){
+                        if (!isOneOfTechFieldsFilled || !form.checkValidity()) {
                             event.preventDefault();
                             event.stopPropagation();
                         }
