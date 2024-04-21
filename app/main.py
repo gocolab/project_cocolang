@@ -32,8 +32,9 @@ from app.routes.errors import router as errors_router
 app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
 app.include_router(comodules_router, prefix="/comodules")
-app.include_router(mains_router, prefix="/mains")
 app.include_router(comodules_router, prefix="/devtemplates")
+app.include_router(comodules_router, prefix="/teams")
+app.include_router(mains_router, prefix="/mains")
 app.include_router(securities_router, prefix="/securities")
 app.include_router(errors_router, prefix="/errors")
 
@@ -48,6 +49,7 @@ EXCLUDE_PATHS = [
     , "/favicon.ico", "/errors"
     , '/users/form', '/mains/list'
     ,"/devtemplates/list"
+    ,"/teams/list"
     , "/comodules/list", '/comodules/v1'
     , '/securities/login', '/users/signup'
     # "/docs",   # Swagger 문서
@@ -58,7 +60,7 @@ EXCLUDE_PATHS = [
 ROLE_BASED_ACCESS = {
     "GUEST": ["/comodules/download"
               , "/securities", '/users/read']
-    ,"PARTNER": ["/comodules", "/devtemplates", ]
+    ,"PARTNER": ["/comodules", "/devtemplates", "/teams",]
     ,"ADMIN": ["/admins", '/commoncodes', '/users']
 }
 
@@ -142,8 +144,8 @@ templates = Jinja2Templates(directory="app/templates/")
 
 from typing import List, Optional
 @app.get("/")
-async def root(request: Request, page_number: Optional[int] = 1):
-    return RedirectResponse(url=f"/mains/list/{page_number}")
+async def root(request: Request):
+    return RedirectResponse(url=f"/mains/list")
 
 # Error Handler
 from starlette.exceptions import HTTPException as StarletteHTTPException

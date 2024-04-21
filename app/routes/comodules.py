@@ -83,9 +83,13 @@ async def read(request: Request, comodule_id: str):
     comodule = await collection_comodule.get(comodule_id)
     if comodule is None:
         raise HTTPException(status_code=404, detail="CoModule not found")
+    
+    user = await userfromauthenticate(request)
+    is_activate = await is_activatebyuser(comodule.create_user_id,user)
     return templates.TemplateResponse("comodules/read.html"
                                       , {"request": request
                                          , "comodule": comodule
+                                         , "is_activate_delete":is_activate
                                          ,'main_router':main_router})
 
 @router.post("/update/{comodule_id}")
@@ -231,3 +235,10 @@ async def update_comodule_approach(comodule_id, user):
                 , 'user_id':user_id
                 , 'user_name':user_name}}}
     )
+
+async def is_activatebyuser(create_user_id, user):
+    user_id = user.get('id')
+    is_activate = False
+    if create_user_id == user_id:
+        is_activate = True
+    return is_activate

@@ -6,66 +6,76 @@
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />
 <style>
     .quill-editor {
-        height: 5rem;
+        height: 10rem;
+    }
+
+    textarea::placeholder {
+        white-space: pre-line;
     }
 </style>
 {% endblock %}
 
 {% block main_container %}
-<form action="" method="post">
+<form action="" method="post" class="needs-validation" novalidate>
     <div class="row gap-3 px-5">
         <div class="form-group col-12">
             <label class="form-label" for="title">Title:</label>
             <input type="text" class="form-control" id="title" name="title" required placeholder="Test My CoModule">
-        </div>
-        <div class="form-group row">
-            <label for="language_name" class="col-2 form-label">Language:</label>
-            <div class="col-6">
-                <input type="text" class="form-control" id="language_name" name="language_name" required
-                    placeholder="T-Python">
-            </div>
-            <div class="col-3">
-                <input type="text" class="form-control" name="language_version" placeholder="3.11">
+            <div class="invalid-feedback">
+                Title must be filled.
             </div>
         </div>
-        <div class="form-group row">
-            <label class="form-label col-2" for="framework_name">Framework:</label>
-            <div class="col-6">
-                <input type="text" class="form-control" id="framework_name" name="framework_name"
-                    placeholder="T-Django">
+        <div class="form-group col-12 row">
+            <div class="col-4">
+                <label for="language_name" class="col form-label">Language:</label>
+                <div class="col">
+                    <textarea class="form-control quill-editor" name="language_name" id="language_name"
+                        placeholder="Python(3.11.9)&#10;JAVA(7)"></textarea>
+                </div>
             </div>
-            <div class="col-3">
-                <input type="text" class="form-control" name="framework_version" placeholder="10.11">
+            <div class="col-4">
+                <label class="form-label col" for="framework_name">Framework:</label>
+                <div class="col">
+                    <textarea class="form-control quill-editor" name="framework_name" id="framework_name"
+                        placeholder="Jupyyrt Lab&#10;SpringBoot(3.11)"></textarea>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="form-label col-2" for="database_name">Database:</label>
-            <div class="col-6">
-                <input type="text" class="form-control" id="database_name" name="database_name" placeholder="T-MySQL">
+            <div class="col-4">
+                <label class="form-label col" for="database_name">Database:</label>
+                <div class="col">
+                    <textarea class="form-control quill-editor" name="database_name" id="database_name"
+                        placeholder="MySQL(8)&#10;Mongodb(7)"></textarea>
+                </div>
             </div>
-            <div class="col-3">
-                <input type="text" class="form-control" name="database_version" placeholder="8.11">
+            <div class="col-12 text-danger small" id="invalid_modules">
+                At least one of Language, Framework, or Database must be filled.
             </div>
         </div>
         <div class="form-group col-12">
             <label class="form-label">Docker File Links:</label>
-            <textarea class="form-control quill-editor" name="docker_files_links" 
-            placeholder="https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env
-https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile
-https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml"></textarea>
+            <textarea class="form-control quill-editor" name="docker_files_links" required
+                placeholder="https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env
+                            https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile
+                            https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml"></textarea>
+            <div class="invalid-feedback">
+                Docker File Links must be filled.
+            </div>
         </div>
         <div class="form-group col-12">
             <label class="form-label">Required Package Versions:</label>
-            <textarea class="form-control quill-editor" name="required_packages_versions" placeholder="Django=5.22
-React=16.11"></textarea>
+            <textarea class="form-control quill-editor" name="required_packages_versions"
+                placeholder="Django==5.22&#10;React==16.11&#10;SpringBoot=3.11"></textarea>
         </div>
         <div class="form-group col-12">
-            <label class="form-label">Description</label>
+            <label class="form-label">More Description</label>
             <div id="description_delta" class="quill-editor"></div>
             <input type="hidden" name="description" id="description">
         </div>
-        <div class="col-12 d-flex justify-content-end">
+        <div class="col-12 d-flex justify-content-start">
             <input type="hidden" name="main_router" placeholder="{{main_router}}">
+            <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
+                List
+            </button>
             <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/insert">
                 Insert
             </button>
@@ -80,19 +90,42 @@ React=16.11"></textarea>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var quillDescription = new Quill('#description_delta', {
+        let quillDescription = new Quill('#description_delta', {
             theme: 'snow'
         });
 
         // Delta 값을 편집기에 적용
         quillDescription.setContents('insert value\r\nupdate value');
         // Submit handler
-        var form = document.querySelector('form');
+        let form = document.querySelector('form');
         form.onsubmit = function (event) {
-            var description_delta = document.querySelector('#description');
+            let description_delta = document.querySelector('#description');
             description_delta.value = JSON.stringify(quillDescription.getContents());
             return true; // return false to cancel form action
         };
+
+        // JavaScript를 사용한 부트스트랩 검증 활성화
+        (function () {
+            'use strict'
+            let forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        let languageName = document.querySelector('#language_name').value;
+                        let frameworkName = document.querySelector('#framework_name').value;
+                        let databaseName = document.querySelector('#database_name').value;
+
+                        let isOneOfTechFieldsFilled = (languageName || frameworkName || databaseName).length > 0 ; // 적어도 하나 입력됐는지 확인
+
+                        if (!isOneOfTechFieldsFilled || !form.checkValidity()){
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false)
+                })
+        })()
     });
 </script>
 
