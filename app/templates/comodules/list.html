@@ -30,12 +30,12 @@ Debugging Coding Test
   <div class="row">
     <div class="col-2">
       <select class="form-select" name="key_name">
-        <option value="title" {{ 'selected' if request._query_params.key_name=='title' else '' }}>title</option>
+        <option value="title" {{ 'selected' if request._query_params.key_name=='title' else '' }}>Title</option>
         <option value="language_name" {{ 'selected' if request._query_params.key_name=='language_name' else '' }}>
-          language</option>
+          Language</option>
         <option value="framework_name" {{ 'selected' if request._query_params.key_name=='framework_name' else '' }}>
-          framework</option>
-        <option value="database_name" {{ 'selected' if request._query_params.key_name=='database_name' else '' }}>email
+          Framework</option>
+        <option value="database_name" {{ 'selected' if request._query_params.key_name=='database_name' else '' }}>Databases
         </option>
       </select>
     </div>
@@ -44,7 +44,7 @@ Debugging Coding Test
     </div>
     <div class="col-4">
       <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">Search</button>
-      {% if request.state.user and "PARTNER" in request.state.user.roles %}
+      {% if request.state.user and "PARTNER" in request.state.user.roles and main_router != 'comodules'%}
       <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/form" formmethod="get">Insert</button>
       {% endif %}
     </div>
@@ -73,13 +73,13 @@ Debugging Coding Test
           {% endif %}
         </td>
         <td>
-          {{comodule.language_name}}{{ "(" + comodule.language_version + ")" if comodule.language_version else "" }}
+          <pre class="pre-scrollable">{{comodule.language_name}}</pre>
         </td>
         <td>
-          {{comodule.framework_name}}{{ "(" + comodule.framework_version + ")" if comodule.framework_version else "" }}
+          <pre class="pre-scrollable">{{comodule.framework_name}}</pre>
         </td>
         <td>
-          {{comodule.database_name}}{{ "(" + comodule.database_version + ")" if comodule.database_version else "" }}
+          <pre class="pre-scrollable">{{comodule.database_name}}</pre>
         </td>
         <td class="text-center">
           <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">

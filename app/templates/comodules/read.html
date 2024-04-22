@@ -7,7 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />
 <style>
     .quill-editor {
-        height: 5rem;
+        height: 10rem;
     }
 </style>
 {% endblock %}
@@ -18,20 +18,25 @@
         <div class="col-12">
             <strong>Title:</strong> {{ comodule.title }}
         </div>
-        <div class="row">
-            <div class="col-2"><strong>Language:</strong></div>
-            <div class="col-6">{{ comodule.language_name }}</div>
-            <div class="col-3">{{ comodule.language_version }}</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><strong>Framework:</strong></div>
-            <div class="col-6">{{ comodule.framework_name }}</div>
-            <div class="col-3">{{ comodule.framework_version }}</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><strong>Database:</strong></div>
-            <div class="col-6">{{ comodule.database_name }}</div>
-            <div class="col-3">{{ comodule.database_version }}</div>
+        <div class="form-group col row">
+            <div class="col-4">
+                <label for="language_name" class="col form-label">Language:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="language_name">{{comodule.language_name}}</pre>
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="form-label col" for="framework_name">Framework:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="framework_name">{{comodule.framework_name}}</pre>
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="form-label col" for="database_name">Database:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="database_name">{{comodule.database_name}}</pre>
+                </div>
+            </div>
         </div>
         <div class="col-12">
             <label class="form-label">
@@ -40,25 +45,31 @@
                     zip <i class="bi bi-cloud-download"></i>
                 </a>
             </label>
+            <div class="form-group col-12">
+                <pre class="pre-scrollable border p-2" name="docker_files_links">{{comodule.docker_files_links}}</pre>
+            </div>
+    
         </div>
         <div class="form-group col-12">
             <label class="form-label">Required Package Versions:</label>
-            <textarea class="form-control quill-editor" name="required_packages_versions" readonly>{{ comodule.required_packages_versions|default('No package versions provided', true) }}
-            </textarea>
+            <pre class="pre-scrollable border p-2" name="required_packages_versions" readonly>{{ comodule.required_packages_versions|default('No package versions provided', true) }}
+            </pre>
         </div>
         <div class="form-group col-12">
             <label class="form-label">Description</label>
             <div id="description_delta" class="quill-editor"></div>
         </div>
-        <div class="col-12 d-flex justify-content-end">
+        <div class="col-12 d-flex justify-content-start">
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
                     List
                 </button>
+                {% if is_activate_delete %}
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}"
                     formmethod="post">
                     Delete
                 </button>
+                {% endif %}
             </div>
         </div>
     </div>
