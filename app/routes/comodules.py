@@ -186,7 +186,7 @@ async def download_docker_files(request: Request, comodule_id: str):
 
     comodule_str_withversion = await format_comodule_details(comodule)
     # 정규표현식을 사용하여 괄호와 괄호 안의 내용을 삭제합니다.
-    comodule_str = re.sub(r'\s*\([^)]*\)', '', comodule_str_withversion)
+    comodule_str = re.sub(r'\s*\([^)]*\)', '', comodule_str_withversion).replace(r'\s', '')
     # 현재 시간을 "YYYYMMDD_HHMMSS" 포맷으로 변환
     file_suffix = datetime.now().strftime("%Y%m%d")
     zip_file_name = f"dockers_{comodule_str}_{file_suffix}.zip"
