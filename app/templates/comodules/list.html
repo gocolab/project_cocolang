@@ -119,8 +119,13 @@ Debugging Coding Test
     });
   });
 
+  function removeAndConcat(str) {
+    // 정규표현식을 사용하여 괄호와 괄호 안의 내용을 삭제합니다.
+    return str.replace(/\s*\([^)]*\)/g, '');
+  }
+
   function createToast(thisButton) {
-    const buttonValue = thisButton.value.toLowerCase(); // 혹은 this.getAttribute('data-value') 등을 사용
+    const buttonValue = removeAndConcat(thisButton.value.toLowerCase()); // 혹은 this.getAttribute('data-value') 등을 사용
 
     let toastEl = document.querySelector('.toast');
 
