@@ -17,7 +17,7 @@ ARG GIT_URI
 RUN git clone -b ${GIT_BRANCH_NAME} ${GIT_URI} ${APP_DIR_NAME}
 
 # Changes the working directory to /apps/${REPO_NAME}. This uses the variable to dynamically set the directory path.
-WORKDIR /apps/${APP_DIR_NAME}
+WORKDIR /apps/${APP_DIR_NAME}/app
 
 # RUN pip install --no-cache-dir -r ./requirements.txt
 RUN pip install --no-cache-dir -r ./requirements.txt

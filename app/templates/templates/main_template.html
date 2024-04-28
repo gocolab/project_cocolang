@@ -79,20 +79,43 @@
                         #}
                     </ul>
                     <!-- Right menu items -->
-                    <ul class="navbar-nav">
-                        {% if request.state.user %}
-                        <li class="nav-item">
-                            <div class="nav-link">{{request.state.user.name}}</div>
+                    <ul class="navbar-nav ms-auto">
+                        {% if request.state.user and "ADMIN" in request.state.user.roles %}
+                        <!-- Logged in with ADMIN -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link menu-item dropdown-toggle" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                AdminMenu
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                                <li><a class="dropdown-item" href="/users/list">users list</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Not Yet</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-item" href="/securities/logout">Logout</a>
+                        {% endif %}
+
+                        {% if request.state.user %}
+                        <!-- Logged in -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ request.state.user.picture }}" alt="profile" class="rounded-circle" style="width: 40px; height: 40px;">
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <div class="dropdown-item">{{ request.state.user.name }}</div>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="/securities/logout">Logout</a></li>
+                            </ul>
                         </li>
                         {% else %}
+                        <!-- Not logged in -->
                         <li class="nav-item">
-                            <a class="nav-link menu-item" href="/securities/login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-item" href="/users/form">Register</a>
+                            <a class="nav-link menu-item" href="/securities/login_google">Login</a>
                         </li>
                         {% endif %}
                     </ul>

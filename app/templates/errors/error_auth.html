@@ -1,0 +1,15 @@
+{% extends "templates/main_template.html"%}
+
+{% block title %}
+Errors
+{% endblock %}
+<!-- main -->
+{% block main_container %}
+<div class="d-flex justify-content-center align-items-center vh-70">
+    <div class="text-center">
+        <h1 class="display-4">Error Occurred</h1>
+        <p class="lead">{{ message }}</p>
+        <a href="/" class="btn btn-primary">Go Home</a>
+    </div>
+</div>
+{% endblock %}

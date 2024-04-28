@@ -20,29 +20,9 @@ collection_user = Database(User)
 
 hash_password = HashPassword()
 
-# 회원 등록
-@router.post("/signup")
-async def sign_user_up(request:Request):
-    user_dict = dict(await request.form())
-    # 저장
-    user = User(**user_dict)
-    user_exist = await User.find_one(User.email == user.email)
-
-    if user_exist:
-        # 사용자 정의 에러 처리로 변경
-        context = {'request': request, 'error': "User with email provided exists already."}
-        return templates.TemplateResponse(name="users/form.html", context=context)
-    
-    hashed_password = hash_password.create_hash(user.password)
-    user.password = hashed_password
-    
-    result = await collection_user.save(user)
-    return templates.TemplateResponse(name="securities/login.html"
-                        , context={'request':request})
-
-# 회원 가입 폼
+# 
 @router.get("/form") 
-async def insert(request:Request):
+async def form(request:Request):
     # print(dict(request._query_params))
     return templates.TemplateResponse(name="users/form.html"
                                       , context={'request':request})
@@ -55,7 +35,6 @@ from typing import Optional
 # http://127.0.0.1:8000/users/list_jinja_pagination/2?key_name=name&word=김
 async def list(request:Request, page_number: Optional[int] = 1):
     user_dict = dict(request._query_params)
-    print(user_dict)
     # db.answers.find({'name':{ '$regex': '김' }})
     # { 'name': { '$regex': user_dict.word } }
     conditions = { }
@@ -83,7 +62,7 @@ async def read(request:Request, object_id:PydanticObjectId):
                                                  , 'user':user})
 
 @router.post("/{object_id}")
-async def read(request:Request, object_id:PydanticObjectId):
-    delete_check = await collection_user.delete(object_id)
+async def delete(request:Request, object_id:PydanticObjectId):
+    # delete_check = await collection_user.delete(object_id)
     return templates.TemplateResponse(name="users/list.html"
                                       , context={'request':request})

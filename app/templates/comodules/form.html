@@ -18,13 +18,6 @@
 {% block main_container %}
 <form action="" method="post" class="needs-validation" novalidate>
     <div class="row gap-3 px-5">
-        <div class="form-group col-12">
-            <label class="form-label" for="title">Title:</label>
-            <input type="text" class="form-control" id="title" name="title" required placeholder="Test My CoModule">
-            <div class="invalid-feedback">
-                Title must be filled.
-            </div>
-        </div>
         <div class="form-group col-12 row">
             <div class="col-4">
                 <label for="language_name" class="col form-label">Language:</label>
@@ -52,7 +45,14 @@
             </div>
         </div>
         <div class="form-group col-12">
-            <label class="form-label">Docker File Links:</label>
+            <label class="form-label" for="title">Main Service:</label>
+            <input type="text" class="form-control" id="title" name="title" required placeholder="Login by permissions and shopping cart functionality">
+            <div class="invalid-feedback">
+                Main Service must be filled.
+            </div>
+        </div>
+        <div class="form-group col-12">
+            <label class="form-label">Docker File Links(Raw file links)</label>
             <textarea class="form-control quill-editor" name="docker_files_links" required
                 placeholder="https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env
                             https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile
@@ -62,12 +62,7 @@
             </div>
         </div>
         <div class="form-group col-12">
-            <label class="form-label">Required Package Versions:</label>
-            <textarea class="form-control quill-editor" name="required_packages_versions"
-                placeholder="Django==5.22&#10;React==16.11&#10;SpringBoot=3.11"></textarea>
-        </div>
-        <div class="form-group col-12">
-            <label class="form-label">More Description</label>
+            <label class="form-label">More Description(Settings for program development or Link)</label>
             <div id="description_delta" class="quill-editor"></div>
             <input type="hidden" name="description" id="description">
         </div>
@@ -78,7 +73,7 @@
                     List
                 </button>
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/insert">
-                    Insert
+                    Create
                 </button>
             </div>
         </div>
