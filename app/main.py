@@ -53,7 +53,7 @@ EXCLUDE_PATHS = [
     , '/users/form', '/mains/list'
     ,"/devtemplates/list"
     ,"/teams/list"
-    , "/comodules/list", '/comodules/v1'
+    , "/comodules/list", '/comodules/v1', '/comodules/r'
     , '/securities', '/users/signup'
     # "/docs",   # Swagger 문서
     # "/openapi.json",  # OpenAPI 스펙
@@ -135,6 +135,7 @@ static_css_directory = os.path.join("app", "resources", "css")
 static_images_directory = os.path.join("app", "resources", "images")
 static_js_directory = os.path.join("app", "resources", "js")
 static_downloads_directory = os.path.join("app", "resources", "downloads")
+
 app.mount("/css", StaticFiles(directory=static_css_directory), name="static_css")
 app.mount("/images", StaticFiles(directory=static_images_directory), name="static_images")
 app.mount("/js", StaticFiles(directory=static_js_directory), name="static_js")

@@ -40,7 +40,7 @@
                         placeholder="MySQL(8)&#10;Mongodb(7)"></textarea>
                 </div>
             </div>
-            <div class="col-12 text-danger small" id="invalid_modules">
+            <div class="col-12 text-center text-primary small" id="invalid_modules">
                 At least one of Language, Framework, or Database must be filled.
             </div>
         </div>
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="form-group col-12">
-            <label class="form-label">Docker File Links(Raw file links)</label>
+            <label class="form-label">Docker File Links <span class="text-primary small">(Raw file links)</span></label>
             <textarea class="form-control quill-editor" name="docker_files_links" required
                 placeholder="https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env
                             https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile
@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="form-group col-12">
-            <label class="form-label">More Description(Settings for program development or Link)</label>
+            <label class="form-label">More Description <span class="text-primary small">(Settings for program development or Link)</span> </label>
             <div id="description_delta" class="quill-editor"></div>
             <input type="hidden" name="description" id="description">
         </div>
