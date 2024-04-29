@@ -1,0 +1,15 @@
+uvicorn
+fastapi
+pydantic
+pydantic_settings
+pydantic[email]
+beanie
+python-jose
+passlib
+PyJWT
+python-dotenv
+Jinja2
+httpx
+itsdangerous
+Authlib
+python-multipart

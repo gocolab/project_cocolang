@@ -30,7 +30,7 @@ Debugging Coding Test
   <div class="row">
     <div class="col-2">
       <select class="form-select" name="key_name">
-        <option value="title" {{ 'selected' if request._query_params.key_name=='title' else '' }}>Title</option>
+        <option value="title" {{ 'selected' if request._query_params.key_name=='title' else '' }}>Main Service</option>
         <option value="language_name" {{ 'selected' if request._query_params.key_name=='language_name' else '' }}>
           Language</option>
         <option value="framework_name" {{ 'selected' if request._query_params.key_name=='framework_name' else '' }}>
@@ -44,8 +44,11 @@ Debugging Coding Test
     </div>
     <div class="col-4">
       <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">Search</button>
-      {% if request.state.user and "PARTNER" in request.state.user.roles and main_router != 'comodules'%}
-      <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/form" formmethod="get">Insert</button>
+      {% 
+        if (request.state.user and request.state.user.roles and main_router == 'teams')
+          or ("ADMIN" in request.state.user.roles)
+      %}
+      <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/form" formmethod="get">Create</button>
       {% endif %}
     </div>
   </div>
@@ -53,25 +56,17 @@ Debugging Coding Test
     <thead>
       <tr class="text-center">
         <th>No.</th>
-        <th>Title</th>
         <th>Language</th>
         <th>Framework</th>
         <th>Database</th>
+        <th>Main Services</th>
         <th class="td-setup-min-width">Setup</th>
-        <th>More</th>
       </tr>
     </thead>
     <tbody>
       {% for comodule in comodules %}
       <tr>
         <td>{{pagination.start_record_number + loop.index}}</td>
-        <td>
-          {% if request.state.user and "PARTNER" in request.state.user.roles %}
-          <a href="/{{main_router}}/{{ comodule.id }}" class="text-decoration-none">{{ comodule.title }}</a>
-          {% else %}
-          {{ comodule.title }}
-          {% endif %}
-        </td>
         <td>
           <pre class="pre-scrollable">{{comodule.language_name}}</pre>
         </td>
@@ -81,19 +76,20 @@ Debugging Coding Test
         <td>
           <pre class="pre-scrollable">{{comodule.database_name}}</pre>
         </td>
+        <td>
+          {% if request.state.user and "PARTNER" in request.state.user.roles %}
+          <a href="/{{main_router}}/{{ comodule.id }}" class="text-decoration-none">{{ comodule.title }}</a>
+          {% else %}
+          {{ comodule.title }}
+          {% endif %}
+        </td>
         <td class="text-center">
           <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
             zip <i class="bi bi-cloud-download"></i>
           </a>
           <button class="btn btn-sm btn-info copyButton"
             value="{{comodule.language_name}}_{{comodule.framework_name}}_{{comodule.database_name}}">
-            copy <i class="bi bi-clipboard"></i>
-          </button>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-outline-info" data-bs-toggle="tooltip"
-            title="pkgs : {{ comodule.required_packages_versions }}">
-            <i class="bi bi-chat-left-dots"></i>
+            setup <i class="bi bi-clipboard"></i>
           </button>
         </td>
       </tr>
@@ -153,7 +149,7 @@ Debugging Coding Test
 
     // 알림 창이 사라진 후 아이콘 원래대로 변경
     toastEl.addEventListener('hidden.bs.toast', function () {
-      thisButton.innerHTML = 'copy <i class="bi bi-clipboard"></i>';
+      thisButton.innerHTML = 'setup <i class="bi bi-clipboard"></i>';
     });
   }
 

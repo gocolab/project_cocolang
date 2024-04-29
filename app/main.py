@@ -42,6 +42,9 @@ app.include_router(errors_router, prefix="/errors")
 async def init_db():
     await settings.initialize_database()
 
+from starlette.middleware.sessions import SessionMiddleware
+app.add_middleware(SessionMiddleware, secret_key="add any string...")
+
 # middleware for auth
 # 제외할 URL 경로 목록
 EXCLUDE_PATHS = [
@@ -51,7 +54,7 @@ EXCLUDE_PATHS = [
     ,"/devtemplates/list"
     ,"/teams/list"
     , "/comodules/list", '/comodules/v1'
-    , '/securities/login', '/users/signup'
+    , '/securities', '/users/signup'
     # "/docs",   # Swagger 문서
     # "/openapi.json",  # OpenAPI 스펙
 ]
@@ -156,8 +159,11 @@ from pydantic import ValidationError
 @app.exception_handler(RequestValidationError)
 @app.exception_handler(StarletteHTTPException)
 @app.exception_handler(ValidationError)
+@app.exception_handler(HTTPException)
+@app.exception_handler(Exception)
 async def http_exception_handler(request: Request, exc: Exception):
     status_code = 500  # 기본값으로 설정
+    message = ''
 
     if isinstance(exc, HTTPException):
         status_code = exc.status_code
@@ -166,6 +172,9 @@ async def http_exception_handler(request: Request, exc: Exception):
         status_code = 400
         message = "Validation Error"
     elif isinstance(exc, StarletteHTTPException):
+        status_code = exc.status_code
+        message = exc.detail
+    elif isinstance(exc, HTTPException):
         status_code = exc.status_code
         message = exc.detail
     else:

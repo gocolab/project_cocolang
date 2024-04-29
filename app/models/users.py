@@ -1,14 +1,22 @@
 from typing import Optional, List
 from beanie import Document
+from datetime import datetime
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 
 class User(Document):
     name: str = None
     email: EmailStr
-    password: str
-    roles :List[str] = ['GUEST']
+    roles :List[str] = ['GUEST',]
+    # google oauth
+    email_verified: bool = False
+    picture: str = None
+    given_name: str = None
+    family_name: str = None
+    exp: int = 0
+    oauth_issuer: str = 'google'
+    create_date: datetime = Field(default_factory=datetime.now)
 
     class Settings:
         name = "users"

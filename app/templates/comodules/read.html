@@ -15,10 +15,7 @@
 {% block main_container %}
 <form action="" method="post">
     <div class="row gap-3 px-5">
-        <div class="col-12">
-            <strong>Title:</strong> {{ comodule.title }}
-        </div>
-        <div class="form-group col row">
+        <div class="form-group row">
             <div class="col-4">
                 <label for="language_name" class="col form-label">Language:</label>
                 <div class="col">
@@ -38,9 +35,15 @@
                 </div>
             </div>
         </div>
+        <!-- Data Display -->
+        <div class="form-group col-12">
+            <label for="title" class="form-label">Main Service:</label>
+            <!-- Display the value from the database using Jinja templating -->
+            <input type="text" class="form-control" id="title" name="title" value="{{ comodule.title }}" readonly>
+        </div>
         <div class="col-12">
             <label class="form-label">
-                Docker File Links:
+                Docker File Links:(Raw file links)
                 <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
                     zip <i class="bi bi-cloud-download"></i>
                 </a>
@@ -51,12 +54,7 @@
     
         </div>
         <div class="form-group col-12">
-            <label class="form-label">Required Package Versions:</label>
-            <pre class="pre-scrollable border p-2" name="required_packages_versions" readonly>{{ comodule.required_packages_versions|default('No package versions provided', true) }}
-            </pre>
-        </div>
-        <div class="form-group col-12">
-            <label class="form-label">Description</label>
+            <label class="form-label">More Description(Settings for program development or Link)</label>
             <div id="description_delta" class="quill-editor"></div>
         </div>
         <div class="col-12 d-flex justify-content-start">
