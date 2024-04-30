@@ -28,7 +28,8 @@
         <th>Name</th>
         <th>Email</th>
         <th>Authority</th>
-        <th>Last Acces</th>
+        <th>Last Access Date </th>
+        <th>Create Date</th>
       </tr>
     </thead>
     <tbody>
@@ -40,6 +41,7 @@
         </td>
         <td>{{user.email}}({{user.email | length}})</td>
         <td>{{user.roles}}</td>
+        <td>{{user.last_access_date.strftime('%Y.%m.%d %H:%M')}}</td>
         <td>{{user.create_date.strftime('%Y.%m.%d %H:%M')}}</td>
       </tr>
       {% endfor %}

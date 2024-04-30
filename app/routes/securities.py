@@ -63,7 +63,8 @@ async def signin_withsignup(request:Request, user):
         # Perform the update operation using the user's ID as the criterion.
         # Make sure to access the ID field correctly according to your ORM.
         # result = await User.update_one({'_id': user_exist.id}, update_data)
-        result = await collection_user.update(user_exist.id, _model.dict(exclude={'roles'}))
+        result = await collection_user.update(user_exist.id
+                                              , _model.dict(exclude={'roles', 'create_date'}))
 
     # create access token in this site
     access_token = create_access_token(user.email)
