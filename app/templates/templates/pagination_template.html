@@ -5,13 +5,13 @@
     <ul class="pagination justify-content-center">
         <li class="page-item {{ '' if pagination.has_previous_block else 'disabled' }}">
           <button type="submit" class="page-link" formaction="/{{main_router}}/list/{{pagination.first_page}}">
-            맨 처음
+            First
           </button>
 
         </li>
         <li class="page-item {{ '' if pagination.has_previous_page else 'disabled' }}">
           <button type="submit" class="page-link"
-            formaction="/{{main_router}}/list/{{pagination.previous_page}}">이전</button>
+            formaction="/{{main_router}}/list/{{pagination.previous_page}}">Prev</button>
         </li>
         {% for page_num in pagination.current_page_range %}
         <li class="page-item {{ 'active' if page_num == pagination.current_page else '' }}">
@@ -22,12 +22,12 @@
         {% endfor %}
         <li class="page-item {{ '' if pagination.has_next_page else 'disabled' }}">
           <button type="submit" class="page-link"
-            formaction="/{{main_router}}/list/{{ pagination.next_page }}">다음</button>
+            formaction="/{{main_router}}/list/{{ pagination.next_page }}">Next</button>
         </li>
         <li class="page-item {{ '' if pagination.has_next_block else 'disabled' }}">
           <button type="submit" class="page-link"
             formaction="/{{main_router}}/list/{{ pagination.last_page }}">
-            맨 끝
+            Last
           </button>
         </li>
     </ul>

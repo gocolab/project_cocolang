@@ -7,7 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />
 <style>
     .quill-editor {
-        height: 5rem;
+        height: 10rem;
     }
 </style>
 {% endblock %}
@@ -15,50 +15,59 @@
 {% block main_container %}
 <form action="" method="post">
     <div class="row gap-3 px-5">
-        <div class="col-12">
-            <strong>Title:</strong> {{ comodule.title }}
+        <div class="form-group row">
+            <div class="col-4">
+                <label for="language_name" class="col form-label">Language:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="language_name">{{comodule.language_name}}</pre>
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="form-label col" for="framework_name">Framework:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="framework_name">{{comodule.framework_name}}</pre>
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="form-label col" for="database_name">Database:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="database_name">{{comodule.database_name}}</pre>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-2"><strong>Language:</strong></div>
-            <div class="col-6">{{ comodule.language_name }}</div>
-            <div class="col-3">{{ comodule.language_version }}</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><strong>Framework:</strong></div>
-            <div class="col-6">{{ comodule.framework_name }}</div>
-            <div class="col-3">{{ comodule.framework_version }}</div>
-        </div>
-        <div class="row">
-            <div class="col-2"><strong>Database:</strong></div>
-            <div class="col-6">{{ comodule.database_name }}</div>
-            <div class="col-3">{{ comodule.database_version }}</div>
+        <!-- Data Display -->
+        <div class="form-group col-12">
+            <label for="title" class="form-label">Main Service:</label>
+            <!-- Display the value from the database using Jinja templating -->
+            <input type="text" class="form-control" id="title" name="title" value="{{ comodule.title }}" readonly>
         </div>
         <div class="col-12">
             <label class="form-label">
-                Docker File Links:
+                Docker File Links:(Raw file links)
                 <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
                     zip <i class="bi bi-cloud-download"></i>
                 </a>
             </label>
+            <div class="form-group col-12">
+                <pre class="pre-scrollable border p-2" name="docker_files_links">{{comodule.docker_files_links}}</pre>
+            </div>
+    
         </div>
         <div class="form-group col-12">
-            <label class="form-label">Required Package Versions:</label>
-            <textarea class="form-control quill-editor" name="required_packages_versions" readonly>{{ comodule.required_packages_versions|default('No package versions provided', true) }}
-            </textarea>
-        </div>
-        <div class="form-group col-12">
-            <label class="form-label">Description</label>
+            <label class="form-label">More Description(Settings for program development or Link)</label>
             <div id="description_delta" class="quill-editor"></div>
         </div>
-        <div class="col-12 d-flex justify-content-end">
+        <div class="col-12 d-flex justify-content-start">
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
                     List
                 </button>
+                {% if is_activate_delete %}
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}"
                     formmethod="post">
                     Delete
                 </button>
+                {% endif %}
             </div>
         </div>
     </div>

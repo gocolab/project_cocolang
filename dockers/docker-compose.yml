@@ -1,7 +1,6 @@
 version: '3.9'
 services:
   fastapi:
-    image: ${IMAGE_NAME}  # Specifies the name for the built image.
     build:
       context: .
       args:
@@ -11,7 +10,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8000:8000
-    command: sleep infinity      
+    # volumes:
+    #   - ./cocolabhub.service:/etc/systemd/system/cocolabhub.service
+    command: sleep infinity
     depends_on:
       - mongodb
   mongodb:

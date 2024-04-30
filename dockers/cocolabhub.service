@@ -1,0 +1,13 @@
+# sudo systemctl restart cocolabhub.service
+[Unit]
+Description=FastAPI server for cocolabhub
+After=network.target
+
+[Service]
+User=mahau_master
+Group=mahau_master
+WorkingDirectory=/apps/project_cocolabhub
+ExecStart=python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+[Install]
+WantedBy=multi-user.target

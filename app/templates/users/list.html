@@ -8,7 +8,7 @@
   <!-- 검색 항목 추가 필요 -->
   <div class="row">
     <div class="col-2">
-      <select class="form-control" name="key_name">
+      <select class="form-select" name="key_name">
         <option value="name" {{ 'selected' if request._query_params.key_name=='name' else '' }}>name</option>
         <option value="email" {{ 'selected' if request._query_params.key_name=='email' else '' }}>email</option>
       </select>
@@ -21,23 +21,26 @@
         formmethod="get">검색</button>
     </div>
   </div>
-  <h3>회원 리스트</h3>
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
+        <th>No.</th>
+        <th>Name</th>
         <th>Email</th>
-        <th>Read</th>
+        <th>Authority</th>
+        <th>Last Acces</th>
       </tr>
     </thead>
     <tbody>
       {% for user in users %}
       <tr>
         <td>{{pagination.start_record_number + loop.index}}</td>
-        <td>{{user.name}}</td>
-        <td>{{user.email | length}}, {{user.email}}</td>
-        <td><button formaction="/users/read/{{user.id}}">read</button></td>
+        <td>
+          <button formaction="/users/read/{{user.id}}" class="text-decoration-none">{{user.name}}</button>
+        </td>
+        <td>{{user.email}}({{user.email | length}})</td>
+        <td>{{user.roles}}</td>
+        <td>{{user.create_date.strftime('%Y.%m.%d %H:%M')}}</td>
       </tr>
       {% endfor %}
     </tbody>

@@ -17,9 +17,6 @@ class Settings(BaseSettings):
     SECRET_KEY: Optional[str] = None
     ALGORITHM: Optional[str] = None
     ACCESS_TOKEN_EXPIRE_MINUTES: Optional[str] = None
-    GOOGLE_CLIENT_ID: Optional[str] = None
-    GOOGLE_CLIENT_SECRET: Optional[str] = None
-    REDIRECT_URI: Optional[str] = None
 
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
@@ -66,8 +63,11 @@ class Database:
     
     async def update(self, id: PydanticObjectId, body: BaseModel):
         doc_id = id
-        des_body = body.dict()
-
+        if hasattr(body, 'dict'):
+            des_body = body.dict()
+        else:
+            des_body = body
+            
         des_body = {k: v for k, v in des_body.items() if v is not None}
         update_query = {"$set": {
             field: value for field, value in des_body.items()

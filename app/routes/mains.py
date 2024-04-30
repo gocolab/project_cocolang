@@ -79,13 +79,26 @@ async def main_list(request: Request, page_number: Optional[int] = 1):
     return context
 
 from itertools import zip_longest
+import re
 async def unique_comodules(original_list):
 
     # Initialize sets for tracking uniqueness
-    unique_frameworks = {item['framework_name'] for item in original_list}
-    unique_languages = {item['language_name'] for item in original_list}
-    unique_database = {item['database_name'] for item in original_list}
+    unique_frameworks = set()
+    unique_languages = set()
+    unique_database = set()
 
+    for item in original_list:
+        # framework_name 분리 및 추가
+        if item['framework_name'] != 'null' and item['framework_name'].strip() != '':
+            unique_frameworks.update(re.split(r' +', item['framework_name']))
+        
+        # language_name 분리 및 추가
+        if item['language_name'] != 'null' and item['language_name'].strip() != '':
+            unique_languages.update(re.split(r' +', item['language_name']))
+        
+        # database_name 분리 및 추가
+        if item['database_name'] != 'null' and item['database_name'].strip() != '':
+            unique_database.update(re.split(r' +', item['database_name']))
     # Use itertools.zip_longest to combine lists with padding of None automatically
     combinations = [
         {'language': lang if lang is not None else '', 

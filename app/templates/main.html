@@ -69,7 +69,7 @@
     <div class="col-12">
       <div class="m-2 d-flex justify-content-end">
         <button type="submit" class="btn btn-sm btn-secondary" id="more_comodules_list">
-          더보기 <span class="badge bg-success" id="total_records">{{pagination.total_records}}</span>
+          More <span class="badge bg-success" id="total_records">{{pagination.total_records}}</span>
         </button>
       </div>
       <ul class="list-group">
@@ -90,11 +90,11 @@
   <div class="col-4">
     <div class="col-12">
       <div class="m-2 d-flex justify-content-center">
-        <div class="btn btn-sm" disabled>상세보기</div>
+        <div class="btn btn-sm" disabled>Detail</div>
       </div>
       <div class="card card-body" id="detail">
         <div class="row">
-          <div class="col-5 fw-bold">Title</div>
+          <div class="col-5 fw-bold">Main Service</div>
           <div class="col-7">{{ comodule.title }}</div>
         </div>
         <div class="row">
@@ -128,16 +128,16 @@
             #}
           </div>
         </div>
-        <div class="row py-2">
+        <!-- <div class="row py-2">
           <div class="col-5 fw-bold">Packages</div>
           <div class="col-7">
             {{ comodule.required_packages_versions }}
           </div>
-        </div>
+        </div> -->
         <div class="row">
           <div class="col-5 fw-bold">Enroll</div>
           <div class="col-7">
-            {{ comodule.user_name }}
+            {{ comodule.create_user_name  | default("", True)}}
           </div>
         </div>
       </div>
@@ -223,7 +223,7 @@
     // 새로운 컨텐츠 생성
     const newContent = `
           <div class="row">
-            <div class="col-5 fw-bold">Title</div>
+            <div class="col-5 fw-bold">Main Service</div>
             <div class="col-7">${data.title}</div>
           </div>
           <div class="row">
@@ -248,16 +248,16 @@
               </div>
             </div>
           </div>
-          <div class="row py-2">
+          <!-- <div class="row py-2">
             <div class="col-5 fw-bold">Packages</div>
             <div class="col-7">
               ${data.required_packages_versions}
             </div>
-          </div>
+          </div> -->
           <div class="row">
             <div class="col-5 fw-bold">Enroll</div>
             <div class="col-7">
-              ${data.user_name}
+              ${data.create_user_name ? data.create_user_name : ""}
             </div>
           </div>
   

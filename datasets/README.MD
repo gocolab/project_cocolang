@@ -1,11 +1,21 @@
-### commons_code
-- datasets\common_comodules.json : 컴퓨터 관련 분야 Langauge,	Framework, Database 분류에 대한 항목 4가지 이상 작성과 표시 순서, 설명 json로 작성. 설명은 간략한 요약 방식
-
+### install dockers
 ```
-~$ docker exec project_cocolabhub-mongodb-1 mongodump --uri "mongodb://127.0.0.1:27017/project_cocolabhub" --out=/data/dump/
-~$ docker cp project_cocolabhub-fastapi-1:/data/dump/ .
-~$ docker cp ./dump project_cocolabhub-mongodb-1:/
-~$ docker exec project_cocolabhub-mongodb-1 mongorestore --uri "mongodb://mongodb:27017/project_cocolabhub" /dump/project_cocolabhub
+~% docker-compose --project-name project_cocolang build --no-cache
+~% docker-compose --project-name project_cocolang up -d
+~$ sudo docker exec -it project_cocolang_fastapi_1 bash
+# uvicorn app.main:app --host 0.0.0.0
+```
 
+### setup initial mongodb datasets commands
+```
+~docker_db$ mongodump --uri "mongodb://cocolabhub_mongodb:27017/project_cocolabhub" --archive=./initial_data.archive
+~$ docker cp cocolabhub_mongodb:/home/initial_data.archive ./
+~$ docker cp ./initial_data.archive project_cocolang-fastapi:/apps/project_cocolabhub/datasets
+~$ mongorestore --uri "mongodb://cocolabhub_mongodb:27017/project_cocolabhub" --archive=/apps/project_cocolabhub/datasets/initial_data.archive
+```
 
+### real server
+```
+~$ cd /apps/project_cocolabhub
+~$ uvicorn app.main:app --host 0.0.0.0 --port 8080
 ```

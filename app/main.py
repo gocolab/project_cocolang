@@ -32,8 +32,9 @@ from app.routes.errors import router as errors_router
 app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
 app.include_router(comodules_router, prefix="/comodules")
-app.include_router(mains_router, prefix="/mains")
 app.include_router(comodules_router, prefix="/devtemplates")
+app.include_router(comodules_router, prefix="/teams")
+app.include_router(mains_router, prefix="/mains")
 app.include_router(securities_router, prefix="/securities")
 app.include_router(errors_router, prefix="/errors")
 
@@ -41,15 +42,19 @@ app.include_router(errors_router, prefix="/errors")
 async def init_db():
     await settings.initialize_database()
 
-from app.auth.jwt_handler import verify_access_token
+from starlette.middleware.sessions import SessionMiddleware
+app.add_middleware(SessionMiddleware, secret_key="add any string...")
+
+# middleware for auth
 # 제외할 URL 경로 목록
 EXCLUDE_PATHS = [
     "/css", "/images", "/js"
     , "/favicon.ico", "/errors"
     , '/users/form', '/mains/list'
     ,"/devtemplates/list"
-    , "/comodules/list", '/comodules/v1'
-    , '/securities/login', '/users/signup'
+    ,"/teams/list"
+    , "/comodules/list", '/comodules/v1', '/comodules/r'
+    , '/securities', '/users/signup'
     # "/docs",   # Swagger 문서
     # "/openapi.json",  # OpenAPI 스펙
 ]
@@ -58,7 +63,7 @@ EXCLUDE_PATHS = [
 ROLE_BASED_ACCESS = {
     "GUEST": ["/comodules/download"
               , "/securities", '/users/read']
-    ,"PARTNER": ["/comodules", "/devtemplates", ]
+    ,"PARTNER": ["/comodules", "/devtemplates", "/teams",]
     ,"ADMIN": ["/admins", '/commoncodes', '/users']
 }
 
@@ -90,7 +95,6 @@ async def auth_middleware(request: Request, call_next):
     return response
 
 import time
-import json
 from app.models.request_log import RequestLog  # 로그 모델 임포트
 async def log_request_response(request: Request, response: Response, user):
     # 요청 처리 전 시간 측정
@@ -100,20 +104,6 @@ async def log_request_response(request: Request, response: Response, user):
     parameters = {}
     if request.method == "GET":
         parameters = dict(request.query_params)
-    # elif request.method in ["POST", "PUT", "DELETE"]:
-    #     # Accumulate request body data into a bytearray
-    #     # request_body = bytearray()
-    #     # async for chunk in request.stream():
-    #     #     request_body.extend(chunk)
-    #     # # Decode the bytearray as JSON
-    #     # parameters = json.loads(request_body.decode())
-    # else:
-
-    # async def response_bytes(response):
-    #     async for chunk in response.body_iterator:
-    #         yield chunk
-    
-    # response_body = b''.join([chunk async for chunk in response_bytes(response)])
     
     end_time = time.time()
     duration = end_time - start_time
@@ -137,7 +127,7 @@ async def log_request_response(request: Request, response: Response, user):
     # MongoDB에 로그 데이터 저장
     await log_data.insert()
 
-
+# setup resources
 from fastapi.staticfiles import StaticFiles
 # url 경로, 자원 물리 경로, 프로그램밍 측면
 import os
@@ -145,6 +135,7 @@ static_css_directory = os.path.join("app", "resources", "css")
 static_images_directory = os.path.join("app", "resources", "images")
 static_js_directory = os.path.join("app", "resources", "js")
 static_downloads_directory = os.path.join("app", "resources", "downloads")
+
 app.mount("/css", StaticFiles(directory=static_css_directory), name="static_css")
 app.mount("/images", StaticFiles(directory=static_images_directory), name="static_images")
 app.mount("/js", StaticFiles(directory=static_js_directory), name="static_js")
@@ -157,8 +148,42 @@ templates = Jinja2Templates(directory="app/templates/")
 
 from typing import List, Optional
 @app.get("/")
-async def root(request: Request, page_number: Optional[int] = 1):
-    return RedirectResponse(url=f"/mains/list/{page_number}")
+async def root(request: Request):
+    return RedirectResponse(url=f"/mains/list")
+
+# Error Handler
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi import HTTPException
+from pydantic import ValidationError
+
+@app.exception_handler(RequestValidationError)
+@app.exception_handler(StarletteHTTPException)
+@app.exception_handler(ValidationError)
+@app.exception_handler(HTTPException)
+@app.exception_handler(Exception)
+async def http_exception_handler(request: Request, exc: Exception):
+    status_code = 500  # 기본값으로 설정
+    message = ''
+
+    if isinstance(exc, HTTPException):
+        status_code = exc.status_code
+        message = exc.detail
+    elif isinstance(exc, RequestValidationError) or isinstance(exc, ValidationError):
+        status_code = 400
+        message = "Validation Error"
+    elif isinstance(exc, StarletteHTTPException):
+        status_code = exc.status_code
+        message = exc.detail
+    elif isinstance(exc, HTTPException):
+        status_code = exc.status_code
+        message = exc.detail
+    else:
+        message = "Internal Server Error"
+    return templates.TemplateResponse("/errors/errors.html"
+                                      , {"request": request
+                                        , "message": message}
+                                      , status_code=status_code)
 
 if __name__ == '__main__':
     pass
