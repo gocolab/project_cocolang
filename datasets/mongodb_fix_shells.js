@@ -69,5 +69,10 @@ db.comodules.find().forEach(function(doc) {
       { $unset: "tempField" } // 임시 필드 제거
     ]
   );
+
+  db.users.updateMany(
+    {},
+    { $addToSet: { roles: "PARTER" } },
+  );
   
   
