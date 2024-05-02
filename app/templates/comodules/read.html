@@ -62,7 +62,11 @@
                 <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
                     List
                 </button>
-                {% if is_activate_delete %}
+                {% if request.state.user == comodule.create_user_name %}
+                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/update/{{ comodule.id }}"
+                    formmethod="post">
+                    Update
+                </button>
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}"
                     formmethod="post">
                     Delete
