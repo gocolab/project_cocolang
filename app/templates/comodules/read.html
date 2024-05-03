@@ -17,19 +17,19 @@
     <div class="row gap-3 px-5">
         <div class="form-group row">
             <div class="col-4">
-                <label for="language_name" class="col form-label">Language:</label>
+                <label class="col form-label">Language:</label>
                 <div class="col">
                     <pre class="pre-scrollable border p-2" id="language_name">{{comodule.language_name}}</pre>
                 </div>
             </div>
             <div class="col-4">
-                <label class="form-label col" for="framework_name">Framework:</label>
+                <label class="form-label col">Framework:</label>
                 <div class="col">
                     <pre class="pre-scrollable border p-2" id="framework_name">{{comodule.framework_name}}</pre>
                 </div>
             </div>
             <div class="col-4">
-                <label class="form-label col" for="database_name">Database:</label>
+                <label class="form-label col">Database:</label>
                 <div class="col">
                     <pre class="pre-scrollable border p-2" id="database_name">{{comodule.database_name}}</pre>
                 </div>
@@ -57,14 +57,11 @@
             <label class="form-label">More Description(Settings for program development or Link)</label>
             <div id="description_delta" class="quill-editor"></div>
         </div>
-        <div class="col-12 d-flex justify-content-start">
+        <div class="col-12 d-flex justify-content-end">
             <div class="form-group">
-                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
-                    List
-                </button>
-                {% if request.state.user == comodule.create_user_name %}
+                {% if (request.state.user.id == comodule.create_user_id) or "ADMIN" in request.state.user.roles %}
                 <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/update/{{ comodule.id }}"
-                    formmethod="post">
+                    formmethod="get">
                     Update
                 </button>
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}"
@@ -72,6 +69,9 @@
                     Delete
                 </button>
                 {% endif %}
+                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
+                    List
+                </button>
             </div>
         </div>
     </div>

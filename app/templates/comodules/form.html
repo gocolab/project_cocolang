@@ -20,30 +20,24 @@
     <div class="row gap-3 px-5">
         <div class="form-group col-12 row">
             <div class="col-4">
-                <label for="language_name" class="col form-label">Language:</label>
+                <label class="col form-label">Language:</label>
                 <div class="col">
                     <textarea class="form-control quill-editor" name="language_name" id="language_name"
-                        placeholder="Python(3.11.9)&#10;JAVA(7)">
-                        {{comodule.language_name}}
-                    </textarea>
+                        placeholder="Python(3.11.9)&#10;JAVA(7)">{{comodule.language_name}}</textarea>
                 </div>
             </div>
             <div class="col-4">
-                <label class="form-label col" for="framework_name">Framework:</label>
+                <label class="form-label col" >Framework:</label>
                 <div class="col">
                     <textarea class="form-control quill-editor" name="framework_name" id="framework_name"
-                        placeholder="Jupyyrt Lab&#10;SpringBoot(3.11)">
-                        {{comodule.language_name}}
-                    </textarea>
+                        placeholder="Jupyyrt Lab&#10;SpringBoot(3.11)">{{comodule.language_name}}</textarea>
                 </div>
             </div>
             <div class="col-4">
-                <label class="form-label col" for="database_name">Database:</label>
+                <label class="form-label col" >Database:</label>
                 <div class="col">
                     <textarea class="form-control quill-editor" name="database_name" id="database_name"
-                        placeholder="MySQL(8)&#10;Mongodb(7)">
-                        {{comodule.database_name}}
-                    </textarea>
+                        placeholder="MySQL(8)&#10;Mongodb(7)">{{comodule.database_name}}</textarea>
                 </div>
             </div>
             <div class="col-12 text-center text-primary small" id="invalid_modules">
@@ -63,9 +57,7 @@
             <textarea class="form-control quill-editor" name="docker_files_links" required
                 placeholder="https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/.env
                             https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/Dockerfile
-                            https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml">
-                {{comodule.docker_files_links}}
-            </textarea>
+                            https://raw.githubusercontent.com/gocolab/co_templates/data_analysis/docker-compose.yml">{{comodule.docker_files_links}}</textarea>
             <div class="invalid-feedback">
                 Docker File Links must be filled.
             </div>
@@ -75,14 +67,22 @@
             <div id="description_delta" class="quill-editor"></div>
             <input type="hidden" name="description" id="description">
         </div>
-        <div class="col-12 d-flex justify-content-start">
-            <input type="hidden" name="main_router" placeholder="{{main_router}}">
+        <div class="col-12 d-flex justify-content-end">
+            <input type="hidden" name="main_router" value="{{main_router}}">
             <div class="form-group">
+                {% if comodule.id or "ADMIN" in request.state.user.roles %}
+                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/update/{{comodule.id}}">
+                    update
+                </button>
+                {% else %}
+                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/insert">
+                    Insert
+                </button>
+                {% endif %}
+
+
                 <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
                     List
-                </button>
-                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/insert">
-                    Create
                 </button>
             </div>
         </div>
@@ -96,25 +96,20 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let deltaObject;
-        try {
-            deltaObject = JSON.parse('{{ comodule.description | safe | tojson}}'); // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
-        } catch (e) {
-            console.error("deltaObject 파싱 오류:", e);
-            // deltaObject 파싱에 실패했다면 비어있는 객체나 기본 값을 할당할 수 있습니다.
-            deltaObject = {}; // 혹은 적절한 기본값
-        }
+        let deltaObject = {{ comodule.description | safe | tojson }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
         
         // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
         let quillSettings = {
             theme: 'snow'
         };
         
-        if (Object.keys(deltaObject).length !== 0) {
+        if (deltaObject.length <= 0) {
             quillSettings.readOnly = true; // 읽기 전용 모드 활성화
             quillSettings.modules = {
                 toolbar: false // 툴바 제거
             };
+        } else {
+            deltaObject = JSON.parse(deltaObject);
         }
     
         let quillDescription = new Quill('#description_delta', quillSettings);

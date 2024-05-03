@@ -18,6 +18,7 @@ collection_comodule = Database(CoModule)
 async def form(request:Request, comodule_id: str = None):
     main_router = request.url.path.split('/')[1]
 
+    comodule = {}
     if comodule_id is not None:
         comodule = await collection_comodule.get(comodule_id)
         if comodule is None:
@@ -99,21 +100,21 @@ async def read(request: Request, comodule_id: str = None):
 
 @router.post("/update/{comodule_id}")
 async def update(request: Request, comodule_id: str):
-    
-    comodule_data = await request.form()
     comodule = await collection_comodule.get(comodule_id)
     if comodule:
-        updated_comodule = {**comodule.dict(), **comodule_data}
-        await collection_comodule.save(updated_comodule)
-        return templates.TemplateResponse("comodules/read.html"
-                                          , {"request": request, "comodule": updated_comodule})
+        comodule_data = dict(await request.form())
+        _model = CoModule(**comodule_data)
+        result = await collection_comodule.update(comodule_id, _model)
+        context = await comodules_list(request)
+        return templates.TemplateResponse("comodules/list.html"
+                                          , context=context)
     else:
         raise HTTPException(status_code=404, detail="CoModule not found")
 
 @router.post("/{comodule_id}")
 async def delete(request: Request, comodule_id: str):
     result_id = await collection_comodule.delete(comodule_id)
-    context = await comodules_list(request, 1)
+    context = await comodules_list(request)
     return templates.TemplateResponse(name="comodules/list.html"
                                       , context=context)
 
