@@ -38,12 +38,11 @@ async def extract_splitlines_from_string(input_str: str):
     
     return list_input
 
-from app.auth.authenticate import userfromauthenticate
 # CRUD Operations
 @router.post("/insert")
 async def create(request: Request):
     comodule_data = dict(await request.form())
-    user = await userfromauthenticate(request)
+    user = request.state.user
     comodule_data["create_user_id"] = user['id']
     comodule_data["create_user_name"] = user['name']
     main_router = request.url.path.split('/')[1]
@@ -92,7 +91,6 @@ async def read(request: Request, comodule_id: str = None):
     if comodule is None:
         raise HTTPException(status_code=404, detail="CoModule not found")
     
-    user = await userfromauthenticate(request)
     return templates.TemplateResponse("comodules/read.html"
                                       , {"request": request
                                          , "comodule": comodule
@@ -189,7 +187,7 @@ async def download_docker_files(request: Request, comodule_id: str):
                 # 임시 파일 삭제
                 os.remove(file_name)
     
-    user = await userfromauthenticate(request)
+    user = request.state.user
 
     await update_comodule_approach(comodule_id, user)
 

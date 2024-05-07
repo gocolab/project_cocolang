@@ -149,7 +149,7 @@
 {% endblock %} {% block foot_javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script>
-  let comodules_relative = JSON.parse('{{ comodules_relative | tojson | safe }}');
+  let comodules_relative = '{{ comodules_relative | tojson }}';
   document.addEventListener("DOMContentLoaded", function () {
     // Event delegation on the parent list
     document.querySelector('.list-group').addEventListener('click', function (event) {

@@ -1,0 +1,138 @@
+{% extends "templates/main_template.html" %}
+
+{% block title %}community Details{% endblock %}
+{% block customize_css %}
+<!-- Include Quill stylesheet -->
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />
+<style>
+    .quill-editor {
+        height: 10rem;
+    }
+
+    textarea::placeholder {
+        white-space: pre-line;
+    }
+</style>
+{% endblock %}
+
+{% block main_container %}
+<form action="" method="post" class="needs-validation" novalidate>
+    <div class="row gap-3 px-5">
+        <div class="form-group col-12 row">
+            <div class="col-6">
+                <label class="form-label">커뮤니티 이름:</label>
+                <input type="text" class="form-control" name="community_name" id="community_name" 
+                    value="{{community.community_name}}" required placeholder="커뮤니티 이름을 입력하세요">
+                <div class="invalid-feedback">
+                    커뮤니티 이름은 필수입니다.
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="form-label">커뮤니티 설명:</label>
+                <textarea class="form-control" name="community_description" id="community_description"
+                    required placeholder="커뮤니티에 대한 설명을 적어주세요">{{community.community_description}}</textarea>
+                <div class="invalid-feedback">
+                    커뮤니티 설명은 필수입니다.
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-12">
+            <label class="form-label">멤버 수:</label>
+            <input type="number" class="form-control" name="member_count" id="member_count" value="{{community.member_count}}" 
+                required placeholder="멤버 수">
+            <div class="invalid-feedback">
+                멤버 수는 필수입니다.
+            </div>
+        </div>
+        <div class="form-group col-12">
+            <label class="form-label">커뮤니티 규칙:</label>
+            <textarea class="form-control" name="community_rules" id="community_rules" required
+                placeholder="커뮤니티 규칙을 적어주세요">{{community.community_rules}}</textarea>
+            <div class="invalid-feedback">
+                커뮤니티 규칙은 필수입니다.
+            </div>
+        </div>
+        <div class="col-12 d-flex justify-content-end">
+            <input type="hidden" name="main_router" value="{{main_router}}">
+            <div class="form-group">
+                {% if community.id or "ADMIN" in request.state.user.roles %}
+                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/update/{{community.id}}">
+                    업데이트
+                </button>
+                {% else %}
+                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/insert">
+                    추가
+                </button>
+                {% endif %}
+
+
+                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
+                    목록
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block foot_javascripts %}
+<!-- Include Quill library -->
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let deltaObject = {{ community.description | tojson }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+        
+        // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
+        let quillSettings = {
+            theme: 'snow'
+        };
+        
+        if (deltaObject.length <= 0) {
+            quillSettings.readOnly = true; // 읽기 전용 모드 활성화
+            quillSettings.modules = {
+                toolbar: false // 툴바 제거
+            };
+        } else {
+            deltaObject = JSON.parse(deltaObject);
+        }
+    
+        let quillDescription = new Quill('#description_delta', quillSettings);
+
+        // Delta 값을 편집기에 적용
+        quillDescription.setContents(deltaObject);        
+        // Submit handler
+        let form = document.querySelector('form');
+        form.onsubmit = function (event) {
+            let description_delta = document.querySelector('#description');
+            description_delta.value = JSON.stringify(quillDescription.getContents());
+            return true; // return false to cancel form action
+        };
+
+        // JavaScript를 사용한 부트스트랩 검증 활성화
+        (function () {
+            'use strict'
+            let forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        let languageName = document.querySelector('#language_name').value;
+                        let frameworkName = document.querySelector('#framework_name').value;
+                        let databaseName = document.querySelector('#database_name').value;
+
+                        let isOneOfTechFieldsFilled = (languageName || frameworkName || databaseName).length > 0; // 적어도 하나 입력됐는지 확인
+
+                        if (!isOneOfTechFieldsFilled || !form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false)
+                })
+        })()
+    });
+</script>
+
+{% endblock %}

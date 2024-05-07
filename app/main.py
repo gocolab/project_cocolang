@@ -50,7 +50,8 @@ app.add_middleware(SessionMiddleware, secret_key="add any string...")
 EXCLUDE_PATHS = [
     "/css", "/images", "/js"
     , "/favicon.ico", "/errors"
-    , '/users/form', '/mains/list'
+    , '/users/form', '/users/list'
+    , '/mains/list'
     ,"/devtemplates/list"
     ,"/teams/list"
     , "/comodules/list", '/comodules/v1', '/comodules/r'

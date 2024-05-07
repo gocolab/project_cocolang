@@ -18,6 +18,7 @@ class User(Document):
     oauth_issuer: str = 'google'
     create_date: datetime = Field(default_factory=datetime.now)
     last_access_date: datetime = Field(default_factory=datetime.now)
+    activity_level: int = 0
 
     class Settings:
         name = "users"

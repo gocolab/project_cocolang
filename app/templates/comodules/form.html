@@ -44,6 +44,27 @@
                 At least one of Language, Framework, or Database must be filled.
             </div>
         </div>
+        <div class="form-group col-12 row">
+            <div class="form-group col-3">
+                <label class="form-label">Level:</label>
+            </div>
+            <div class="form-group col-4">
+                <select class="form-select" name="level">
+                    <option value="0" {{ 'selected' if comodule.level=='0' else '' }}>
+                        Lv. 0</option>
+                    <option value="1" {{ 'selected' if comodule.level=='1'
+                        else '' }}>
+                        Lv. 1</option>
+                    <option value="2" {{ 'selected' if comodule.level=='2'
+                        else '' }}>
+                        Lv. 2</option>
+                    <option value="3" {{ 'selected' if comodule.level=='3'
+                        else '' }}>
+                        Lv. 3
+                    </option>
+                </select>
+            </div>
+        </div>
         <div class="form-group col-12">
             <label class="form-label" for="title">Main Service:</label>
             <input type="text" class="form-control" id="title" name="title" value="{{ comodule.title }}" 
@@ -96,7 +117,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let deltaObject = {{ comodule.description | safe | tojson }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+        let deltaObject = {{ comodule.description | tojson }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
         
         // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
         let quillSettings = {

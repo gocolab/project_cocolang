@@ -1,6 +1,6 @@
 {% extends "templates/main_template.html" %}
 
-{% block title %}CoModule Details{% endblock %}
+{% block title %}communiti Details{% endblock %}
 
 {% block customize_css %}
 <!-- Include Quill stylesheet -->
@@ -15,67 +15,54 @@
 {% block main_container %}
 <form action="" method="post">
     <div class="row gap-3 px-5">
+        <!-- Language Selection -->
         <div class="form-group row">
             <div class="col-4">
                 <label class="col form-label">Language:</label>
                 <div class="col">
-                    <pre class="pre-scrollable border p-2" id="language_name">{{comodule.language_name}}</pre>
+                    <!-- Display the conversation language -->
+                    <pre class="pre-scrollable border p-2" id="conversation_language">{{community.conversation_language}}</pre>
                 </div>
             </div>
+            <!-- Activity Type -->
             <div class="col-4">
-                <label class="form-label col">Framework:</label>
+                <label class="form-label col">Activity Type:</label>
                 <div class="col">
-                    <pre class="pre-scrollable border p-2" id="framework_name">{{comodule.framework_name}}</pre>
+                    <!-- Display the activity type -->
+                    <pre class="pre-scrollable border p-2" id="activity_type">{{community.activity_type}}</pre>
                 </div>
             </div>
+            <!-- Needs Level -->
             <div class="col-4">
-                <label class="form-label col">Database:</label>
+                <label class="form-label col">Needs Level:</label>
                 <div class="col">
-                    <pre class="pre-scrollable border p-2" id="database_name">{{comodule.database_name}}</pre>
+                    <!-- Display the needs level -->
+                    <pre class="pre-scrollable border p-2" id="needs_level">Lv. {{ community.needs_level}}</pre>
                 </div>
             </div>
         </div>
-        <div class="form-group col-12 row">
-            <div class="col-3">
-                <label class="form-label">Level:</label>
-            </div>
-            <div class="col-4 form-group">
-                Lv. {{ comodule.level}}
-            </div>
-        </div>
-        <!-- Data Display -->
+        <!-- Title and Description -->
         <div class="form-group col-12">
-            <label for="title" class="form-label">Main Service:</label>
-            <!-- Display the value from the database using Jinja templating -->
-            <input type="text" class="form-control" id="title" name="title" value="{{ comodule.title }}" readonly>
-        </div>
-        <div class="col-12">
-            <label class="form-label">
-                Docker File Links:(Raw file links)
-                {% if (request.state.user) %}
-                <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
-                    zip <i class="bi bi-cloud-download"></i>
-                </a>
-                {% endif %}
-            </label>
-            <div class="form-group col-12">
-                <pre class="pre-scrollable border p-2" name="docker_files_links">{{comodule.docker_files_links}}</pre>
-            </div>
-
+            <label for="title" class="form-label">Title:</label>
+            <!-- Display the title -->
+            <input type="text" class="form-control" id="title" name="title" value="{{ community.title }}" readonly>
         </div>
         <div class="form-group col-12">
-            <label class="form-label">More Description(Settings for program development or Link)</label>
+            <label class="form-label">Description:</label>
+            <!-- Description using a rich text editor for more complex inputs -->
             <div id="description_delta" class="quill-editor"></div>
         </div>
+        <!-- communities ID (Hidden) -->
+        <input type="hidden" name="communities_id" value="{{community.communities_id}}">
+        <!-- Action Buttons -->
         <div class="col-12 d-flex justify-content-end">
             <div class="form-group">
-                {% if (request.state.user.id == comodule.create_user_id) or "ADMIN" in request.state.user.roles %}
-                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/update/{{ comodule.id }}"
-                    formmethod="get">
+                <!-- Conditional display based on user role and ownership -->
+                {% if (request.state.user.id == community.create_user_id) or "ADMIN" in request.state.user.roles %}
+                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/update/{{ community.id }}" formmethod="get">
                     Update
                 </button>
-                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}"
-                    formmethod="post">
+                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ community.id }}" formmethod="post">
                     Delete
                 </button>
                 {% endif %}
@@ -86,6 +73,7 @@
         </div>
     </div>
 </form>
+
 {% endblock %}
 {% block foot_javascripts %}
 <!-- Include Quill library -->
@@ -101,7 +89,7 @@
             }
         });
 
-    let deltaObject = JSON.parse({{ comodule.description | tojson }});
+    let deltaObject = JSON.parse({{ communiti.description | tojson }});
     quillDescription.setContents(deltaObject);
     let downloadLink = document.querySelector('#download_all');
 

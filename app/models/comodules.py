@@ -4,7 +4,6 @@ from pydantic import BaseModel, HttpUrl, Field
 from datetime import datetime
 
 class CoModule(Document):
-    fields: Optional[str] = None
     main_router: str
     title: str = None
     language_name: Optional[str] = None
@@ -16,7 +15,7 @@ class CoModule(Document):
     create_date: datetime = Field(default_factory=datetime.now)
     create_user_id:Optional[str] = None
     create_user_name:Optional[str] = None
-    grade: str = 0
+    level: str = 0
 
     class Settings:
         name = "comodules"
