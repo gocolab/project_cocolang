@@ -28,6 +28,7 @@ from app.routes.comodules import router as comodules_router
 from app.routes.mains import router as mains_router
 from app.routes.securities import router as securities_router
 from app.routes.errors import router as errors_router
+from app.routes.communities import router as communities_router
 
 app.include_router(user_router, prefix="/users")
 app.include_router(common_codes_router, prefix="/commoncodes")
@@ -37,6 +38,7 @@ app.include_router(comodules_router, prefix="/teams")
 app.include_router(mains_router, prefix="/mains")
 app.include_router(securities_router, prefix="/securities")
 app.include_router(errors_router, prefix="/errors")
+app.include_router(communities_router, prefix="/communities")
 
 @app.on_event("startup")
 async def init_db():
@@ -52,10 +54,11 @@ EXCLUDE_PATHS = [
     , "/favicon.ico", "/errors"
     , '/users/form', '/users/list'
     , '/mains/list'
-    ,"/devtemplates/list"
-    ,"/teams/list"
+    , "/devtemplates/list"
+    , "/teams/list"
     , "/comodules/list", '/comodules/v1', '/comodules/r'
-    , '/securities', '/users/signup'
+    , "/communities/list", '/communities/r'
+    , '/securities'
     # "/docs",   # Swagger 문서
     # "/openapi.json",  # OpenAPI 스펙
 ]
@@ -64,7 +67,7 @@ EXCLUDE_PATHS = [
 ROLE_BASED_ACCESS = {
     "GUEST": ["/comodules/download"
               , "/securities", '/users/read']
-    ,"PARTNER": ["/comodules", "/devtemplates", "/teams",]
+    ,"PARTNER": ["/comodules", "/devtemplates", "/teams", '/communities']
     ,"ADMIN": ["/admins", '/commoncodes', '/users']
 }
 

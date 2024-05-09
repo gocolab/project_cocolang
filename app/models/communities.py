@@ -3,7 +3,7 @@ from beanie import Document
 from pydantic import BaseModel, HttpUrl, Field
 from datetime import datetime
 
-class Community(Document):
+class Communities(Document):
     conversation_language: str = 'kr'
     title: str = None
     description: Optional[str] = None
@@ -24,12 +24,12 @@ class Community(Document):
     visibility: str = None  # "public", "private", "restricted"
     # 참여 회원별 신청 상황과 승인 여부, 메일 발송과 참여 여부 등
     # id, email, name, Authorizations in Community
-    members_information: Optional[List[dict]] = None 
+    member_ids: Optional[List[str]] = None 
 
     create_date: datetime = Field(default_factory=datetime.now)
     create_user_id:Optional[str] = None
     create_user_name:Optional[str] = None
-    comodules_id: str       # from Comodules Doc
+    refer_comodules_id: str       # from Comodules Doc
 
     class Settings:
         name = "communities"
