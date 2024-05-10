@@ -10,6 +10,8 @@ from app.models.users import User
 from app.models.common_codes import CommonCode
 from app.models.comodules import CoModule
 from app.models.request_log import RequestLog
+from app.models.boards import Boards
+from app.models.communities import Communities
 
 import os
 class Settings(BaseSettings):
@@ -21,7 +23,8 @@ class Settings(BaseSettings):
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(database=client.get_default_database(), 
-        document_models=[User, CommonCode, CoModule, RequestLog])
+        document_models=[User, CommonCode, CoModule, RequestLog
+                         , Boards, Communities])
 
     class Config:
         env_file = os.path.join("app",".env")

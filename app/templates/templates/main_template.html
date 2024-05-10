@@ -57,7 +57,7 @@
                             Beta
                         </span>
                     </div>
-                                    </a>
+                </a>
 
                 <!-- Toggler for mobile view -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -91,7 +91,8 @@
                         {% if request.state.user and "ADMIN" in request.state.user.roles %}
                         <!-- Logged in with ADMIN -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link menu-item dropdown-toggle" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link menu-item dropdown-toggle" href="#" id="navbarDropdownAdmin"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 AdminMenu
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
@@ -99,7 +100,7 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Not Yet</a></li>
+                                <li><a class="dropdown-item" href="/boards/list">Board</a></li>
                             </ul>
                         </li>
                         {% endif %}
@@ -107,11 +108,13 @@
                         {% if request.state.user %}
                         <!-- Logged in -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 {% if request.state.user.picture %}
-                                <img src="{{ request.state.user.picture }}" alt="profile" class="rounded-circle" style="width: 40px; height: 40px;">
+                                <img src="{{ request.state.user.picture }}" alt="profile" class="rounded-circle"
+                                    style="width: 40px; height: 40px;">
                                 {% else %}
-                                <span>My</span>                                
+                                <span>My</span>
                                 {% endif %}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -153,7 +156,8 @@
                 <!-- Company Information -->
                 <div class="col-6">
                     <h5>CoCoLabhub(Collaboration, Coding, Language)</h5>
-                    <div>beyond coding to collaboration, beyond language to communication. New possibilities with Us.</div>
+                    <div>beyond coding to collaboration, beyond language to communication. New possibilities with Us.
+                    </div>
                 </div>
 
                 <!-- Contact Information -->

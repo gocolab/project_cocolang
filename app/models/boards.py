@@ -12,10 +12,10 @@ class Boards(Document):
     create_user_id:Optional[str] = None
     create_user_name:Optional[str] = None
     
-    parent_id: str       # implement recursive loop
+    parent_id: str       # implement recursive loop with comments
     # 메뉴에 생성되지 않은 _id 적용 방안 고려 필요
-    refer_model_id: Optional[str] = None    # to use other model or model
-    refer_model_name: Optional[str] = None    
+    refer_kind_id: Optional[str] = None    # to use other model or model
+    refer_kind_name: Optional[str] = None    
 
     class Settings:
         name = "boards"

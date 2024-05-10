@@ -117,7 +117,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let deltaObject = {{ comodule.description | tojson }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+        let deltaObject = {{ comodule.title }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
         
         // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
         let quillSettings = {
@@ -130,7 +130,7 @@
                 toolbar: false // 툴바 제거
             };
         } else {
-            deltaObject = JSON.parse(deltaObject);
+            deltaObject = JSON.parse({{ comodule.description }});
         }
     
         let quillDescription = new Quill('#description_delta', quillSettings);

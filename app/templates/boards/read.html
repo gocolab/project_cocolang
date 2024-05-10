@@ -1,6 +1,6 @@
 {% extends "templates/main_template.html" %}
 
-{% block title %}communiti Details{% endblock %}
+{% block title %}board Details{% endblock %}
 
 {% block customize_css %}
 <!-- Include Quill stylesheet -->
@@ -15,32 +15,72 @@
 {% block main_container %}
 <form action="" method="post">
     <div class="row gap-3 px-5">
-        <!-- Title -->
-        <div class="form-group col-12">
-            <label for="title" class="form-label">제목:</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ board.title }}" placeholder="제목을 입력하세요">
+        <div class="form-group row">
+            <div class="col-4">
+                <label class="col form-label">Board Name:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="board_name">{{board.board_name}}</pre>
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="form-label col">Board Type:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="board_type">{{board.board_type}}</pre>
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="form-label col">Access Level:</label>
+                <div class="col">
+                    <pre class="pre-scrollable border p-2" id="access_level">{{board.access_level}}</pre>
+                </div>
+            </div>
         </div>
-        <!-- Content -->
-        <div class="form-group col-12">
-            <label for="content" class="form-label">내용:</label>
-            <textarea class="form-control" id="content" name="content" rows="5" placeholder="내용을 입력하세요">{{ board.content }}</textarea>
+        <div class="form-group col-12 row">
+            <div class="col-3">
+                <label class="form-label">Status:</label>
+            </div>
+            <div class="col-4 form-group">
+                Status: {{ board.status}}
+            </div>
         </div>
-        <!-- Board ID (Hidden) -->
-        <input type="hidden" name="board_id" value="{{board.id}}">
-        <!-- Action Buttons -->
+        <!-- Data Display -->
+        <div class="form-group col-12">
+            <label for="title" class="form-label">Main Topic:</label>
+            <!-- Display the value from the database using Jinja templating -->
+            <input type="text" class="form-control" id="title" name="title" value="{{ board.title }}" readonly>
+        </div>
+        <div class="col-12">
+            <label class="form-label">
+                Attachment Links:(Raw file links)
+                {% if (request.state.user) %}
+                <a href="/boards/download/{{ board.id }}" class="btn btn-sm btn-info" id="download_all">
+                    zip <i class="bi bi-cloud-download"></i>
+                </a>
+                {% endif %}
+            </label>
+            <div class="form-group col-12">
+                <pre class="pre-scrollable border p-2" name="attachment_links">{{board.attachment_links}}</pre>
+            </div>
+
+        </div>
+        <div class="form-group col-12">
+            <label class="form-label">Detailed Description(Development settings or Link)</label>
+            <div id="description_delta" class="quill-editor"></div>
+        </div>
         <div class="col-12 d-flex justify-content-end">
             <div class="form-group">
-                <!-- Conditional display based on user role and ownership -->
                 {% if (request.state.user.id == board.create_user_id) or "ADMIN" in request.state.user.roles %}
-                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/update/{{ board.id }}" formmethod="post">
-                    수정
+                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/update/{{ board.id }}"
+                    formmethod="get">
+                    Update
                 </button>
-                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ board.id }}" formmethod="post">
-                    삭제
+                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ board.id }}"
+                    formmethod="post">
+                    Delete
                 </button>
                 {% endif %}
                 <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
-                    목록
+                    List
                 </button>
             </div>
         </div>
@@ -62,7 +102,7 @@
             }
         });
 
-    let deltaObject = JSON.parse({{ communiti.description | tojson }});
+    let deltaObject = JSON.parse({{ board.description | tojson }});
     quillDescription.setContents(deltaObject);
     let downloadLink = document.querySelector('#download_all');
 

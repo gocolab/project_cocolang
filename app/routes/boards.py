@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, HTTPException
 from typing import Optional
-from app.models import Boards  # Boards 모델 import
-from app.database import Database  # Database 클래스 import 가정
+from app.models.boards import Boards  # Boards 모델 import
+from app.database.connection import Database  # Database 클래스 import 가정
 from fastapi.templating import Jinja2Templates
 from datetime import datetime
 
@@ -52,7 +52,7 @@ async def boards_list(request: Request, page_number: Optional[int] = 1):
     _dict = dict(request.query_params)
     queries = []
     main_router = request.url.path.split('/')[1]
-    queries.append({'main_router': main_router})
+    # queries.append({'main_router': main_router})
     try:
         search_word = _dict["word"].strip()
         if search_word:
@@ -60,7 +60,12 @@ async def boards_list(request: Request, page_number: Optional[int] = 1):
     except:
         pass
 
-    conditions = {'$and': queries}
+    # queries 배열이 비어있는 경우, 모든 문서를 매칭시키는 조건을 사용합니다.
+    if queries:
+        conditions = {'$and': queries}
+    else:
+        conditions = {}
+    
     boards_list, pagination = await collection_boards.getsbyconditionswithpagination(conditions, page_number)
     context = {'request': request, 'boards': boards_list, 'pagination': pagination, 'main_router': main_router}
     return context

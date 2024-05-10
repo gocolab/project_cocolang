@@ -15,64 +15,107 @@
 {% block main_container %}
 <form action="" method="post">
     <div class="row gap-3 px-5">
-        <!-- Language Selection -->
-        <div class="form-group row">
-            <div class="col-4">
-                <label class="col form-label">Language:</label>
-                <div class="col">
-                    <!-- Display the conversation language -->
-                    <pre class="pre-scrollable border p-2" id="conversation_language">{{community.conversation_language}}</pre>
-                </div>
-            </div>
-            <!-- Activity Type -->
-            <div class="col-4">
-                <label class="form-label col">Activity Type:</label>
-                <div class="col">
-                    <!-- Display the activity type -->
-                    <pre class="pre-scrollable border p-2" id="activity_type">{{community.activity_type}}</pre>
-                </div>
-            </div>
-            <!-- Needs Level -->
-            <div class="col-4">
-                <label class="form-label col">Needs Level:</label>
-                <div class="col">
-                    <!-- Display the needs level -->
-                    <pre class="pre-scrollable border p-2" id="needs_level">Lv. {{ community.needs_level}}</pre>
-                </div>
-            </div>
+        <!-- Language -->
+        <div class="form-group col-6">
+            <label for="conversation_language" class="form-label">Conversation Language:</label>
+            <input type="text" class="form-control" id="conversation_language" name="conversation_language" value="{{ community.conversation_language }}">
         </div>
-        <!-- Title and Description -->
-        <div class="form-group col-12">
+        
+        <!-- Title -->
+        <div class="form-group col-6">
             <label for="title" class="form-label">Title:</label>
-            <!-- Display the title -->
-            <input type="text" class="form-control" id="title" name="title" value="{{ community.title }}" readonly>
+            <input type="text" class="form-control" id="title" name="title" value="{{ community.title }}">
         </div>
+
+        <!-- Description -->
         <div class="form-group col-12">
-            <label class="form-label">Description:</label>
-            <!-- Description using a rich text editor for more complex inputs -->
-            <div id="description_delta" class="quill-editor"></div>
+            <label for="description" class="form-label">Description:</label>
+            <textarea class="form-control" id="description" name="description">{{ community.description }}</textarea>
         </div>
-        <!-- communities ID (Hidden) -->
-        <input type="hidden" name="communities_id" value="{{community.communities_id}}">
-        <!-- Action Buttons -->
+
+        <!-- Activity Type -->
+        <div class="form-group col-6">
+            <label for="activity_type" class="form-label">Activity Type:</label>
+            <select class="form-control" id="activity_type" name="activity_type">
+                <option value="Code Review" {{ "selected" if community.activity_type == "Code Review" }}>Code Review</option>
+                <option value="Coding Test" {{ "selected" if community.activity_type == "Coding Test" }}>Coding Test</option>
+                <option value="Team Project" {{ "selected" if community.activity_type == "Team Project" }}>Team Project</option>
+            </select>
+        </div>
+
+        <!-- Needs Level -->
+        <div class="form-group col-6">
+            <label for="needs_level" class="form-label">Needs Level:</label>
+            <input type="number" class="form-control" id="needs_level" name="needs_level" value="{{ community.needs_level }}">
+        </div>
+
+        <!-- Description Private -->
+        <div class="form-group col-12">
+            <label for="description_private" class="form-label">Description Private:</label>
+            <textarea class="form-control" id="description_private" name="description_private">{{ community.description_private }}</textarea>
+        </div>
+
+        <!-- Recruitment Period Start -->
+        <div class="form-group col-6">
+            <label for="recruitment_period_start" class="form-label">Recruitment Period Start:</label>
+            <input type="date" class="form-control" id="recruitment_period_start" name="recruitment_period_start" value="{{ community.recruitment_period_start }}">
+        </div>
+
+        <!-- Recruitment Period End -->
+        <div class="form-group col-6">
+            <label for="recruitment_period_end" class="form-label">Recruitment Period End:</label>
+            <input type="date" class="form-control" id="recruitment_period_end" name="recruitment_period_end" value="{{ community.recruitment_period_end }}">
+        </div>
+
+        <!-- Recruitment Number -->
+        <div class="form-group col-6">
+            <label for="recruitment_number" class="form-label">Recruitment Number:</label>
+            <input type="number" class="form-control" id="recruitment_number" name="recruitment_number" value="{{ community.recruitment_number }}">
+        </div>
+
+        <!-- Activity Period Start -->
+        <div class="form-group col-6">
+            <label for="activity_period_start" class="form-label">Activity Period Start:</label>
+            <input type="date" class="form-control" id="activity_period_start" name="activity_period_start" value="{{ community.activity_period_start }}">
+        </div>
+
+        <!-- Activity Period End -->
+        <div class="form-group col-6">
+            <label for="activity_period_end" class="form-label">Activity Period End:</label>
+            <input type="date" class="form-control" id="activity_period_end" name="activity_period_end" value="{{ community.activity_period_end }}">
+        </div>
+
+        <!-- Visibility -->
+        <div class="form-group col-6">
+            <label for="visibility" class="form-label">Visibility:</label>
+            <select class="form-control" id="visibility" name="visibility">
+                <option value="public" {{ "selected" if community.visibility == "public" }}>Public</option>
+                <option value="private" {{ "selected" if community.visibility == "private" }}>Private</option>
+                <option value="restricted" {{ "selected" if community.visibility == "restricted" }}>Restricted</option>
+            </select>
+        </div>
+        
+        <!-- Buttons -->
         <div class="col-12 d-flex justify-content-end">
             <div class="form-group">
-                <!-- Conditional display based on user role and ownership -->
                 {% if (request.state.user.id == community.create_user_id) or "ADMIN" in request.state.user.roles %}
-                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/update/{{ community.id }}" formmethod="get">
+                <button type="submit" class="btn btn-primary" formaction="/communities/update/{{ community.id }}"
+                    formmethod="get">
                     Update
                 </button>
-                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ community.id }}" formmethod="post">
+                <button type="submit" class="btn btn-danger" formaction="/communities/{{ community.id }}"
+                    formmethod="post">
                     Delete
                 </button>
                 {% endif %}
-                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
+                <button type="submit" class="btn btn-primary" formaction="/communities/list" formmethod="get">
                     List
                 </button>
             </div>
         </div>
     </div>
 </form>
+
 
 {% endblock %}
 {% block foot_javascripts %}
@@ -89,7 +132,7 @@
             }
         });
 
-    let deltaObject = JSON.parse({{ communiti.description | tojson }});
+    let deltaObject = JSON.parse({{ community.description | tojson }});
     quillDescription.setContents(deltaObject);
     let downloadLink = document.querySelector('#download_all');
 

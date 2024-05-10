@@ -18,6 +18,8 @@ async def form(request: Request, community_id: str = None):
         community = await collection_communities.get(community_id)
         if community is None:
             raise HTTPException(status_code=404, detail="Community not found")
+    else :
+        community = Communities        
 
     return templates.TemplateResponse(name="communities/form.html",
                                       context={'request': request,
@@ -52,7 +54,12 @@ async def communities_list(request: Request, page_number: Optional[int] = 1):
     except:
         pass
 
-    conditions = {'$and': queries}
+    # queries 배열이 비어있는 경우, 모든 문서를 매칭시키는 조건을 사용합니다.
+    if queries:
+        conditions = {'$and': queries}
+    else:
+        conditions = {}
+
     communities_list, pagination = await collection_communities.getsbyconditionswithpagination(conditions, page_number)
     context = {'request': request, 'communities': communities_list, 'pagination': pagination}
     return context

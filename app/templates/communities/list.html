@@ -34,35 +34,33 @@ Debugging Coding Test
 </div>
 
 <form>
-  <!-- 검색 항목 추가 필요 -->
+  <!-- Additional search items needed -->
   <div class="row">
-    <div class="col-6">
-    <div class="col-2 form-group">
+    <div class="col-3 form-group">
       <select class="form-select" name="key_name">
-        <option value="name" {{ 'selected' if request._query_params.key_name=='name' else '' }}>
-          Community Name</option>
-        <option value="description" {{ 'selected' if request._query_params.key_name=='description' else '' }}>
-          Description</option>
-        <option value="location" {{ 'selected' if request._query_params.key_name=='location' else '' }}>
-          Location</option>
-        <option value="category" {{ 'selected' if request._query_params.key_name=='category' else '' }}>
-          Category
-        </option>
+        <option value="conversation_language" {{ 'selected' if request._query_params.key_name=='conversation_language' else '' }}>
+          Conversation Language</option>
+        <option value="activity_type" {{ 'selected' if request._query_params.key_name=='activity_type' else '' }}>
+          Activity Type</option>
+        <option value="needs_level" {{ 'selected' if request._query_params.key_name=='needs_level' else '' }}>
+          Required Level</option>
+        <option value="visibility" {{ 'selected' if request._query_params.key_name=='visibility' else '' }}>
+          Visibility</option>
       </select>
     </div>
-    <div class="col-5">
-      <input class="form-control" placeholder="Enter Search!" name="word" value="{{request._query_params.word}}">
+    <div class="col-6">
+      <input class="form-control" placeholder="Enter search term!" name="word" value="{{request._query_params.word}}">
     </div>
-    <div class="col-5 form-group d-flex justify-content-between">
-      <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
+    <div class="col-3 form-group d-flex justify-content-between">
+      <button type="submit" class="btn btn-primary" formaction="/communities/list" formmethod="get">
         Search
       </button>
       {%
-      if (request.state.user and request.state.user.roles and main_router == 'communities')
+      if (request.state.user and request.state.user.roles and main_router == 'teams')
       or ("ADMIN" in request.state.user.roles)
       %}
-      <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/form" formmethod="get">
-        New
+      <button type="submit" class="btn btn-danger" formaction="/communities/form" formmethod="get">
+        Create New
       </button>
       {% endif %}
     </div>
@@ -71,29 +69,27 @@ Debugging Coding Test
     <thead>
       <tr class="text-center">
         <th>No.</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Location</th>
-        <th>Category</th>
-        <th>Details</th>
+        <th>Conversation Language</th>
+        <th>Activity Type</th>
+        <th>Required Level</th>
+        <th>Visibility</th>
+        <th>Title</th>
+        <th>Settings</th>
       </tr>
     </thead>
     <tbody>
       {% for community in communities %}
       <tr>
         <td>{{pagination.start_record_number + loop.index}}</td>
-        <td>
-          <pre class="pre-scrollable">{{community.name}}</pre>
-        </td>
-        <td>
-          <pre class="pre-scrollable">{{community.description}}</pre>
-        </td>
-        <td>
-          <pre class="pre-scrollable">{{community.location}}</pre>
-        </td>
-        <td>{{community.category}}</td>
+        <td>{{community.conversation_language}}</td>
+        <td>{{community.activity_type}}</td>
+        <td>lv. {{community.needs_level}}</td>
+        <td>{{community.visibility}}</td>
         <td class="max-width-td">
-          <a href="/{{main_router}}/{{ community.id }}" class="text-decoration-none">{{ community.title }}</a>
+          <a href="/communities/{{ community.id }}" class="text-decoration-none">{{ community.title }}</a>
+        </td>
+        <td class="text-center form-group td-setup-min-width">
+          <!-- Possible to add setting buttons or links -->
         </td>
       </tr>
       {% endfor %}
@@ -102,11 +98,6 @@ Debugging Coding Test
   {% endblock %}
   {% block paginations_container %}
   {% include 'templates/pagination_template.html' %}
-  </div>
-  <div class="col-6">
-    
-  </div>
-
 </form>
 
 {% endblock %}
