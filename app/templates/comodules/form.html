@@ -44,11 +44,8 @@
                 At least one of Language, Framework, or Database must be filled.
             </div>
         </div>
-        <div class="form-group col-12 row">
-            <div class="form-group col-3">
+        <div class="form-group col-2 row">
                 <label class="form-label">Level:</label>
-            </div>
-            <div class="form-group col-4">
                 <select class="form-select" name="level">
                     <option value="0" {{ 'selected' if comodule.level=='0' else '' }}>
                         Lv. 0</option>
@@ -63,9 +60,8 @@
                         Lv. 3
                     </option>
                 </select>
-            </div>
         </div>
-        <div class="form-group col-12">
+        <div class="form-group col-10">
             <label class="form-label" for="title">Main Service:</label>
             <input type="text" class="form-control" id="title" name="title" value="{{ comodule.title }}" 
                 required placeholder="Login by permissions and shopping cart functionality">
@@ -93,18 +89,16 @@
             <div class="form-group">
                 {% if comodule.id or "ADMIN" in request.state.user.roles %}
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/update/{{comodule.id}}">
-                    update
+                    Update
                 </button>
                 {% else %}
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/insert">
                     Insert
                 </button>
                 {% endif %}
-
-
-                <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/list" formmethod="get">
+                <a class="btn btn-primary" href="/{{main_router}}/list">
                     List
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -117,21 +111,14 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let deltaObject = {{ comodule.title }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+        let deltaObject = {{ comodule.description if comodule.description else '{}' | tojson }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
         
         // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
         let quillSettings = {
             theme: 'snow'
         };
         
-        if (deltaObject.length <= 0) {
-            quillSettings.readOnly = true; // 읽기 전용 모드 활성화
-            quillSettings.modules = {
-                toolbar: false // 툴바 제거
-            };
-        } else {
-            deltaObject = JSON.parse({{ comodule.description }});
-        }
+        deltaObject = JSON.parse(deltaObject);
     
         let quillDescription = new Quill('#description_delta', quillSettings);
 

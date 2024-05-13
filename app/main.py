@@ -68,8 +68,8 @@ EXCLUDE_PATHS = [
 # Role-based URL access configuration
 ROLE_BASED_ACCESS = {
     "GUEST": ["/comodules/download"
-              , "/securities", '/users/read', '/boards']
-    ,"PARTNER": ["/comodules", "/devtemplates", "/teams", '/communities']
+              , "/securities", '/users/read', '/boards', '/communities']
+    ,"PARTNER": ["/comodules", "/devtemplates", "/teams"]
     ,"ADMIN": ["/admins", '/commoncodes', '/users']
 }
 

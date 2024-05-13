@@ -18,8 +18,6 @@ async def form(request: Request, community_id: str = None):
         community = await collection_communities.get(community_id)
         if community is None:
             raise HTTPException(status_code=404, detail="Community not found")
-    else :
-        community = Communities        
 
     return templates.TemplateResponse(name="communities/form.html",
                                       context={'request': request,

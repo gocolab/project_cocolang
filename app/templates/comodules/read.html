@@ -35,16 +35,14 @@
                 </div>
             </div>
         </div>
-        <div class="form-group col-12 row">
-            <div class="col-3">
-                <label class="form-label">Level:</label>
-            </div>
-            <div class="col-4 form-group">
+        <div class="form-group col-2 row">
+            <label class="form-label">Level:</label>
+            <div class="col form-group">
                 Lv. {{ comodule.level}}
             </div>
         </div>
         <!-- Data Display -->
-        <div class="form-group col-12">
+        <div class="form-group col-10">
             <label for="title" class="form-label">Main Service:</label>
             <!-- Display the value from the database using Jinja templating -->
             <input type="text" class="form-control" id="title" name="title" value="{{ comodule.title }}" readonly>
@@ -72,7 +70,7 @@
                 {% if (request.state.user.id == comodule.create_user_id) or "ADMIN" in request.state.user.roles %}
                 <button type="submit" class="btn btn-primary" formaction="/{{main_router}}/update/{{ comodule.id }}"
                     formmethod="get">
-                    Update
+                    Change
                 </button>
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/{{ comodule.id }}"
                     formmethod="post">
@@ -101,14 +99,14 @@
             }
         });
 
-    let deltaObject = JSON.parse({{ comodule.description | tojson }});
+        let deltaObject = JSON.parse({{ comodule.description | tojson }});
     quillDescription.setContents(deltaObject);
     let downloadLink = document.querySelector('#download_all');
 
     downloadLink.addEventListener('click', function (e) {
         e.preventDefault(); // 기본 링크 동작 방지
         window.location.href = downloadLink.getAttribute('href'); // 파일 다운로드 시작
-        });
+    });
     });
 </script>
 {% endblock %}

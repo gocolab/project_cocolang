@@ -18,29 +18,56 @@
 {% block main_container %}
 <form action="" method="post" class="needs-validation" novalidate>
     <div class="row gap-3 px-5">
-        <!-- Conversation Language -->
-        <div class="form-group col-6">
-            <label for="conversation_language" class="form-label">Conversation Language:</label>
-            <input type="text" class="form-control" id="conversation_language" name="conversation_language"
-                value="{{ community.conversation_language }}" required>
+        <!-- Visibility -->
+        <div class="form-group col-3">
+            <label for="visibility" class="form-label">Visibility:</label>
+            <select class="form-control" id="visibility" name="visibility" required>
+                <option value="public" {{ 'selected' if community.visibility=='public' }}>Public</option>
+                <option value="private" {{ 'selected' if community.visibility=='private' }}>Private</option>
+                <option value="restricted" {{ 'selected' if community.visibility=='restricted' }}>Restricted</option>
+            </select>
         </div>
 
-        <!-- Title -->
-        <div class="form-group col-6">
-            <label for="title" class="form-label">Title:</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ community.title }}" required>
+        <!-- Recruitment Period -->
+        <div class="form-group col-5">
+            <label for="recruitment_period_start" class="form-label">Recruitment Period Start:</label>
+            <input type="datetime-local" class="form-control" id="recruitment_period_start"
+                name="recruitment_period_start"
+                value="{{ community.recruitment_period_start.strftime('%Y-%m-%dT%H:%M') if community.recruitment_period_start else '' }}"
+                required>
+        </div>
+        <div class="form-group col-5">
+            <label for="recruitment_period_end" class="form-label">Recruitment Period End:</label>
+            <input type="datetime-local" class="form-control" id="recruitment_period_end" name="recruitment_period_end"
+                value="{{ community.recruitment_period_end.strftime('%Y-%m-%dT%H:%M') if community.recruitment_period_end else '' }}"
+                required>
         </div>
 
-        <!-- Description -->
-        <div class="form-group col-12">
-            <label for="description" class="form-label">Description:</label>
-            <textarea class="form-control" id="description" name="description">{{ community.description }}</textarea>
+        <!-- Recruitment Number -->
+        <div class="form-group col-5">
+            <label for="recruitment_number" class="form-label">Recruitment Number:</label>
+            <input type="number" class="form-control" id="recruitment_number" name="recruitment_number"
+                value="{{ community.recruitment_number }}" required>
+        </div>
+
+        <!-- Activity Period -->
+        <div class="form-group col-5">
+            <label for="activity_period_start" class="form-label">Activity Period Start:</label>
+            <input type="datetime-local" class="form-control" id="activity_period_start" name="activity_period_start"
+                value="{{ community.activity_period_start.strftime('%Y-%m-%dT%H:%M') if community.activity_period_start else '' }}"
+                required>
+        </div>
+        <div class="form-group col-5">
+            <label for="activity_period_end" class="form-label">Activity Period End:</label>
+            <input type="datetime-local" class="form-control" id="activity_period_end" name="activity_period_end"
+                value="{{ community.activity_period_end.strftime('%Y-%m-%dT%H:%M') if community.activity_period_end else '' }}"
+                required>
         </div>
 
         <!-- Activity Type -->
-        <div class="form-group col-6">
+        <div class="form-group col-3">
             <label for="activity_type" class="form-label">Activity Type:</label>
-            <select class="form-control" id="activity_type" name="activity_type" required>
+            <select class="form-select" id="activity_type" name="activity_type" required>
                 <option value="Code Review" {{ 'selected' if community.activity_type=='Code Review' }}>Code Review
                 </option>
                 <option value="Coding Test" {{ 'selected' if community.activity_type=='Coding Test' }}>Coding Test
@@ -51,59 +78,39 @@
         </div>
 
         <!-- Needs Level -->
-        <div class="form-group col-6">
+        <div class="form-group col-3">
             <label for="needs_level" class="form-label">Needs Level:</label>
-            <input type="number" class="form-control" id="needs_level" name="needs_level"
-                value="{{ community.needs_level }}" required>
+            <select class="form-select" name="level">
+                <option value="0" {{ 'selected' if community.level=='0' else '' }}>
+                    Lv. 0</option>
+                <option value="1" {{ 'selected' if community.level=='1' else '' }}>
+                    Lv. 1</option>
+                <option value="2" {{ 'selected' if community.level=='2' else '' }}>
+                    Lv. 2</option>
+                <option value="3" {{ 'selected' if community.level=='3' else '' }}>
+                    Lv. 3
+                </option>
+            </select>
+        </div>
+
+        <!-- Title -->
+        <div class="form-group col-12">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{community.title}}" required>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group col-12">
+            <label class="form-label">Description:</label>
+            <div id="description_delta" class="quill-editor"></div>
+            <input type="hidden" name="description" id="description">
         </div>
 
         <!-- Description Private -->
         <div class="form-group col-12">
-            <label for="description_private" class="form-label">Description Private:</label>
-            <textarea class="form-control" id="description_private"
-                name="description_private">{{ community.description_private }}</textarea>
-        </div>
-
-        <!-- Recruitment Period -->
-        <div class="form-group col-6">
-            <label for="recruitment_period_start" class="form-label">Recruitment Period Start:</label>
-            <input type="datetime-local" class="form-control" id="recruitment_period_start"
-                name="recruitment_period_start"
-                value="{{ community.recruitment_period_start.strftime('%Y-%m-%dT%H:%M') }}" required>
-        </div>
-        <div class="form-group col-6">
-            <label for="recruitment_period_end" class="form-label">Recruitment Period End:</label>
-            <input type="datetime-local" class="form-control" id="recruitment_period_end" name="recruitment_period_end"
-                value="{{ community.recruitment_period_end.strftime('%Y-%m-%dT%H:%M') }}" required>
-        </div>
-
-        <!-- Recruitment Number -->
-        <div class="form-group col-6">
-            <label for="recruitment_number" class="form-label">Recruitment Number:</label>
-            <input type="number" class="form-control" id="recruitment_number" name="recruitment_number"
-                value="{{ community.recruitment_number }}" required>
-        </div>
-
-        <!-- Activity Period -->
-        <div class="form-group col-6">
-            <label for="activity_period_start" class="form-label">Activity Period Start:</label>
-            <input type="datetime-local" class="form-control" id="activity_period_start" name="activity_period_start"
-                value="{{ community.activity_period_start.strftime('%Y-%m-%dT%H:%M') }}" required>
-        </div>
-        <div class="form-group col-6">
-            <label for="activity_period_end" class="form-label">Activity Period End:</label>
-            <input type="datetime-local" class="form-control" id="activity_period_end" name="activity_period_end"
-                value="{{ community.activity_period_end.strftime('%Y-%m-%dT%H:%M') }}" required>
-        </div>
-
-        <!-- Visibility -->
-        <div class="form-group col-6">
-            <label for="visibility" class="form-label">Visibility:</label>
-            <select class="form-control" id="visibility" name="visibility" required>
-                <option value="public" {{ 'selected' if community.visibility=='public' }}>Public</option>
-                <option value="private" {{ 'selected' if community.visibility=='private' }}>Private</option>
-                <option value="restricted" {{ 'selected' if community.visibility=='restricted' }}>Restricted</option>
-            </select>
+            <label class="form-label">Description Private:</label>
+            <div id="description_private_delta" class="quill-editor"></div>
+            <input type="hidden" name="description_private" id="description_private">
         </div>
 
         <div class="col-12 d-flex justify-content-end">
@@ -136,7 +143,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let deltaObject = {{ community.description | tojson
+        let deltaObject = {{ community.description if community.description else '{}' | tojson
     }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
 
     // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
@@ -144,24 +151,32 @@
         theme: 'snow'
     };
 
-    if (deltaObject.length <= 0) {
-        quillSettings.readOnly = true; // 읽기 전용 모드 활성화
-        quillSettings.modules = {
-            toolbar: false // 툴바 제거
-        };
-    } else {
-        deltaObject = JSON.parse(deltaObject);
-    }
+    deltaObject = JSON.parse(deltaObject);
 
     let quillDescription = new Quill('#description_delta', quillSettings);
-
     // Delta 값을 편집기에 적용
     quillDescription.setContents(deltaObject);
+
+    let deltaObject_private = {{ community.description_private if community.description_private else '{}' | tojson }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+
+    // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
+    let quillSettings_private = {
+        theme: 'snow'
+    };
+
+    deltaObject_private = JSON.parse(deltaObject_private);
+
+    let quillDescription_private = new Quill('#description_private_delta', quillSettings_private);
+    // Delta 값을 편집기에 적용
+    quillDescription_private.setContents(deltaObject_private);
+
     // Submit handler
     let form = document.querySelector('form');
     form.onsubmit = function (event) {
         let description_delta = document.querySelector('#description');
         description_delta.value = JSON.stringify(quillDescription.getContents());
+        let description_private_delta = document.querySelector('#description_private');
+        description_private_delta.value = JSON.stringify(quillDescription_private.getContents());
         return true; // return false to cancel form action
     };
     });

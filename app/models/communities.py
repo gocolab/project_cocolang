@@ -16,7 +16,7 @@ class Communities(Document):
     recruitment_period_start: datetime = None
     recruitment_period_end: datetime = None
     # 모집 명수
-    recruitment_number: int = None
+    recruitment_number: int = 5
     # 활동 기간
     activity_period_start: datetime = None
     activity_period_end: datetime = None

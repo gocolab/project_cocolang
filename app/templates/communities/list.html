@@ -60,7 +60,7 @@ Debugging Coding Test
       or ("ADMIN" in request.state.user.roles)
       %}
       <button type="submit" class="btn btn-danger" formaction="/communities/form" formmethod="get">
-        Create New
+        New
       </button>
       {% endif %}
     </div>
@@ -69,7 +69,6 @@ Debugging Coding Test
     <thead>
       <tr class="text-center">
         <th>No.</th>
-        <th>Conversation Language</th>
         <th>Activity Type</th>
         <th>Required Level</th>
         <th>Visibility</th>
@@ -81,7 +80,6 @@ Debugging Coding Test
       {% for community in communities %}
       <tr>
         <td>{{pagination.start_record_number + loop.index}}</td>
-        <td>{{community.conversation_language}}</td>
         <td>{{community.activity_type}}</td>
         <td>lv. {{community.needs_level}}</td>
         <td>{{community.visibility}}</td>
