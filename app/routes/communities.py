@@ -20,6 +20,8 @@ async def form(request: Request, community_id: str = None):
         if community is None:
             raise HTTPException(status_code=404, detail="Community not found")
     else :
+        _dict = dict(request.query_params)
+        community['refer_comodules_id'] = _dict['refer_comodules_id']
         community['visibility'] = 'public'
         community['recruitment_period_start'] = datetime.now()
         community['recruitment_period_end'] = datetime.now() + timedelta(days=6)

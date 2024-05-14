@@ -57,8 +57,8 @@ Debugging Coding Test
       if (request.state.user and request.state.user.roles and main_router == 'teams')
       or ("ADMIN" in request.state.user.roles)
       %}
-      <button type="submit" class="btn btn-danger" formaction="/communities/form" formmethod="get">
-        New
+      <button type="submit" class="btn btn-danger" formaction="/mains/list" formmethod="get" name="previous_path" value="communities">
+        Create
       </button>
       {% endif %}
     </div>

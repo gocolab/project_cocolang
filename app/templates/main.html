@@ -89,9 +89,13 @@
   </div>
   <div class="col-4">
     <div class="col-12">
-      <div class="m-2 d-flex justify-content-center">
-        <div class="btn btn-sm" disabled>Detail</div>
-      </div>
+      <form>
+      <div class="m-2 d-flex justify-content-between">
+          <input type="hidden" name="refer_comodules_id" value="{{ comodule.id }}">
+          <button class="btn btn-sm btn-success" formaction="/communities/form">Create Community</button>
+          <button class="btn btn-sm btn-danger" formaction="/template/form">Create</button>
+        </div>
+      </form>
       <div class="card card-body" id="detail">
         <div class="row">
           <div class="col-5 fw-bold">Main Service</div>
