@@ -15,84 +15,62 @@
 {% block main_container %}
 <form action="" method="post">
     <div class="row gap-3 px-5">
-        <!-- Language -->
-        <div class="form-group col-6">
-            <label for="conversation_language" class="form-label">Conversation Language:</label>
-            <input type="text" class="form-control" id="conversation_language" name="conversation_language" value="{{ community.conversation_language }}">
+        <!-- Visibility -->
+        <div class="form-group col-12 row">
+            <label class="form-label col-2">Visibility:</label>
+            <div class="col-3">
+                <p>{{ 'Public' if community.visibility=='public' else 'Private' }}</p>
+            </div>
         </div>
-        
+
+        <!-- Needs Level -->
+        <div class="form-group col-2">
+            <label class="form-label">Needs Level:</label>
+            <p>Lv. {{ community.needs_level }}</p>
+        </div>
+
+        <!-- Recruitment Period -->
+        <div class="form-group col-3">
+            <label class="form-label">Recruitment Period Start:</label>
+            <p>{{ community.recruitment_period_start.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_start else '' }}</p>
+        </div>
+        <div class="form-group col-3">
+            <label class="form-label">Recruitment Period End:</label>
+            <p>{{ community.recruitment_period_end.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_end else '' }}</p>
+        </div>
+
+        <!-- Recruitment Number -->
+        <div class="form-group col-2">
+            <label class="form-label">Recruit Numbers:</label>
+            <p>{{ community.recruitment_number if community.recruitment_number else 10 }}</p>
+        </div>
+
+        <!-- Activity Type -->
+        <div class="form-group col-2">
+            <label class="form-label">Activity Type:</label>
+            <p>{{ community.activity_type }}</p>
+        </div>
+
+        <!-- Activity Period -->
+        <div class="form-group col-3">
+            <label class="form-label">Activity Period Start:</label>
+            <p>{{ community.activity_period_start.strftime('%Y-%m-%d %H:%M') if community.activity_period_start else now.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        <div class="form-group col-3">
+            <label class="form-label">Activity Period End:</label>
+            <p>{{ community.activity_period_end.strftime('%Y-%m-%d %H:%M') if community.activity_period_end else '' }}</p>
+        </div>
+
         <!-- Title -->
-        <div class="form-group col-6">
-            <label for="title" class="form-label">Title:</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ community.title }}">
+        <div class="form-group col-12">
+            <label class="form-label">Title:</label>
+            <p>{{community.title}}</p>
         </div>
 
         <!-- Description -->
         <div class="form-group col-12">
-            <label for="description" class="form-label">Description:</label>
-            <textarea class="form-control" id="description" name="description">{{ community.description }}</textarea>
-        </div>
-
-        <!-- Activity Type -->
-        <div class="form-group col-6">
-            <label for="activity_type" class="form-label">Activity Type:</label>
-            <select class="form-control" id="activity_type" name="activity_type">
-                <option value="Code Review" {{ "selected" if community.activity_type == "Code Review" }}>Code Review</option>
-                <option value="Coding Test" {{ "selected" if community.activity_type == "Coding Test" }}>Coding Test</option>
-                <option value="Team Project" {{ "selected" if community.activity_type == "Team Project" }}>Team Project</option>
-            </select>
-        </div>
-
-        <!-- Needs Level -->
-        <div class="form-group col-6">
-            <label for="needs_level" class="form-label">Needs Level:</label>
-            <input type="number" class="form-control" id="needs_level" name="needs_level" value="{{ community.needs_level }}">
-        </div>
-
-        <!-- Description Private -->
-        <div class="form-group col-12">
-            <label for="description_private" class="form-label">Description Private:</label>
-            <textarea class="form-control" id="description_private" name="description_private">{{ community.description_private }}</textarea>
-        </div>
-
-        <!-- Recruitment Period Start -->
-        <div class="form-group col-6">
-            <label for="recruitment_period_start" class="form-label">Recruitment Period Start:</label>
-            <input type="date" class="form-control" id="recruitment_period_start" name="recruitment_period_start" value="{{ community.recruitment_period_start }}">
-        </div>
-
-        <!-- Recruitment Period End -->
-        <div class="form-group col-6">
-            <label for="recruitment_period_end" class="form-label">Recruitment Period End:</label>
-            <input type="date" class="form-control" id="recruitment_period_end" name="recruitment_period_end" value="{{ community.recruitment_period_end }}">
-        </div>
-
-        <!-- Recruitment Number -->
-        <div class="form-group col-6">
-            <label for="recruitment_number" class="form-label">Recruitment Number:</label>
-            <input type="number" class="form-control" id="recruitment_number" name="recruitment_number" value="{{ community.recruitment_number }}">
-        </div>
-
-        <!-- Activity Period Start -->
-        <div class="form-group col-6">
-            <label for="activity_period_start" class="form-label">Activity Period Start:</label>
-            <input type="date" class="form-control" id="activity_period_start" name="activity_period_start" value="{{ community.activity_period_start }}">
-        </div>
-
-        <!-- Activity Period End -->
-        <div class="form-group col-6">
-            <label for="activity_period_end" class="form-label">Activity Period End:</label>
-            <input type="date" class="form-control" id="activity_period_end" name="activity_period_end" value="{{ community.activity_period_end }}">
-        </div>
-
-        <!-- Visibility -->
-        <div class="form-group col-6">
-            <label for="visibility" class="form-label">Visibility:</label>
-            <select class="form-control" id="visibility" name="visibility">
-                <option value="public" {{ "selected" if community.visibility == "public" }}>Public</option>
-                <option value="private" {{ "selected" if community.visibility == "private" }}>Private</option>
-                <option value="restricted" {{ "selected" if community.visibility == "restricted" }}>Restricted</option>
-            </select>
+            <label class="form-label">Description:</label>
+            <div id="description_delta" class="quill-editor"></div>
         </div>
         
         <!-- Buttons -->
@@ -134,6 +112,7 @@
 
     let deltaObject = JSON.parse({{ community.description | tojson }});
     quillDescription.setContents(deltaObject);
+    
     let downloadLink = document.querySelector('#download_all');
 
     downloadLink.addEventListener('click', function (e) {

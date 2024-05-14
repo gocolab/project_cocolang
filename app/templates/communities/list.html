@@ -38,8 +38,6 @@ Debugging Coding Test
   <div class="row">
     <div class="col-3 form-group">
       <select class="form-select" name="key_name">
-        <option value="conversation_language" {{ 'selected' if request._query_params.key_name=='conversation_language' else '' }}>
-          Conversation Language</option>
         <option value="activity_type" {{ 'selected' if request._query_params.key_name=='activity_type' else '' }}>
           Activity Type</option>
         <option value="needs_level" {{ 'selected' if request._query_params.key_name=='needs_level' else '' }}>
@@ -69,26 +67,22 @@ Debugging Coding Test
     <thead>
       <tr class="text-center">
         <th>No.</th>
+        <th>Title</th>
         <th>Activity Type</th>
         <th>Required Level</th>
         <th>Visibility</th>
-        <th>Title</th>
-        <th>Settings</th>
       </tr>
     </thead>
     <tbody>
       {% for community in communities %}
       <tr>
         <td>{{pagination.start_record_number + loop.index}}</td>
-        <td>{{community.activity_type}}</td>
-        <td>lv. {{community.needs_level}}</td>
-        <td>{{community.visibility}}</td>
         <td class="max-width-td">
           <a href="/communities/{{ community.id }}" class="text-decoration-none">{{ community.title }}</a>
         </td>
-        <td class="text-center form-group td-setup-min-width">
-          <!-- Possible to add setting buttons or links -->
-        </td>
+        <td>{{community.activity_type}}</td>
+        <td>lv. {{community.needs_level}}</td>
+        <td>{{community.visibility}}</td>
       </tr>
       {% endfor %}
     </tbody>

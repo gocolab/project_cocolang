@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from fastapi import APIRouter, Request, HTTPException
 from typing import Optional
 from app.models.communities import Communities  # Communities 모델 import 가정
@@ -18,6 +19,12 @@ async def form(request: Request, community_id: str = None):
         community = await collection_communities.get(community_id)
         if community is None:
             raise HTTPException(status_code=404, detail="Community not found")
+    else :
+        community['visibility'] = 'public'
+        community['recruitment_period_start'] = datetime.now()
+        community['recruitment_period_end'] = datetime.now() + timedelta(days=6)
+        community['activity_period_start'] = datetime.now() + timedelta(days=7)
+        community['activity_period_end'] = datetime.now() + timedelta(days=21)
 
     return templates.TemplateResponse(name="communities/form.html",
                                       context={'request': request,
@@ -33,7 +40,7 @@ async def create(request: Request):
     community = Communities(**community_data)
     result_id = await collection_communities.save(community)
 
-    context = await communities_list(request, 1)
+    context = await communities_list(request)
     return templates.TemplateResponse("communities/list.html", context=context)
 
 @router.get("/list/{page_number}")

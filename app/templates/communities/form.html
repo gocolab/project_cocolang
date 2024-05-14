@@ -17,55 +17,63 @@
 
 {% block main_container %}
 <form action="" method="post" class="needs-validation" novalidate>
+    <input type="hidden" name="refer_comodules_id" value="t-384924912">
     <div class="row gap-3 px-5">
         <!-- Visibility -->
-        <div class="form-group col-3">
-            <label for="visibility" class="form-label">Visibility:</label>
-            <select class="form-control" id="visibility" name="visibility" required>
-                <option value="public" {{ 'selected' if community.visibility=='public' }}>Public</option>
-                <option value="private" {{ 'selected' if community.visibility=='private' }}>Private</option>
-                <option value="restricted" {{ 'selected' if community.visibility=='restricted' }}>Restricted</option>
+        <div class="form-group col-12 row">
+            <label class="form-label col-2">Visibility:</label>
+            <div class="col-3">
+                <input type="radio" id="visibilityPublic" name="visibility" value="public" class="" {{ 'checked' if
+                    community.visibility=='public' else '' }}>
+                <label for="visibilityPublic" class="">Public</label>
+            </div>
+            <div class="col-3">
+                <input type="radio" id="visibilityPrivate" name="visibility" value="private" class="" {{ 'checked'
+                    if community.visibility=='private' else '' }}>
+                <label for="visibilityPrivate">Private</label>
+            </div>
+        </div>
+
+        <!-- Needs Level -->
+        <div class="form-group col-2">
+            <label class="form-label">Needs Level:</label>
+            <select class="form-select" name="needs_level">
+                <option value="0" {{ 'selected' if community.needs_level=='0' else '' }}>
+                    Lv. 0</option>
+                <option value="1" {{ 'selected' if community.needs_level=='1' else '' }}>
+                    Lv. 1</option>
+                <option value="2" {{ 'selected' if community.needs_level=='2' else '' }}>
+                    Lv. 2</option>
+                <option value="3" {{ 'selected' if community.needs_level=='3' else '' }}>
+                    Lv. 3
+                </option>
             </select>
         </div>
 
         <!-- Recruitment Period -->
-        <div class="form-group col-5">
+        <div class="form-group col-3">
             <label for="recruitment_period_start" class="form-label">Recruitment Period Start:</label>
             <input type="datetime-local" class="form-control" id="recruitment_period_start"
                 name="recruitment_period_start"
-                value="{{ community.recruitment_period_start.strftime('%Y-%m-%dT%H:%M') if community.recruitment_period_start else '' }}"
+                value="{{ community.recruitment_period_start.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_start else '' }}"
                 required>
         </div>
-        <div class="form-group col-5">
+        <div class="form-group col-3">
             <label for="recruitment_period_end" class="form-label">Recruitment Period End:</label>
             <input type="datetime-local" class="form-control" id="recruitment_period_end" name="recruitment_period_end"
-                value="{{ community.recruitment_period_end.strftime('%Y-%m-%dT%H:%M') if community.recruitment_period_end else '' }}"
+                value="{{ community.recruitment_period_end.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_end else '' }}"
                 required>
         </div>
 
         <!-- Recruitment Number -->
-        <div class="form-group col-5">
-            <label for="recruitment_number" class="form-label">Recruitment Number:</label>
+        <div class="form-group col-2">
+            <label for="recruitment_number" class="form-label">Recruit Numbers:</label>
             <input type="number" class="form-control" id="recruitment_number" name="recruitment_number"
-                value="{{ community.recruitment_number }}" required>
-        </div>
-
-        <!-- Activity Period -->
-        <div class="form-group col-5">
-            <label for="activity_period_start" class="form-label">Activity Period Start:</label>
-            <input type="datetime-local" class="form-control" id="activity_period_start" name="activity_period_start"
-                value="{{ community.activity_period_start.strftime('%Y-%m-%dT%H:%M') if community.activity_period_start else '' }}"
-                required>
-        </div>
-        <div class="form-group col-5">
-            <label for="activity_period_end" class="form-label">Activity Period End:</label>
-            <input type="datetime-local" class="form-control" id="activity_period_end" name="activity_period_end"
-                value="{{ community.activity_period_end.strftime('%Y-%m-%dT%H:%M') if community.activity_period_end else '' }}"
-                required>
+                value="{{ community.recruitment_number if community.recruitment_number else 10 }}" required>
         </div>
 
         <!-- Activity Type -->
-        <div class="form-group col-3">
+        <div class="form-group col-2">
             <label for="activity_type" class="form-label">Activity Type:</label>
             <select class="form-select" id="activity_type" name="activity_type" required>
                 <option value="Code Review" {{ 'selected' if community.activity_type=='Code Review' }}>Code Review
@@ -77,20 +85,18 @@
             </select>
         </div>
 
-        <!-- Needs Level -->
+        <!-- Activity Period -->
         <div class="form-group col-3">
-            <label for="needs_level" class="form-label">Needs Level:</label>
-            <select class="form-select" name="level">
-                <option value="0" {{ 'selected' if community.level=='0' else '' }}>
-                    Lv. 0</option>
-                <option value="1" {{ 'selected' if community.level=='1' else '' }}>
-                    Lv. 1</option>
-                <option value="2" {{ 'selected' if community.level=='2' else '' }}>
-                    Lv. 2</option>
-                <option value="3" {{ 'selected' if community.level=='3' else '' }}>
-                    Lv. 3
-                </option>
-            </select>
+            <label for="activity_period_start" class="form-label">Activity Period Start:</label>
+            <input type="datetime-local" class="form-control" id="activity_period_start" name="activity_period_start"
+                value="{{ community.activity_period_start.strftime('%Y-%m-%d %H:%M') if community.activity_period_start else now.strftime('%Y-%m-%d %H:%M') }}"
+                required>
+        </div>
+        <div class="form-group col-3">
+            <label for="activity_period_end" class="form-label">Activity Period End:</label>
+            <input type="datetime-local" class="form-control" id="activity_period_end" name="activity_period_end"
+                value="{{ community.activity_period_end.strftime('%Y-%m-%d %H:%M') if community.activity_period_end else '' }}"
+                required>
         </div>
 
         <!-- Title -->
@@ -106,27 +112,18 @@
             <input type="hidden" name="description" id="description">
         </div>
 
-        <!-- Description Private -->
-        <div class="form-group col-12">
-            <label class="form-label">Description Private:</label>
-            <div id="description_private_delta" class="quill-editor"></div>
-            <input type="hidden" name="description_private" id="description_private">
-        </div>
-
         <div class="col-12 d-flex justify-content-end">
             <input type="hidden" name="main_router" value="{{main_router}}">
             <div class="form-group">
-                {% if community.id or "ADMIN" in request.state.user.roles %}
+                {% if community.id or (community.id and "ADMIN" in request.state.user.roles) %}
                 <button type="submit" class="btn btn-danger" formaction="/communities/update/{{community.id}}">
-                    update
+                    Update
                 </button>
                 {% else %}
                 <button type="submit" class="btn btn-danger" formaction="/communities/insert">
                     Insert
                 </button>
                 {% endif %}
-
-
                 <button type="submit" class="btn btn-primary" formaction="/communities/list" formmethod="get">
                     List
                 </button>
@@ -143,42 +140,27 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let deltaObject = {{ community.description if community.description else '{}' | tojson
-    }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+        let deltaObject = {{ community.description if community.description else '{}' | tojson}}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
 
-    // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
-    let quillSettings = {
-        theme: 'snow'
-    };
+        // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
+        let quillSettings = {
+            theme: 'snow'
+        };
 
-    deltaObject = JSON.parse(deltaObject);
+        deltaObject = JSON.parse(deltaObject);
 
-    let quillDescription = new Quill('#description_delta', quillSettings);
-    // Delta 값을 편집기에 적용
-    quillDescription.setContents(deltaObject);
+        let quillDescription = new Quill('#description_delta', quillSettings);
+        // Delta 값을 편집기에 적용
+        quillDescription.setContents(deltaObject);
 
-    let deltaObject_private = {{ community.description_private if community.description_private else '{}' | tojson }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+        // Submit handler
+        let form = document.querySelector('form');
+        form.onsubmit = function (event) {
+            let description_delta = document.querySelector('#description');
+            description_delta.value = JSON.stringify(quillDescription.getContents());
+            return true; // return false to cancel form action
+        };
 
-    // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
-    let quillSettings_private = {
-        theme: 'snow'
-    };
-
-    deltaObject_private = JSON.parse(deltaObject_private);
-
-    let quillDescription_private = new Quill('#description_private_delta', quillSettings_private);
-    // Delta 값을 편집기에 적용
-    quillDescription_private.setContents(deltaObject_private);
-
-    // Submit handler
-    let form = document.querySelector('form');
-    form.onsubmit = function (event) {
-        let description_delta = document.querySelector('#description');
-        description_delta.value = JSON.stringify(quillDescription.getContents());
-        let description_private_delta = document.querySelector('#description_private');
-        description_private_delta.value = JSON.stringify(quillDescription_private.getContents());
-        return true; // return false to cancel form action
-    };
     });
 </script>
 
