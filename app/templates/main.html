@@ -69,21 +69,11 @@
     <div class="col-12">
       <div class="m-2 d-flex justify-content-end">
         <button type="submit" class="btn btn-sm btn-secondary" id="more_comodules_list">
-          More <span class="badge bg-success" id="total_records">{{pagination.total_records}}</span>
+          More <span class="badge bg-success" id="total_records"></span>
         </button>
       </div>
+      <div ></div>
       <ul class="list-group">
-        {% for comodule in comodules %}
-        <li class="list-group-item lh-sm" data-id="{{comodule.id}}">
-          <div>
-            <h6 class="my-0">{{comodule.title}}</h6>
-            <div class="text-body-secondary small">
-              {{comodule.language_name}}{{ "(" + comodule.language_version + ")" if comodule.language_version else "" }}
-              {{comodule.framework_name}}{{ "(" + comodule.framework_version + ")" if comodule.framework_version else "" }}
-              {{comodule.database_name}}{{ "(" + comodule.database_version + ")" if comodule.database_version else "" }}
-          </div>
-        </li>
-        {% endfor %}
       </ul>
     </div>
   </div>
@@ -91,59 +81,13 @@
     <div class="col-12">
       <form>
       <div class="m-2 d-flex justify-content-between">
-          <input type="hidden" name="refer_comodules_id" value="{{ comodule.id }}">
+          <input type="hidden" name="refer_comodules_id" value="">
           <button class="btn btn-sm btn-success" formaction="/communities/form">New Community</button>
           <button class="btn btn-sm btn-danger" formaction="/template/form">New</button>
         </div>
       </form>
       <div class="card card-body" id="detail">
-        <div class="row">
-          <div class="col-5 fw-bold">Main Service</div>
-          <div class="col-7">{{ comodule.title }}</div>
-        </div>
-        <div class="row">
-          <div class="col-5 fw-bold">Language</div>
-          <div class="col-7">{{ comodule.language_name }}</div>
-        </div>
-        <div class="row">
-          <div class="col-5 fw-bold">Framework</div>
-          <div class="col-7">{{ comodule.framework_name }}</div>
-        </div>
-        <div class="row">
-          <div class="col-5 fw-bold">Database</div>
-          <div class="col-7">{{ comodule.database_name }}</div>
-        </div>
-        <div class="row py-2">
-          <div class="col-5 fw-bold">Docker Files</div>
-          <div class="col-7">
-            <div>
-              <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
-                zip <i class="bi bi-cloud-download"></i>
-              </a>
-            </div>
-            {#
-            <div>
-              {% for link in comodule.docker_files_links %}
-              <div>
-                <a href="{{ link }}" class="download-link">{{ link.split('/')[-1] }}</a>
-              </div>
-              {% endfor %}
-            </div>
-            #}
-          </div>
-        </div>
-        <!-- <div class="row py-2">
-          <div class="col-5 fw-bold">Packages</div>
-          <div class="col-7">
-            {{ comodule.required_packages_versions }}
-          </div>
-        </div> -->
-        <div class="row">
-          <div class="col-5 fw-bold">Enroll</div>
-          <div class="col-7">
-            {{ comodule.create_user_name  | default("", True)}}
-          </div>
-        </div>
+
       </div>
     </div>
   </div>
@@ -153,7 +97,6 @@
 {% endblock %} {% block foot_javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script>
-  let comodules_relative = '{{ comodules_relative | tojson }}';
   document.addEventListener("DOMContentLoaded", function () {
     // Event delegation on the parent list
     document.querySelector('.list-group').addEventListener('click', function (event) {
@@ -176,23 +119,6 @@
     });
 
     let buttons = document.querySelectorAll("#interactiveTable button");
-
-    // 상호 관례 따른 button toggle
-    function toggleRelatedButtons(clickedButton, attribute) {
-      const attributeValue = clickedButton.textContent.trim();
-      comodules_relative.forEach(assoc => {
-        if (assoc[attribute + '_name'] === attributeValue) {
-          buttons.forEach(button => {
-            if (button.textContent.trim() === assoc.language_name ||
-              button.textContent.trim() === assoc.framework_name ||
-              button.textContent.trim() === assoc.database_name) {
-              button.classList.toggle("btn-light");
-              button.classList.toggle("btn-primary");
-            }
-          });
-        }
-      });
-    }
 
     buttons.forEach(function (button) {
       button.addEventListener("click", function () {
@@ -297,9 +223,9 @@
         const listGroup = document.querySelector('.list-group');
         listGroup.innerHTML = ''; // Clear existing list
         data.comodules.forEach(comodule => {
-          let languageInfo = comodule.language_name + (comodule.language_version ? ` (${comodule.language_version})` : "");
-          let frameworkInfo = comodule.framework_name + (comodule.framework_version ? ` (${comodule.framework_version})` : "");
-          let databaseInfo = comodule.database_name + (comodule.database_version ? ` (${comodule.database_version})` : "");
+          let languageInfo = comodule.language_name;
+          let frameworkInfo = comodule.framework_name;
+          let databaseInfo = comodule.database_name;
 
           listGroup.innerHTML += `
           <li class="list-group-item lh-sm" data-id="${comodule.id}">

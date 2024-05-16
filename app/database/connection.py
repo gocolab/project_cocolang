@@ -46,7 +46,7 @@ class Database:
             return doc
         return False
 
-    async def get_all(self):
+    async def get_all(self, conditions: dict = {}):
         docs = await self.model.find_all().to_list()
         return docs
 
@@ -90,7 +90,7 @@ class Database:
         return True
 
     # column 값으로 여러 Documents 가져오기
-    async def getsbyconditions(self, conditions:dict) -> [Any]:
+    async def getsbyconditions(self, conditions:dict = {}) -> [Any]:
         documents = await self.model.find(conditions).to_list()  # find({})
         if documents:
             return documents
