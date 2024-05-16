@@ -19,6 +19,7 @@ class User(Document):
     create_date: datetime = Field(default_factory=datetime.now)
     last_access_date: datetime = Field(default_factory=datetime.now)
     activity_level: int = 0
+    country: Optional[str] = 'kr'
 
     class Settings:
         name = "users"

@@ -21,7 +21,7 @@
     <div class="row gap-3 px-5">
         <!-- Visibility -->
         <div class="form-group col-12 row">
-            <label class="form-label col-2">Visibility:</label>
+            <label class="form-label col-2">Share way:</label>
             <div class="col-3">
                 <input type="radio" id="visibilityPublic" name="visibility" value="public" class="" {{ 'checked' if
                     community.visibility=='public' else '' }}>
@@ -121,7 +121,7 @@
                 </button>
                 {% else %}
                 <button type="submit" class="btn btn-danger" formaction="/communities/insert">
-                    Insert
+                    Create
                 </button>
                 {% endif %}
                 <button type="submit" class="btn btn-primary" formaction="/communities/list" formmethod="get">

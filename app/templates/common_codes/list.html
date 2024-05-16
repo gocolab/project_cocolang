@@ -1,0 +1,99 @@
+{% extends "templates/main_template.html"%}
+{% block title %}
+Common Codes List
+{% endblock %}
+
+{% block customize_css %}
+<style>
+  .max-width-td {
+    max-width: 15rem; /* 원하는 최대 넓이로 설정 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+</style>
+{% endblock %}
+{% block main_container %}
+<form>
+  <div class="row">
+    <div class="col-2">
+      <select class="form-select" name="key_category">
+        {% for category in code_categories %}
+        <option value="{{category}}" {{ 'selected' if request._query_params.key_category==category else '' }}>
+          {{category}}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-2">
+      <select class="form-select" name="key_name">
+        <option value="name" {{ 'selected' if request._query_params.key_name=='name' else '' }}>
+          name
+        </option>
+        <option value="code_classification" {{ 'selected' if request._query_params.key_name=='code_classification' else '' }}>
+          Classification
+        </option>
+      </select>
+    </div>
+    <div class="col-3">
+      <input class="form-control" placeholder="Enter Search!" name="word" value="{{request._query_params.word}}">
+    </div>
+    <div class="col-5 row form-group d-flex justify-content-between">
+      <div class="col">
+        <button type="submit" class="btn btn-primary" formaction="/commoncodes/list" formmethod="get">
+          Search
+        </button>
+      </div>
+      {%
+      if (request.state.user and request.state.user.roles)
+          or ("ADMIN" in request.state.user.roles)
+      %}
+      <div class="col-9 form-group">
+        <button type="submit" class="btn btn-danger" formaction="/commoncodes/form" formmethod="get">
+          New with Category
+        </button>
+        <button type="submit" class="btn btn-danger" formaction="/commoncodes/form/add" formmethod="get">
+          Add Classification
+        </button>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Category</th>
+        <th>Classification</th>
+        <th>Order</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Conformed</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for code in common_codes %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ code.code_category }}</td>
+        <td>
+          <a href="/commoncodes/{{ code.id }}" class="text-decoration-none">{{ code.code_classification }}</a>
+        </td>
+        <td>{{ code.order }}</td>
+        <td>{{ code.name }}</td>
+        <td class="max-width-td">{{ code.description }}</td>
+        <td>{{ code.conformed }}</td>
+        <td>
+          <button formaction="/commoncodes/update/{{code.id}}">Change</button>
+          <button formaction="/commoncodes/{{code.id}}" formmethod="post">Delete</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endblock %}
+  {% block paginations_container %}
+  {% include 'templates/pagination_template.html' %}
+</form>
+{% endblock %}

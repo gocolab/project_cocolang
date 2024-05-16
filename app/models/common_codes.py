@@ -7,6 +7,7 @@ class CommonCode(Document):
     order: Optional[int] = None
     name: Optional[str] = None
     description: Optional[str] = None
+    conformed: Optional[bool] = False   # 외부 의한 입력 시 사용 여부 판단 후 사용
 
     class Settings:
         name = "common_codes"

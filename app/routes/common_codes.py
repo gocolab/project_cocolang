@@ -1,54 +1,101 @@
-from app.database.connection import Database
-from fastapi import APIRouter, Depends, HTTPException, status
-
-router = APIRouter(
-    tags=["CommonCodes"],
-)
-
+from typing import Optional
 from fastapi.templating import Jinja2Templates
-from fastapi import Request
-from beanie import PydanticObjectId
+from app.database.connection import Database
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 
+from app.models.common_codes import CommonCode
 
+router = APIRouter(tags=["CommonCodes"])
 templates = Jinja2Templates(directory="app/templates/")
 
-from app.database.connection import Database
-from app.models.common_codes import CommonCode
-collection_CommonCode = Database(CommonCode)
+# Database 클래스와 CommonCode 모델을 적절히 정의했다고 가정
+collection_common_codes = Database(CommonCode)
 
-@router.post("/")
-async def create_common_code(request:Request):
-    _dict = dict(await request.form())
-    # 저장
-    _model = CommonCode(**_dict)
+@router.get("/form")
+@router.get("/update/{code_id}")
+async def form(request: Request, code_id: str = None):
+    main_router = request.url.path.split('/')[1]
 
-    await _model.insert()
-    return templates.TemplateResponse(name="/commoncodes/list.html"
-                        , context={'request':request})
+    common_code = {}
+    if code_id is not None:
+        common_code = await collection_common_codes.get(code_id)
+        if common_code is None:
+            raise HTTPException(status_code=404, detail="CommonCode not found")
 
-@router.get("/{object_id}")
-async def get_common_code(object_id: PydanticObjectId):
-    common_code = await CommonCode.get(object_id)
-    if not common_code:
+    return templates.TemplateResponse(name="common_codes/form.html",
+                                      context={'request': request,
+                                               'common_code': common_code,
+                                               'main_router': main_router})
+
+@router.post("/insert")
+async def create(request: Request):
+    common_code_data = dict(await request.form())
+    user = request.state.user  # userfromauthenticate 구현 가정
+    common_code_data["create_user_id"] = user['id']
+    common_code_data["create_user_name"] = user['name']
+    main_router = request.url.path.split('/')[1]
+    common_code_data["main_router"] = main_router
+
+    common_code = CommonCode(**common_code_data)
+    result_id = await collection_common_codes.save(common_code)
+
+    context = await common_codes_list(request, 1)
+    return templates.TemplateResponse("common_codes/list.html", context=context)
+
+@router.get("/list/{page_number}")
+@router.get("/list")  # 검색 with pagination
+async def list(request: Request, page_number: Optional[int] = 1):
+    context = await common_codes_list(request, page_number)
+    return templates.TemplateResponse(name="common_codes/list.html", context=context)
+
+async def common_codes_list(request: Request, page_number: Optional[int] = 1):
+    _dict = dict(request.query_params)
+    queries = []
+    main_router = request.url.path.split('/')[1]
+    try:
+        search_word = _dict["word"].strip()
+        if search_word:
+            queries.append({_dict['key_name']: {'$regex': search_word}})
+    except:
+        pass
+
+    if queries:
+        conditions = {'$and': queries}
+    else:
+        conditions = {}
+
+    common_codes_list, pagination = await collection_common_codes.getsbyconditionswithpagination(conditions, page_number)
+    context = {'request': request, 'common_codes': common_codes_list
+               , 'pagination': pagination, 'main_router': main_router}
+    return context
+
+@router.get("/{code_id}")
+async def read(request: Request, code_id: str = None):
+    main_router = request.url.path.split('/')[1]
+
+    common_code = await collection_common_codes.get(code_id)
+    if common_code is None:
         raise HTTPException(status_code=404, detail="CommonCode not found")
-    return common_code
 
-@router.put("/{object_id}")
-async def update_common_code(object_id: PydanticObjectId, request:Request):
-    _dict = dict(await request.form())
-    # 저장
-    _model = CommonCode(**_dict)
-    common_code_doc = await CommonCode.get(object_id)
-    if not common_code_doc:
-        raise HTTPException(status_code=404, detail="CommonCode not found")
-    # update_data = _model.dict(exclude_unset=True)
-    await common_code_doc.set(_model)
-    return common_code_doc
+    return templates.TemplateResponse("common_codes/read.html",
+                                      {"request": request,
+                                       "common_code": common_code,
+                                       'main_router': main_router})
 
-@router.delete("/{object_id}")
-async def delete_common_code(object_id: PydanticObjectId):
-    common_code_doc = await CommonCode.get(object_id)
-    if not common_code_doc:
+@router.post("/update/{code_id}")
+async def update(request: Request, code_id: str):
+    common_code = await collection_common_codes.get(code_id)
+    if common_code:
+        common_code_data = dict(await request.form())
+        _model = CommonCode(**common_code_data)
+        result = await collection_common_codes.update(code_id, _model)
+        context = await common_codes_list(request)
+        return templates.TemplateResponse("common_codes/list.html", context=context)
+    else:
         raise HTTPException(status_code=404, detail="CommonCode not found")
-    await common_code_doc.delete()
-    return {"message": "CommonCode deleted successfully"}
+
+@router.post("/{code_id}")
+async def delete(request: Request, code_id: str):
+    result_id = await collection_common_codes.delete(code_id)
+    context = await common_codes_list(request)
+    return templates.TemplateResponse(name="common_codes/list.html", context=context)

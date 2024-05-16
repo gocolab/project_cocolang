@@ -15,7 +15,9 @@ class CoModule(Document):
     create_date: datetime = Field(default_factory=datetime.now)
     create_user_id:Optional[str] = None
     create_user_name:Optional[str] = None
-    level: str = 0
+    level: int = 0
+    # 공개 or 비공개 or 승인된 사람만 여부
+    visibility: str = None  # "public", "private", "restricted"
 
     class Settings:
         name = "comodules"

@@ -79,6 +79,20 @@
                 Docker File Links must be filled.
             </div>
         </div>
+        <!-- Visibility -->
+        <div class="form-group col-12 row">
+            <label class="form-label col-2">Share way:</label>
+            <div class="col-3">
+                <input type="radio" id="visibilityPublic" name="visibility" value="public" class="" {{ 'checked' if
+                    comodule.visibility=='public' else '' }}>
+                <label for="visibilityPublic" class="">Public</label>
+            </div>
+            <div class="col-3">
+                <input type="radio" id="visibilityPrivate" name="visibility" value="private" class="" {{ 'checked'
+                    if comodule.visibility=='private' else '' }}>
+                <label for="visibilityPrivate">Private</label>
+            </div>
+        </div>
         <div class="form-group col-12">
             <label class="form-label">More Description <span class="text-primary small">(Settings for program development or Link)</span> </label>
             <div id="description_delta" class="quill-editor"></div>
@@ -87,13 +101,13 @@
         <div class="col-12 d-flex justify-content-end">
             <input type="hidden" name="main_router" value="{{main_router}}">
             <div class="form-group">
-                {% if comodule.id or "ADMIN" in request.state.user.roles %}
+                {% if comodule.id or (comodule.id and "ADMIN" in request.state.user.roles) %}
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/update/{{comodule.id}}">
                     Update
                 </button>
                 {% else %}
                 <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/insert">
-                    Insert
+                    Create
                 </button>
                 {% endif %}
                 <a class="btn btn-primary" href="/{{main_router}}/list">
