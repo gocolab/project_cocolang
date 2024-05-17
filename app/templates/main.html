@@ -28,8 +28,15 @@
     cursor: pointer;
     /* 마우스 오버 시 커서 모양 변경 */
   }
+
+  .max-width-td {
+    max-width: 15rem;
+    /* 원하는 최대 넓이로 설정 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
-{% endblock %} 
+{% endblock %}
 
 {% block main_container %}
 <div class="row">
@@ -68,20 +75,38 @@
   <div class="col-4">
     <div class="col-12">
       <div class="m-2 d-flex justify-content-end">
+        <input type="text" class="form-control form-control-sm me-2" id="search_input" placeholder="Enter a search">
         <button type="submit" class="btn btn-sm btn-secondary" id="more_comodules_list">
-          More <span class="badge bg-success" id="total_records">{{pagination.total_records}}</span>
+          Search <span class="badge bg-success" id="total_records">{{pagination.total_records}}</span>
         </button>
       </div>
+      <nav aria-label="Page navigation" id="comodules_list_pagination">
+        <ul class="pagination pagination-sm justify-content-center">
+          <li class="page-item {{ '' if pagination.has_previous_page else 'disabled' }}">
+            <button type="submit" class="page-link" value="{{pagination.previous_page}}">Prev</button>
+          </li>
+          {% for page_num in pagination.current_page_range %}
+          <li class="page-item {{ 'active' if page_num == pagination.current_page else '' }}">
+            <button type="submit" class="page-link" value="{{pagination.current_page}}">
+              {{page_num}}
+            </button>
+          </li>
+          {% endfor %}
+          <li class="page-item {{ '' if pagination.has_next_page else 'disabled' }}">
+            <button type="submit" class="page-link" value="{{pagination.next_page}}">Next</button>
+          </li>
+        </ul>
+      </nav>
       <ul class="list-group">
         {% for comodule in comodules %}
         <li class="list-group-item lh-sm" data-id="{{comodule.id}}">
-          <div>
+          <div class="max-width-td">
             <h6 class="my-0">{{comodule.title}}</h6>
             <div class="text-body-secondary small">
-              {{comodule.language_name}}{{ "(" + comodule.language_version + ")" if comodule.language_version else "" }}
-              {{comodule.framework_name}}{{ "(" + comodule.framework_version + ")" if comodule.framework_version else "" }}
-              {{comodule.database_name}}{{ "(" + comodule.database_version + ")" if comodule.database_version else "" }}
-          </div>
+              {{comodule.language_name}}
+              {{comodule.framework_name}}
+              {{comodule.database_name}}
+            </div>
         </li>
         {% endfor %}
       </ul>
@@ -90,7 +115,7 @@
   <div class="col-4">
     <div class="col-12">
       <form>
-      <div class="m-2 d-flex justify-content-between">
+        <div class="m-2 d-flex justify-content-between">
           <input type="hidden" name="refer_comodules_id" value="{{ comodule.id }}">
           <button class="btn btn-sm btn-success" formaction="/communities/form">New Community</button>
           <button class="btn btn-sm btn-danger" formaction="/template/form">New</button>
@@ -141,7 +166,7 @@
         <div class="row">
           <div class="col-5 fw-bold">Enroll</div>
           <div class="col-7">
-            {{ comodule.create_user_name  | default("", True)}}
+            {{ comodule.create_user_name | default("", True)}}
           </div>
         </div>
       </div>
@@ -153,7 +178,6 @@
 {% endblock %} {% block foot_javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script>
-  let comodules_relative = '{{ comodules_relative | tojson }}';
   document.addEventListener("DOMContentLoaded", function () {
     // Event delegation on the parent list
     document.querySelector('.list-group').addEventListener('click', function (event) {
@@ -166,33 +190,24 @@
         fetchComoduleDetails(comoduleId);
       }
     });
-    // Select the button by its ID
-    const moreComodulesBtn = document.querySelector('#more_comodules_list');
 
-    // Add a click event listener
-    moreComodulesBtn.addEventListener('click', function () {
-      // Redirect the user to /comodules/list
-      window.location.href = '/comodules/list';
+    // 'more_comodules_list' 버튼에 대한 클릭 이벤트 리스너
+    document.querySelector('#more_comodules_list').addEventListener('click', function (event) {
+      event.preventDefault(); // 기본 제출 동작 방지
+      fetchComodulesData();
+    });
+
+    // 'comodules_list_pagination' 내의 페이지 버튼에 대한 클릭 이벤트 리스너
+    document.querySelector('#comodules_list_pagination').addEventListener('click', function (event) {
+      const target = event.target;
+      if (target.tagName === 'BUTTON' && target.type === 'submit') {
+        event.preventDefault(); // 기본 제출 동작 방지
+        const pageNum = event.target.getAttribute('data-page'); // 버튼에 페이지 번호를 속성으로 저장해야 함
+        fetchComodulesData(pageNum); // 페이지 번호를 기반으로 데이터 재조회
+      }
     });
 
     let buttons = document.querySelectorAll("#interactiveTable button");
-
-    // 상호 관례 따른 button toggle
-    function toggleRelatedButtons(clickedButton, attribute) {
-      const attributeValue = clickedButton.textContent.trim();
-      comodules_relative.forEach(assoc => {
-        if (assoc[attribute + '_name'] === attributeValue) {
-          buttons.forEach(button => {
-            if (button.textContent.trim() === assoc.language_name ||
-              button.textContent.trim() === assoc.framework_name ||
-              button.textContent.trim() === assoc.database_name) {
-              button.classList.toggle("btn-light");
-              button.classList.toggle("btn-primary");
-            }
-          });
-        }
-      });
-    }
 
     buttons.forEach(function (button) {
       button.addEventListener("click", function () {
@@ -205,7 +220,7 @@
         button.classList.toggle("btn-primary");
         // toggleRelatedButtons(this, buttonType);
         // Update the list after state change
-        updateList();
+        fetchComodulesData();
       });
     });
   });
@@ -272,14 +287,18 @@
   }
 
   // Function to update the list based on the selected buttons
-  function updateList() {
+  function fetchComodulesData(pageNum = 1) {
     // Find all active buttons for each category
     const activeLanguages = Array.from(document.querySelectorAll('.btn.language.btn-primary')).map(btn => btn.textContent.trim());
     const activeFrameworks = Array.from(document.querySelectorAll('.btn.framework.btn-primary')).map(btn => btn.textContent.trim());
     const activeDatabase = Array.from(document.querySelectorAll('.btn.database.btn-primary')).map(btn => btn.textContent.trim());
+    // 검색어 가져오기
+    const searchQuery = document.getElementById('search_input').value.trim();
 
     // Construct query parameters
     const queryParams = new URLSearchParams({
+      search_word: searchQuery,
+      page_number: pageNum, // 페이지 번호 추가      
       language: activeLanguages.join(','),
       framework: activeFrameworks.join(','),
       database: activeDatabase.join(',')
@@ -294,27 +313,69 @@
         return response.json();
       })
       .then(data => {
-        const listGroup = document.querySelector('.list-group');
-        listGroup.innerHTML = ''; // Clear existing list
-        data.comodules.forEach(comodule => {
-          let languageInfo = comodule.language_name + (comodule.language_version ? ` (${comodule.language_version})` : "");
-          let frameworkInfo = comodule.framework_name + (comodule.framework_version ? ` (${comodule.framework_version})` : "");
-          let databaseInfo = comodule.database_name + (comodule.database_version ? ` (${comodule.database_version})` : "");
+        updateComodulesList(data); // .list-group 내용 업데이트
+        updatePagination(data.pagination); // #comodules_list_pagination 내용 업데이트
 
-          listGroup.innerHTML += `
-          <li class="list-group-item lh-sm" data-id="${comodule.id}">
-            <div>
-              <h6 class="my-0">${comodule.title}</h6>
-              <div class="text-body-secondary small">
-                ${languageInfo} ${frameworkInfo} ${databaseInfo}
-              </div>
-            </div>
-          </li>`;
-        });
         const total_records = document.querySelector('#total_records');
         total_records.innerHTML = data.total_records;
       })
       .catch(error => console.error('Error fetching the list:', error));
+  }
+
+  function updateComodulesList(data) {
+    const listGroup = document.querySelector('.list-group');
+    listGroup.innerHTML = ''; // 기존 목록을 비우기
+    data.comodules.forEach(function (comodule) {
+      const listItem = document.createElement('li');
+      listItem.className = 'list-group-item lh-sm';
+      listItem.setAttribute('data-id', comodule.id);
+      listItem.innerHTML = `
+            <div class="max-width-td">
+                <h6 class="my-0">${comodule.title}</h6>
+                <div class="text-body-secondary small">
+                    ${comodule.language_name} ${comodule.framework_name} ${comodule.database_name}
+                </div>
+            </div>
+        `;
+      listGroup.appendChild(listItem);
+    });
+  }
+
+  function updatePagination(pagination) {
+    const paginationContainer = document.querySelector('#comodules_list_pagination');
+    const ul = paginationContainer.querySelector('.pagination'); // 이미 존재하는 ul 태그 선택
+    ul.innerHTML = ''; // 기존 페이징 버튼 제거
+
+    // 'Prev' 버튼
+    const prevLi = document.createElement('li');
+    prevLi.className = `page-item ${pagination.has_previous_page ? '' : 'disabled'}`;
+    prevLi.innerHTML = `<button type="submit" class="page-link" valeu="${pagination.previous_page}">Prev</button>`;
+    ul.appendChild(prevLi);
+
+    // 현재 페이지 주변의 페이지 번호 버튼들
+    pagination.current_page_range.forEach(function (pageNum) {
+      const li = document.createElement('li');
+      li.className = `page-item ${pageNum === pagination.current_page ? 'active' : ''}`;
+      li.innerHTML = `<button type="submit" class="page-link" valeu="${pagination.pageNum}">${pageNum}</button>`;
+      ul.appendChild(li);
+    });
+
+    // 'Next' 버튼
+    const nextLi = document.createElement('li');
+    nextLi.className = `page-item ${pagination.has_next_page ? '' : 'disabled'}`;
+    nextLi.innerHTML = `<button type="submit" class="page-link" valeu="${pagination.next_page}">Next</button>`;
+    ul.appendChild(nextLi);
+
+    // 페이지 버튼 클릭 이벤트 리스너 등록
+    // 페이지 이동이 필요한 경우, 해당 페이지 번호를 기반으로 추가 fetch 로직을 구현해야 함
+    ul.querySelectorAll('.page-item').forEach(function (item) {
+      item.addEventListener('click', function (event) {
+        if (!item.classList.contains('disabled') && !item.classList.contains('active')) {
+          // 페이지 번호를 기반으로 데이터를 다시 가져오는 로직 구현
+          // 예: fetchComodulesDataWithPage(pageNum);
+        }
+      });
+    });
   }
 
 </script>

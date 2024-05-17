@@ -135,25 +135,38 @@ async def get_list(request: Request):
     language = _dict.get('language')
     framework = _dict.get('framework')
     database = _dict.get('database')
+    search_word = _dict.get('search_word')
+    page_number = _dict.get('page_number')
 
     # Construct the query
-    query = {'main_router':"comodules"}
+    # query = {'main_router':"comodules"}
+    query = {}
+
+    if search_word:
+        regex_pattern = search_word
+        query['title'] = {"$regex": regex_pattern, "$options": "i"}
+        query['description'] = {"$regex": regex_pattern, "$options": "i"}
 
     if language:
-        query['language_name'] = {"$in": language.split(',')}
+        regex_pattern = "|".join(language.split(','))
+        query['language_name'] = {"$regex": regex_pattern, "$options": "i"}
     if framework:
-        query['framework_name'] = {"$in": framework.split(',')}
+        regex_pattern = "|".join(framework.split(','))
+        query['framework_name'] = {"$regex": regex_pattern, "$options": "i"}
     if database:
-        query['database_name'] = {"$in": database.split(',')}
+        regex_pattern = "|".join(database.split(','))
+        query['database_name'] = {"$regex": regex_pattern, "$options": "i"}
 
     conditions = {}
     if query:
         conditions["$and"] = [query]
 
     try:
-        comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions,1,5)
+        comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions,page_number,5)
         comodules_dict_list = [comodule.dict() for comodule in comodules_list]
-        return {"comodules":comodules_dict_list, "total_records":pagination.total_records}
+        return {"comodules":comodules_dict_list
+                , "total_records":pagination.total_records
+                , 'pagination':pagination.to_dict()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -1,3 +1,41 @@
+from itertools import zip_longest
+import re
+from app.database.connection import Database
+from app.models.common_codes import CommonCode
+collection_common_codes = Database(CommonCode)
+
+async def unique_comodules():
+
+    # Initialize sets for tracking uniqueness
+    unique_frameworks = []
+    unique_languages = []
+    unique_database = []
+
+    conditions = {'code_category':'comodules'}
+    
+    commoncode_list = await collection_common_codes.getsbyconditions(conditions)
+
+    for item in commoncode_list:
+        # framework_name 분리 및 추가
+        if item.code_classification == 'Frameworks':
+            unique_frameworks.append(item.name)
+        
+        # language_name 분리 및 추가
+        if item.code_classification == 'Languages':
+            unique_languages.append(item.name)
+        
+        # database_name 분리 및 추가
+        if item.code_classification == 'Databases':
+            unique_database.append(item.name)
+    # Use itertools.zip_longest to combine lists with padding of None automatically
+    combinations = [
+        {'language': lang if lang is not None else '', 
+        'framework': fw if fw is not None else '', 
+        'database': db if db is not None else ''}  
+        for lang, fw, db in zip_longest(set(unique_languages), set(unique_frameworks), set(unique_database))
+    ]
+    return combinations
+
 async def remove_and_concat(input_str, file_type):
     # '_'를 기준으로 문자열을 분리합니다.
     split_by_underscore = input_str.split('_')
