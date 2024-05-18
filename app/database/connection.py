@@ -107,9 +107,8 @@ class Database:
     async def getsbyconditionswithpagination(self
                                              , conditions:dict, page_number=1
                                              , records_per_page=10, pages_per_block=5
-                                             , sorted = -1
+                                             , sorted = '-'
                                              , sort_field:str = 'create_date') -> [Any]:
-        # find({})
         try:
             total = await self.model.find(conditions).count()
         except:
@@ -117,7 +116,7 @@ class Database:
         pagination = Paginations(total_records=total, current_page=page_number
                                  , records_per_page=records_per_page
                                  , pages_per_block=pages_per_block)
-        documents = await self.model.find(conditions).sort(f'{sorted}').skip(pagination.start_record_number).limit(pagination.records_per_page).to_list()
+        documents = await self.model.find(conditions).sort(f'{sorted}{sort_field}').skip(pagination.start_record_number).limit(pagination.records_per_page).to_list()
         if documents:
             return documents, pagination
         return [], pagination     

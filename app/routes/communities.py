@@ -22,7 +22,7 @@ async def form(request: Request, community_id: str = None):
     else :
         _dict = dict(request.query_params)
         community['refer_comodules_id'] = _dict['refer_comodules_id']
-        community['visibility'] = 'public'
+        community['visibility'] = _dict['visibility']
         community['recruitment_period_start'] = datetime.now()
         community['recruitment_period_end'] = datetime.now() + timedelta(days=6)
         community['activity_period_start'] = datetime.now() + timedelta(days=7)
@@ -52,24 +52,60 @@ async def list(request: Request, page_number: Optional[int] = 1):
     return templates.TemplateResponse(name="communities/list.html", context=context)
 
 async def communities_list(request: Request, page_number: Optional[int] = 1):
-    _dict = dict(request.query_params)
-    queries = []
-    try:
-        search_word = _dict["word"].strip()
-        if search_word:
-            queries.append({_dict['key_name']: {'$regex': search_word}})
-    except:
-        pass
-
-    # queries 배열이 비어있는 경우, 모든 문서를 매칭시키는 조건을 사용합니다.
-    if queries:
-        conditions = {'$and': queries}
-    else:
-        conditions = {}
+    conditions, page_number = await main_conditions(request, page_number)
 
     communities_list, pagination = await collection_communities.getsbyconditionswithpagination(conditions, page_number)
     context = {'request': request, 'communities': communities_list, 'pagination': pagination}
     return context
+
+async def main_conditions(request: Request, page_number):
+    _dict = dict(request._query_params)
+    search_word = ''
+    if _dict:
+        search_word = _dict.get('search_word').strip()
+    if not page_number:
+        page_number = int(_dict.get('page_number'))
+
+    query = {}
+    query['visibility']= "public"
+    # Construct the query
+    query_or = {}
+    if search_word:
+        regex_pattern = search_word
+        query_or['title'] = {"$regex": regex_pattern, "$options": "i"}
+        query_or['description'] = {"$regex": regex_pattern, "$options": "i"}
+        query_or['create_user_name'] = {"$regex": regex_pattern, "$options": "i"}
+        query['$or'] = [query_or]
+
+    conditions = {}   # public or 
+    condition_list = []
+    # add condition_list
+    if query:
+        condition_list.append(query)
+
+    # add condition_list with login
+    query = {} 
+    if request.state.user:
+        query['create_user_id'] = request.state.user['id']  # visibility is 'private' and own
+    if query:
+        condition_list.append(query)
+
+    # add 'or' conditions   
+    if condition_list:
+        conditions["$or"] = condition_list
+
+# db.communities.find({
+#   '$and': [
+#     {'visibility': 'public'},
+#     {'$or': [
+#       {'title': {'$regex': '리뷰', '$options': 'i'}},
+#       {'description': {'$regex': '리뷰', '$options': 'i'}},
+#       {'create_user_name': {'$regex': '리뷰', '$options': 'i'}}
+#     ]}
+#   ]
+# })
+
+    return conditions, page_number
 
 @router.get("/{community_id}")
 async def read(request: Request, community_id: str = None):

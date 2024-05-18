@@ -36,18 +36,8 @@ Debugging Coding Test
 <form>
   <!-- Additional search items needed -->
   <div class="row">
-    <div class="col-3 form-group">
-      <select class="form-select" name="key_name">
-        <option value="activity_type" {{ 'selected' if request._query_params.key_name=='activity_type' else '' }}>
-          Activity Type</option>
-        <option value="needs_level" {{ 'selected' if request._query_params.key_name=='needs_level' else '' }}>
-          Required Level</option>
-        <option value="visibility" {{ 'selected' if request._query_params.key_name=='visibility' else '' }}>
-          Visibility</option>
-      </select>
-    </div>
     <div class="col-6">
-      <input class="form-control" placeholder="Enter search term!" name="word" value="{{request._query_params.word}}">
+      <input class="form-control" placeholder="Enter search term!" name="search_word" value="{{request._query_params.search_word}}">
     </div>
     <div class="col-3 form-group d-flex justify-content-between">
       <button type="submit" class="btn btn-primary" formaction="/communities/list" formmethod="get">

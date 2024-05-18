@@ -102,15 +102,15 @@
             <input type="hidden" name="main_router" value="{{main_router}}">
             <div class="form-group">
                 {% if comodule.id or (comodule.id and "ADMIN" in request.state.user.roles) %}
-                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/update/{{comodule.id}}">
+                <button type="submit" class="btn btn-danger" formaction="/comodules/update/{{comodule.id}}">
                     Update
                 </button>
                 {% else %}
-                <button type="submit" class="btn btn-danger" formaction="/{{main_router}}/insert">
+                <button type="submit" class="btn btn-danger" formaction="/comodules/insert">
                     Create
                 </button>
                 {% endif %}
-                <a class="btn btn-primary" href="/{{main_router}}/list">
+                <a class="btn btn-primary" href="/comodules/main">
                     List
                 </a>
             </div>

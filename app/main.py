@@ -54,22 +54,25 @@ app.add_middleware(SessionMiddleware, secret_key="add any string...")
 EXCLUDE_PATHS = [
     "/css", "/images", "/js"
     , "/favicon.ico", "/errors"
-    , '/users/form', '/users/list'
+    , '/users/form'
     , '/mains/list'
     , "/devtemplates/list"
     , "/teams/list"
     , "/comodules/main", "/comodules/list", '/comodules/v1', '/comodules/r'
     , "/communities/list", '/communities/r'
     , '/securities'
+    , '/boards'
     # "/docs",   # Swagger 문서
     # "/openapi.json",  # OpenAPI 스펙
 ]
 
 # Role-based URL access configuration
 ROLE_BASED_ACCESS = {
-    "GUEST": ["/comodules/download"
-              , "/securities", '/users/read', '/boards', '/communities']
-    ,"PARTNER": ["/comodules", "/devtemplates", "/teams"]
+    "GUEST": ["/comodules"
+              , '/users/read'
+              , '/communities']
+    ,"PARTNER": ["/devtemplates"
+                 , "/teams"]
     ,"ADMIN": ["/admins", '/commoncodes', '/users']
 }
 

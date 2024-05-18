@@ -51,8 +51,8 @@ async def create(request: Request):
     comodule = CoModule(**comodule_data)
     result_id = await collection_comodule.save(comodule)
 
-    context = await comodules_list(request, 1)
-    return templates.TemplateResponse("comodules/list.html"
+    context = await comodules_main(request)
+    return templates.TemplateResponse("comodules/main.html"
                                       , context=context)
 
 
