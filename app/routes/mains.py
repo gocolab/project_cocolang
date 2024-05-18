@@ -16,34 +16,16 @@ collection_comodule = Database(CoModule)
 
 @router.get("/list/{page_number}")
 @router.get("/list") # 검색 with pagination
-async def list(request: Request, page_number: Optional[int] = 1):
+async def main(request: Request, page_number: Optional[int] = 1):
     context = await main_list(request, page_number)
-    return templates.TemplateResponse(name="main.html"
+    return templates.TemplateResponse(name="comodules/main.html"
                                       , context=context)
 
+from app.routes.comodules import main_conditions
 async def main_list(request: Request, page_number: Optional[int] = 1):
-    _dict = dict(request._query_params)
-    # conditions = {'main_router':'comodules'}
-    conditions = {}
-
-    try :
-        conditions[_dict['key_name']] = {'$regex': _dict["word"] }
-    except:
-        pass
-
-    comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
-                                                                     ,page_number
-                                                                     ,5)
-    comodule = {}
-    if comodules_list:
-        comodule = comodules_list[0]
-
    # 연관 관계 리스트
     comodules_unique_list = await unique_comodules()
     context={'request':request
-            , 'comodule' : comodule
-            , 'comodules' : comodules_list
             , 'comodules_unique' : comodules_unique_list
-            , 'pagination' : pagination
             }
     return context

@@ -74,41 +74,19 @@
   </div>
   <div class="col-4">
     <div class="col-12">
-      <div class="m-2 d-flex justify-content-end">
-        <input type="text" class="form-control form-control-sm me-2" id="search_input" placeholder="Enter a search">
-        <button type="submit" class="btn btn-sm btn-secondary" id="more_comodules_list">
-          Search <span class="badge bg-success" id="total_records">{{pagination.total_records}}</span>
+      <div class="input-group m-2">
+        <input type="text" class="form-control form-control-sm" id="search_input" placeholder="Enter a search"
+          aria-label="Enter a search" aria-describedby="button-addon2">
+        <button class="btn btn-sm btn-secondary" type="submit" id="button-search">
+          Search <span class="badge bg-success" id="total_records"></span>
         </button>
       </div>
       <nav aria-label="Page navigation" id="comodules_list_pagination">
         <ul class="pagination pagination-sm justify-content-center">
-          <li class="page-item {{ '' if pagination.has_previous_page else 'disabled' }}">
-            <button type="submit" class="page-link" value="{{pagination.previous_page}}">Prev</button>
-          </li>
-          {% for page_num in pagination.current_page_range %}
-          <li class="page-item {{ 'active' if page_num == pagination.current_page else '' }}">
-            <button type="submit" class="page-link" value="{{pagination.current_page}}">
-              {{page_num}}
-            </button>
-          </li>
-          {% endfor %}
-          <li class="page-item {{ '' if pagination.has_next_page else 'disabled' }}">
-            <button type="submit" class="page-link" value="{{pagination.next_page}}">Next</button>
-          </li>
         </ul>
       </nav>
       <ul class="list-group">
-        {% for comodule in comodules %}
-        <li class="list-group-item lh-sm" data-id="{{comodule.id}}">
-          <div class="max-width-td">
-            <h6 class="my-0">{{comodule.title}}</h6>
-            <div class="text-body-secondary small">
-              {{comodule.language_name}}
-              {{comodule.framework_name}}
-              {{comodule.database_name}}
-            </div>
-        </li>
-        {% endfor %}
+
       </ul>
     </div>
   </div>
@@ -116,60 +94,14 @@
     <div class="col-12">
       <form>
         <div class="m-2 d-flex justify-content-between">
-          <input type="hidden" name="refer_comodules_id" value="{{ comodule.id }}">
-          <button class="btn btn-sm btn-success" formaction="/communities/form">New Community</button>
-          <button class="btn btn-sm btn-danger" formaction="/template/form">New</button>
+          <input type="hidden" name="refer_comodules_id" id="refer_comodules_id" value="">
+          <input type="hidden" name="visibility" id="visibility" value="">
+          <button class="btn btn-sm btn-success" formaction="/communities/form" id="refer_comodules_button" disabled>New
+            Community</button>
+          <button class="btn btn-sm btn-danger" formaction="/comodules/form">New</button>
         </div>
       </form>
-      <div class="card card-body" id="detail">
-        <div class="row">
-          <div class="col-5 fw-bold">Main Service</div>
-          <div class="col-7">{{ comodule.title }}</div>
-        </div>
-        <div class="row">
-          <div class="col-5 fw-bold">Language</div>
-          <div class="col-7">{{ comodule.language_name }}</div>
-        </div>
-        <div class="row">
-          <div class="col-5 fw-bold">Framework</div>
-          <div class="col-7">{{ comodule.framework_name }}</div>
-        </div>
-        <div class="row">
-          <div class="col-5 fw-bold">Database</div>
-          <div class="col-7">{{ comodule.database_name }}</div>
-        </div>
-        <div class="row py-2">
-          <div class="col-5 fw-bold">Docker Files</div>
-          <div class="col-7">
-            <div>
-              <a href="/comodules/download/{{ comodule.id }}" class="btn btn-sm btn-info" id="download_all">
-                zip <i class="bi bi-cloud-download"></i>
-              </a>
-            </div>
-            {#
-            <div>
-              {% for link in comodule.docker_files_links %}
-              <div>
-                <a href="{{ link }}" class="download-link">{{ link.split('/')[-1] }}</a>
-              </div>
-              {% endfor %}
-            </div>
-            #}
-          </div>
-        </div>
-        <!-- <div class="row py-2">
-          <div class="col-5 fw-bold">Packages</div>
-          <div class="col-7">
-            {{ comodule.required_packages_versions }}
-          </div>
-        </div> -->
-        <div class="row">
-          <div class="col-5 fw-bold">Enroll</div>
-          <div class="col-7">
-            {{ comodule.create_user_name | default("", True)}}
-          </div>
-        </div>
-      </div>
+      <div class="card card-body" id="detail"></div>
     </div>
   </div>
 </div>
@@ -178,53 +110,6 @@
 {% endblock %} {% block foot_javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Event delegation on the parent list
-    document.querySelector('.list-group').addEventListener('click', function (event) {
-      let target = event.target;
-      while (target != this && !target.matches('.list-group-item')) {
-        target = target.parentNode;
-      }
-      if (target.matches('.list-group-item')) {
-        const comoduleId = target.getAttribute('data-id');
-        fetchComoduleDetails(comoduleId);
-      }
-    });
-
-    // 'more_comodules_list' 버튼에 대한 클릭 이벤트 리스너
-    document.querySelector('#more_comodules_list').addEventListener('click', function (event) {
-      event.preventDefault(); // 기본 제출 동작 방지
-      fetchComodulesData();
-    });
-
-    // 'comodules_list_pagination' 내의 페이지 버튼에 대한 클릭 이벤트 리스너
-    document.querySelector('#comodules_list_pagination').addEventListener('click', function (event) {
-      const target = event.target;
-      if (target.tagName === 'BUTTON' && target.type === 'submit') {
-        event.preventDefault(); // 기본 제출 동작 방지
-        const pageNum = event.target.getAttribute('data-page'); // 버튼에 페이지 번호를 속성으로 저장해야 함
-        fetchComodulesData(pageNum); // 페이지 번호를 기반으로 데이터 재조회
-      }
-    });
-
-    let buttons = document.querySelectorAll("#interactiveTable button");
-
-    buttons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        // Determine the type of button clicked based on a data attribute or its position (language, framework, database)
-        // For simplicity, this example assumes buttons are distinguishable by their content
-        // A better approach would be to use custom data attributes (data-type="language") in your HTML
-        const buttonType = button.className.includes('language') ? 'language' :
-          button.className.includes('framework') ? 'framework' : 'database';
-        button.classList.toggle("btn-light");
-        button.classList.toggle("btn-primary");
-        // toggleRelatedButtons(this, buttonType);
-        // Update the list after state change
-        fetchComodulesData();
-      });
-    });
-  });
-
   function fetchComoduleDetails(comoduleId) {
     fetch(`/comodules/v1/${comoduleId}`)
       .then(response => response.json())
@@ -235,15 +120,28 @@
       .catch(error => console.error('Error fetching comodule details:', error));
   }
 
-  function updateComoduleDetails(data) {
+  function updateComoduleDetails(data = null) {
+    const referComodulesButton = document.querySelector('#refer_comodules_button');
+    if (referComodulesButton) {
+        referComodulesButton.disabled = true; // 버튼을 활성화합니다.
+    }
+    
     // HTML 요소 선택
     const cardBody = document.querySelector('#detail');
 
     // 새로운 컨텐츠 생성
-    const newContent = `
+    let newContent = '';
+
+    if (data) {
+      newContent = `
+          <div class="row">
+            <div class="col-5 fw-bold">visibility</div>
+            <div class="col-7">${data.visibility}</div>
+          </div>
           <div class="row">
             <div class="col-5 fw-bold">Main Service</div>
             <div class="col-7">${data.title}</div>
+          </div>
           </div>
           <div class="row">
             <div class="col-5 fw-bold">Language</div>
@@ -261,7 +159,7 @@
             <div class="col-5 fw-bold">Docker Files</div>
             <div class="col-7">
               <div>
-                <a href="/comodules/download/${data._id}" class="btn btn-sm btn-info" id="download_all">
+                <a href="/comodules/download/${data.id}" class="btn btn-sm btn-info" id="download_all">
                   zip <i class="bi bi-cloud-download"></i>
                 </a>
               </div>
@@ -270,7 +168,6 @@
           <!-- <div class="row py-2">
             <div class="col-5 fw-bold">Packages</div>
             <div class="col-7">
-              ${data.required_packages_versions}
             </div>
           </div> -->
           <div class="row">
@@ -278,9 +175,16 @@
             <div class="col-7">
               ${data.create_user_name ? data.create_user_name : ""}
             </div>
-          </div>
-  
-    `;
+          </div>`;
+
+      const refer_comodules_id = document.querySelector('#refer_comodules_id');
+      const visibility = document.querySelector('#visibility');
+      if (refer_comodules_id) {
+        refer_comodules_id.value = data.id;
+        visibility.value = data.visibility;
+        referComodulesButton.disabled = false; // 버튼을 활성화합니다.        
+      }
+    }
 
     // 기존 컨텐츠를 새로운 컨텐츠로 교체
     cardBody.innerHTML = newContent;
@@ -293,7 +197,7 @@
     const activeFrameworks = Array.from(document.querySelectorAll('.btn.framework.btn-primary')).map(btn => btn.textContent.trim());
     const activeDatabase = Array.from(document.querySelectorAll('.btn.database.btn-primary')).map(btn => btn.textContent.trim());
     // 검색어 가져오기
-    const searchQuery = document.getElementById('search_input').value.trim();
+    const searchQuery = document.querySelector('#search_input').value.trim();
 
     // Construct query parameters
     const queryParams = new URLSearchParams({
@@ -315,6 +219,12 @@
       .then(data => {
         updateComodulesList(data); // .list-group 내용 업데이트
         updatePagination(data.pagination); // #comodules_list_pagination 내용 업데이트
+        let comodule = null
+        if (data.comodules.length > 0) {
+          comodule = data.comodules[0];
+        }
+
+        updateComoduleDetails(comodule);
 
         const total_records = document.querySelector('#total_records');
         total_records.innerHTML = data.total_records;
@@ -330,7 +240,7 @@
       listItem.className = 'list-group-item lh-sm';
       listItem.setAttribute('data-id', comodule.id);
       listItem.innerHTML = `
-            <div class="max-width-td">
+            <div class="">
                 <h6 class="my-0">${comodule.title}</h6>
                 <div class="text-body-secondary small">
                     ${comodule.language_name} ${comodule.framework_name} ${comodule.database_name}
@@ -349,21 +259,21 @@
     // 'Prev' 버튼
     const prevLi = document.createElement('li');
     prevLi.className = `page-item ${pagination.has_previous_page ? '' : 'disabled'}`;
-    prevLi.innerHTML = `<button type="submit" class="page-link" valeu="${pagination.previous_page}">Prev</button>`;
+    prevLi.innerHTML = `<button type="submit" class="page-link" value="${pagination.previous_page}">Prev</button>`;
     ul.appendChild(prevLi);
 
     // 현재 페이지 주변의 페이지 번호 버튼들
     pagination.current_page_range.forEach(function (pageNum) {
       const li = document.createElement('li');
       li.className = `page-item ${pageNum === pagination.current_page ? 'active' : ''}`;
-      li.innerHTML = `<button type="submit" class="page-link" valeu="${pagination.pageNum}">${pageNum}</button>`;
+      li.innerHTML = `<button type="submit" class="page-link" value="${pageNum}">${pageNum}</button>`;
       ul.appendChild(li);
     });
 
     // 'Next' 버튼
     const nextLi = document.createElement('li');
     nextLi.className = `page-item ${pagination.has_next_page ? '' : 'disabled'}`;
-    nextLi.innerHTML = `<button type="submit" class="page-link" valeu="${pagination.next_page}">Next</button>`;
+    nextLi.innerHTML = `<button type="submit" class="page-link" value="${pagination.next_page}">Next</button>`;
     ul.appendChild(nextLi);
 
     // 페이지 버튼 클릭 이벤트 리스너 등록
@@ -377,6 +287,63 @@
       });
     });
   }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Event delegation on the parent list
+    document.querySelector('.list-group').addEventListener('click', function (event) {
+      let target = event.target;
+      while (target != this && !target.matches('.list-group-item')) {
+        target = target.parentNode;
+      }
+      if (target.matches('.list-group-item')) {
+        const comoduleId = target.getAttribute('data-id');
+        fetchComoduleDetails(comoduleId);
+      }
+    });
+
+    // 'button-search' 버튼에 대한 클릭 이벤트 리스너
+    document.querySelector('#button-search').addEventListener('click', function (event) {
+      event.preventDefault(); // 기본 제출 동작 방지
+      fetchComodulesData();
+    });
+
+    // 'comodules_list_pagination' 내의 페이지 버튼에 대한 클릭 이벤트 리스너
+    document.querySelector('#comodules_list_pagination').addEventListener('click', function (event) {
+      const target = event.target;
+      if (target.tagName === 'BUTTON' && target.type === 'submit') {
+        event.preventDefault(); // 기본 제출 동작 방지
+        const pageNum = target.value; // 버튼에 페이지 번호 저장해야 함
+        fetchComodulesData(pageNum); // 페이지 번호를 기반으로 데이터 재조회
+      }
+    });
+
+    let buttons = document.querySelectorAll("#interactiveTable button");
+
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        // Determine the type of button clicked based on a data attribute or its position (language, framework, database)
+        // For simplicity, this example assumes buttons are distinguishable by their content
+        // A better approach would be to use custom data attributes (data-type="language") in your HTML
+        const buttonType = button.className.includes('language') ? 'language' :
+          button.className.includes('framework') ? 'framework' : 'database';
+        button.classList.toggle("btn-light");
+        button.classList.toggle("btn-primary");
+        // toggleRelatedButtons(this, buttonType);
+        // Update the list after state change
+        fetchComodulesData();
+      });
+    });
+
+    document.querySelector('#search_input').addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Enter 키에 의한 기본 동작 방지
+        fetchComodulesData();
+      }
+    });
+
+    fetchComodulesData();
+  });
+
 
 </script>
 

@@ -58,7 +58,7 @@ EXCLUDE_PATHS = [
     , '/mains/list'
     , "/devtemplates/list"
     , "/teams/list"
-    , "/comodules/list", '/comodules/v1', '/comodules/r'
+    , "/comodules/main", "/comodules/list", '/comodules/v1', '/comodules/r'
     , "/communities/list", '/communities/r'
     , '/securities'
     # "/docs",   # Swagger 문서
@@ -93,7 +93,7 @@ async def auth_middleware(request: Request, call_next):
         if not path_allowed:
             # Redirect user to a "permission denied" page if they have no access
             # return RedirectResponse(url="/errors/permission-denied")
-            return RedirectResponse(url="/securities/login")
+            return RedirectResponse(url="/securities/login_google")
 
     # Continue with the next middleware or route handler
     response = await call_next(request)
@@ -155,6 +155,7 @@ templates = Jinja2Templates(directory="app/templates/")
 from typing import List, Optional
 @app.get("/")
 async def root(request: Request):
+    # return RedirectResponse(url=f"/comodules/main")
     return RedirectResponse(url=f"/mains/list")
 
 # Error Handler

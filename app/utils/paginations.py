@@ -1,13 +1,13 @@
 from math import ceil
 
 class Paginations:
-    def __init__(self, total_records, current_page
-                 , records_per_page=10, pages_per_block=5):
+    def __init__(self, total_records:int, current_page:int
+                 , records_per_page:int=10, pages_per_block:int=5):
         self.setup_inner_variables(total_records, current_page
                               , records_per_page, pages_per_block)
 
-    def setup_inner_variables(self, total_records, current_page
-                              , records_per_page, pages_per_block):
+    def setup_inner_variables(self, total_records:int, current_page:int
+                              , records_per_page:int, pages_per_block:int):
         self.records_per_page = records_per_page  # 한 페이지 당 레코드 수
         self.pages_per_block = pages_per_block  # 한 블럭 당 페이지 수
         self.total_records = total_records  # 총 레코드 수
@@ -50,7 +50,7 @@ class Paginations:
         return max(ceil(self.total_records / self.records_per_page), 1)
 
     def _calculate_current_block(self):
-        return ceil(self.current_page / self.pages_per_block)
+        return ceil(int(self.current_page) / self.pages_per_block)
 
     def _calculate_start_page(self):
         return (self.current_block - 1) * self.pages_per_block + 1

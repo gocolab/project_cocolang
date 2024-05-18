@@ -73,7 +73,7 @@ async def signin_withsignup(request:Request, user):
     request.state.user = user
     context = await main_list(request)
     # response.set_cookie(key="Authorization", value=f"Bearer {access_token}", httponly=True)
-    response = templates.TemplateResponse(name="main.html"
+    response = templates.TemplateResponse(name="comodules/main.html"
                                     , context=context)
 
     response.set_cookie(key="Authorization", value=f"Bearer {access_token}"
@@ -89,7 +89,7 @@ async def logout(request: Request):
     request.state.user = {}
     context = await main_list(request, page_number=1)
 
-    response = templates.TemplateResponse("main.html"
+    response = templates.TemplateResponse("comodules/main.html"
                                           , context=context)
     response.delete_cookie(key="Authorization")
 

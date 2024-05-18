@@ -128,45 +128,28 @@ async def read(request: Request, comodule_id: str):
         raise HTTPException(status_code=404, detail="CoModule not found")
     return comodule
 
+@router.get("/main/{page_number}")
+@router.get("/main") # 검색 with pagination
+async def main(request: Request, page_number: Optional[int] = 1):
+    context = await comodules_main(request, page_number)
+    return templates.TemplateResponse(name="comodules/main.html"
+                                      , context=context)
+
+from app.utils.comodules import unique_comodules
+async def comodules_main(request: Request, page_number: Optional[int] = 1):
+   # 연관 관계 리스트
+    comodules_unique_list = await unique_comodules()
+    context={'request':request
+            , 'comodules_unique' : comodules_unique_list
+            }
+    return context
+
 @router.get("/v1/list/main")
 # async def get_list(language: List[str] = None, framework: List[str] = None, database: List[str] = None):
 async def get_list(request: Request):
-    _dict = dict(request._query_params)
-    language = _dict.get('language')
-    framework = _dict.get('framework')
-    database = _dict.get('database')
-    search_word = _dict.get('search_word')
-    page_number = _dict.get('page_number')
-
-    # Construct the query
-    # query = {'main_router':"comodules"}
-    query = {}
-
-    if search_word:
-        regex_pattern = search_word
-        query['title'] = {"$regex": regex_pattern, "$options": "i"}
-        query['description'] = {"$regex": regex_pattern, "$options": "i"}
-
-    if language:
-        regex_pattern = "|".join(language.split(','))
-        query['language_name'] = {"$regex": regex_pattern, "$options": "i"}
-    if framework:
-        regex_pattern = "|".join(framework.split(','))
-        query['framework_name'] = {"$regex": regex_pattern, "$options": "i"}
-    if database:
-        regex_pattern = "|".join(database.split(','))
-        query['database_name'] = {"$regex": regex_pattern, "$options": "i"}
-
-    conditions = {}
-    if query:
-        conditions["$and"] = [query]
-
     try:
-        comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions,page_number,5)
-        comodules_dict_list = [comodule.dict() for comodule in comodules_list]
-        return {"comodules":comodules_dict_list
-                , "total_records":pagination.total_records
-                , 'pagination':pagination.to_dict()}
+        context = await main_list(request)
+        return context
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -238,4 +221,63 @@ async def is_activatebyuser(create_user_id, user):
         is_activate = True
     return is_activate
 
+async def main_list(request: Request):
+    conditions, page_number = await main_conditions(request, '')
 
+    try:
+        comodules_list, pagination = await collection_comodule.getsbyconditionswithpagination(conditions
+                                                                                              ,page_number=page_number
+                                                                                              ,records_per_page=5)
+        comodules_dict_list = [comodule.dict() for comodule in comodules_list]
+        return {"comodules":comodules_dict_list
+                , "total_records":pagination.total_records
+                , 'pagination':pagination.to_dict()}
+    except Exception as e:
+        raise Exception(status_code=500, detail=str(e))
+
+async def main_conditions(request: Request, page_number):
+    _dict = dict(request._query_params)
+    language = _dict.get('language')
+    framework = _dict.get('framework')
+    database = _dict.get('database')
+    search_word = _dict.get('search_word')
+    if not page_number:
+        page_number = int(_dict.get('page_number'))
+
+    query = {}
+
+    query['visibility']= "public"
+    # Construct the query
+    if search_word:
+        regex_pattern = search_word
+        query['title'] = {"$regex": regex_pattern, "$options": "i"}
+        query['description'] = {"$regex": regex_pattern, "$options": "i"}
+
+    if language:
+        regex_pattern = "|".join(language.split(','))
+        query['language_name'] = {"$regex": regex_pattern, "$options": "i"}
+    if framework:
+        regex_pattern = "|".join(framework.split(','))
+        query['framework_name'] = {"$regex": regex_pattern, "$options": "i"}
+    if database:
+        regex_pattern = "|".join(database.split(','))
+        query['database_name'] = {"$regex": regex_pattern, "$options": "i"}
+
+    conditions = {}   # public or 
+    condition_list = []
+    # add condition_list
+    if query:
+        condition_list.append(query)
+
+    # add condition_list with login
+    query = {} 
+    if request.state.user:
+        query['create_user_id'] = request.state.user['id']  # visibility is 'private' and own
+    if query:
+        condition_list.append(query)
+
+    # add 'or' conditions   
+    if condition_list:
+        conditions["$or"] = condition_list
+
+    return conditions, page_number

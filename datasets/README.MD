@@ -11,7 +11,7 @@
 ~docker_db$ mongodump --uri "mongodb://cocolabhub_mongodb:27017/project_cocolabhub" --archive=./initial_data.archive
 ~$ docker cp cocolabhub_mongodb:/home/initial_data.archive ./
 ~$ docker cp ./initial_data.archive project_cocolang-fastapi:/apps/project_cocolabhub/datasets
-~$ mongorestore --uri "mongodb://cocolabhub_mongodb:27017/project_cocolabhub" --archive=/apps/project_cocolabhub/datasets/initial_data.archive
+~$ mongorestore --uri "mongodb://cocolabhub_mongodb:27017/project_cocolabhub" --archive=/home/initial_data.archive
 ```
 
 ### real server
