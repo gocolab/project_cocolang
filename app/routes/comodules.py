@@ -244,40 +244,41 @@ async def main_conditions(request: Request, page_number):
     if not page_number:
         page_number = int(_dict.get('page_number'))
 
-    query = {}
+    conditions = {}   # public or 
+    conditions["$and"] = []
 
-    query['visibility']= "public"
+    # group first
+    conditions_first = {}
+    conditions_first["$or"] = []
+    conditions_first["$or"].append({'visibility':"public"})
+    # add condition_list with login
+    if request.state.user:
+        conditions_first["$or"].append({'create_user_id': request.state.user['id']})  # visibility is 'private' and own
+    conditions["$and"].append(conditions_first)
+
     # Construct the query
+    conditions_second = {}
+    conditions_second['$and'] = []
     if search_word:
         regex_pattern = search_word
-        query['title'] = {"$regex": regex_pattern, "$options": "i"}
-        query['description'] = {"$regex": regex_pattern, "$options": "i"}
+        conditions_search_word = {}
+        conditions_search_word['$or'] = []
+        conditions_search_word['$or'].append({'title':{"$regex": regex_pattern, "$options": "i"}})
+        conditions_search_word['$or'].append({'description':{"$regex": regex_pattern, "$options": "i"}})
+        conditions_search_word['$or'].append({'create_user_name':{"$regex": regex_pattern, "$options": "i"}})
+        conditions_second['$and'].append(conditions_search_word)
 
     if language:
         regex_pattern = "|".join(language.split(','))
-        query['language_name'] = {"$regex": regex_pattern, "$options": "i"}
+        conditions_second['$and'].append({'language_name':{"$regex": regex_pattern, "$options": "i"}})
     if framework:
         regex_pattern = "|".join(framework.split(','))
-        query['framework_name'] = {"$regex": regex_pattern, "$options": "i"}
+        conditions_second['$and'].append({'framework_name':{"$regex": regex_pattern, "$options": "i"}})
     if database:
         regex_pattern = "|".join(database.split(','))
-        query['database_name'] = {"$regex": regex_pattern, "$options": "i"}
+        conditions_second['$and'].append({'database_name':{"$regex": regex_pattern, "$options": "i"}})
 
-    conditions = {}   # public or 
-    condition_list = []
-    # add condition_list
-    if query:
-        condition_list.append(query)
-
-    # add condition_list with login
-    query = {} 
-    if request.state.user:
-        query['create_user_id'] = request.state.user['id']  # visibility is 'private' and own
-    if query:
-        condition_list.append(query)
-
-    # add 'or' conditions   
-    if condition_list:
-        conditions["$or"] = condition_list
+    if conditions_second['$and']:
+        conditions["$and"].append(conditions_second)
 
     return conditions, page_number

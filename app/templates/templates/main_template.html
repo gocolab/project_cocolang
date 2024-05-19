@@ -84,13 +84,13 @@
                         #}
                     </ul>
                     <!-- Right menu items -->
-                    <ul class="navbar-nav ms-auto">
-                        {% if request.state.user and "ADMIN" in request.state.user.roles %}
+                    {% if request.state.user and "ADMIN" in request.state.user.roles %}
+                    <ul class="navbar-nav">
                         <!-- Logged in with ADMIN -->
                         <li class="nav-item dropdown">
                             <a class="nav-link menu-item dropdown-toggle" href="#" id="navbarDropdownAdmin"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                AdminMenu
+                                <i class="bi bi-menu-button-wide-fill"></i>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
                                 <li><a class="dropdown-item" href="/users/list">users list</a></li>
@@ -102,8 +102,10 @@
                                 <li><a class="dropdown-item" href="/comodules/list">comodules</a></li>
                             </ul>
                         </li>
-                        {% endif %}
+                    </ul>
+                    {% endif %}
 
+                    <ul class="navbar-nav">
                         {% if request.state.user %}
                         <!-- Logged in -->
                         <li class="nav-item dropdown">
@@ -119,17 +121,22 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li>
                                     <div class="dropdown-item">{{ request.state.user.name }}</div>
+                                    <div class="dropdown-item small">({{ request.state.user.email }})</div>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="/securities/logout">Logout</a></li>
+                                <li><a class="dropdown-item" href="/securities/logout">
+                                    logout
+                                </a></li>
                             </ul>
                         </li>
                         {% else %}
                         <!-- Not logged in -->
                         <li class="nav-item">
-                            <a class="nav-link menu-item" href="/securities/login_google">Login</a>
+                            <a class="nav-link menu-item" href="/securities/login_google">
+                                <i class="bi bi-person-check"></i>s
+                            </a>
                         </li>
                         {% endif %}
                     </ul>

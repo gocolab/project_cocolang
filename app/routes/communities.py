@@ -66,36 +66,30 @@ async def main_conditions(request: Request, page_number):
     if not page_number:
         page_number = int(_dict.get('page_number'))
 
-    query = {}
-    query['visibility']= "public"
+    conditions = {}   # public or 
+    conditions["$and"] = []
+
+    # group first
+    conditions_first = {}
+    conditions_first["$or"] = []
+    conditions_first["$or"].append({'visibility':"public"})
+    # add condition_list with login
+    if request.state.user:
+        conditions_first["$or"].append({'create_user_id': request.state.user['id']})  # visibility is 'private' and own
+    conditions["$and"].append(conditions_first)
+
     # Construct the query
-    query_or = {}
     if search_word:
         regex_pattern = search_word
-        query_or['title'] = {"$regex": regex_pattern, "$options": "i"}
-        query_or['description'] = {"$regex": regex_pattern, "$options": "i"}
-        query_or['create_user_name'] = {"$regex": regex_pattern, "$options": "i"}
-        query['$or'] = [query_or]
-
-    conditions = {}   # public or 
-    condition_list = []
-    # add condition_list
-    if query:
-        condition_list.append(query)
-
-    # add condition_list with login
-    query = {} 
-    if request.state.user:
-        query['create_user_id'] = request.state.user['id']  # visibility is 'private' and own
-    if query:
-        condition_list.append(query)
-
-    # add 'or' conditions   
-    if condition_list:
-        conditions["$or"] = condition_list
+        conditions_second = {}
+        conditions_second["$or"] = []
+        conditions_second["$or"].append({'title':{"$regex": regex_pattern, "$options": "i"}})
+        conditions_second["$or"].append({'description':{"$regex": regex_pattern, "$options": "i"}})
+        conditions_second["$or"].append({'create_user_name':{"$regex": regex_pattern, "$options": "i"}})
+        conditions["$and"].append(conditions_second)
 
 # db.communities.find({
-#   '$and': [
+#   '$or': [
 #     {'visibility': 'public'},
 #     {'$or': [
 #       {'title': {'$regex': '리뷰', '$options': 'i'}},

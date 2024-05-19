@@ -61,6 +61,8 @@ Debugging Coding Test
         <th>Activity Type</th>
         <th>Required Level</th>
         <th>Visibility</th>
+        <th>Owner</th>
+        {# <th>Desc</th> #}
       </tr>
     </thead>
     <tbody>
@@ -73,6 +75,8 @@ Debugging Coding Test
         <td>{{community.activity_type}}</td>
         <td>lv. {{community.needs_level}}</td>
         <td>{{community.visibility}}</td>
+        <td>{{community.create_user_name}}</td>
+        {# <td>{{community.description}}</td> #}
       </tr>
       {% endfor %}
     </tbody>
