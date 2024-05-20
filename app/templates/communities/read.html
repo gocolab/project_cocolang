@@ -4,7 +4,7 @@
 
 {% block customize_css %}
 <!-- Include Quill stylesheet -->
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 <style>
     .quill-editor {
         height: 10rem;
@@ -13,11 +13,27 @@
 {% endblock %}
 
 {% block main_container %}
-<form action="" method="post">
-    <div class="row gap-3 px-5">
+<div class="row px-5">
+    <div class="card card-body col-3" id="detail">
+        <div class="col-5 fw-bold">visibility / Level</div>
+        <div class="col-7">{{comodule.visibility}} / lv.{{comodule.level}}</div>
+        <div class="col-5 fw-bold">Main Service</div>
+        <div class="col-7">{{comodule.title}}</div>
+        <div class="col-5 fw-bold">Language</div>
+        <div class="col-7">{{comodule.language_name}}</div>
+        <div class="col-5 fw-bold">Framework</div>
+        <div class="col-7">{{comodule.framework_name}}</div>
+        <div class="col-5 fw-bold">Database</div>
+        <div class="col-7">{{comodule.database_name}}</div>
+        <div class="col-5 fw-bold">Owner</div>
+        <div class="col-7">
+            {{comodule.create_user_name}}
+        </div>
+    </div>
+    <div class="col-9 row gy-2 px-5">
         <!-- Visibility -->
         <div class="form-group col-12 row">
-            <label class="form-label col-2">Visibility:</label>
+            <label class="form-label col-2">Visibility</label>
             <div class="col-3">
                 <p>{{ 'Public' if community.visibility=='public' else 'Private' }}</p>
             </div>
@@ -25,80 +41,87 @@
 
         <!-- Needs Level -->
         <div class="form-group col-2">
-            <label class="form-label">Needs Level:</label>
+            <label class="form-label">Needs Level</label>
             <p>Lv. {{ community.needs_level }}</p>
         </div>
 
-        <!-- Recruitment Period -->
-        <div class="form-group col-3">
-            <label class="form-label">Recruitment Period Start:</label>
-            <p>{{ community.recruitment_period_start.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_start else '' }}</p>
+        <!-- Recruitment -->
+        <div class="form-group col-4">
+            <label class="form-label">Recruitment Start</label>
+            <p>{{ community.recruitment_period_start.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_start
+                else '' }}</p>
         </div>
-        <div class="form-group col-3">
-            <label class="form-label">Recruitment Period End:</label>
-            <p>{{ community.recruitment_period_end.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_end else '' }}</p>
+        <div class="form-group col-4">
+            <label class="form-label">Recruitment End</label>
+            <p>{{ community.recruitment_period_end.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_end else
+                '' }}</p>
         </div>
 
         <!-- Recruitment Number -->
         <div class="form-group col-2">
-            <label class="form-label">Recruit Numbers:</label>
+            <label class="form-label">Recruit Numbers</label>
             <p>{{ community.recruitment_number if community.recruitment_number else 10 }}</p>
         </div>
 
         <!-- Activity Type -->
         <div class="form-group col-2">
-            <label class="form-label">Activity Type:</label>
+            <label class="form-label">Activity Type</label>
             <p>{{ community.activity_type }}</p>
         </div>
 
-        <!-- Activity Period -->
-        <div class="form-group col-3">
-            <label class="form-label">Activity Period Start:</label>
-            <p>{{ community.activity_period_start.strftime('%Y-%m-%d %H:%M') if community.activity_period_start else now.strftime('%Y-%m-%d %H:%M') }}</p>
+        <!-- Activity -->
+        <div class="form-group col-4">
+            <label class="form-label">Activity Start</label>
+            <p>{{ community.activity_period_start.strftime('%Y-%m-%d %H:%M') if community.activity_period_start else
+                now.strftime('%Y-%m-%d %H:%M') }}</p>
         </div>
-        <div class="form-group col-3">
-            <label class="form-label">Activity Period End:</label>
-            <p>{{ community.activity_period_end.strftime('%Y-%m-%d %H:%M') if community.activity_period_end else '' }}</p>
+        <div class="form-group col-4">
+            <label class="form-label">Activity End</label>
+            <p>{{ community.activity_period_end.strftime('%Y-%m-%d %H:%M') if community.activity_period_end else '' }}
+            </p>
         </div>
 
         <!-- Title -->
         <div class="form-group col-12">
-            <label class="form-label">Title:</label>
+            <label class="form-label">Title</label>
             <p>{{community.title}}</p>
         </div>
 
         <!-- Description -->
         <div class="form-group col-12">
-            <label class="form-label">Description:</label>
+            <label class="form-label">Description</label>
             <div id="description_delta" class="quill-editor"></div>
         </div>
-        
+
         <!-- Buttons -->
         <div class="col-12 d-flex justify-content-end">
             <div class="form-group">
-                {% if (request.state.user.id == community.create_user_id) or "ADMIN" in request.state.user.roles %}
-                <button type="submit" class="btn btn-primary" formaction="/communities/update/{{ community.id }}"
-                    formmethod="get">
-                    Change
-                </button>
-                <button type="submit" class="btn btn-danger" formaction="/communities/{{ community.id }}"
-                    formmethod="post">
-                    Delete
-                </button>
-                {% endif %}
-                <a class="btn btn-primary" href="/communities/list">
-                    List
-                </a>
+                <form action="" method="post">
+
+                    {% if (request.state.user.id == community.create_user_id) or "ADMIN" in request.state.user.roles %}
+                    <button type="submit" class="btn btn-primary" formaction="/communities/update/{{ community.id }}"
+                        formmethod="get">
+                        Change
+                    </button>
+                    <button type="submit" class="btn btn-danger" formaction="/communities/{{ community.id }}"
+                        formmethod="post">
+                        Delete
+                    </button>
+                    {% endif %}
+                    <a class="btn btn-primary" href="/communities/list">
+                        List
+                    </a>
+                </form>
             </div>
         </div>
     </div>
-</form>
+</div>
 
 
 {% endblock %}
 {% block foot_javascripts %}
 <!-- Include Quill library -->
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -110,15 +133,10 @@
             }
         });
 
-    let deltaObject = JSON.parse({{ community.description | tojson }});
-    quillDescription.setContents(deltaObject);
-    
-    let downloadLink = document.querySelector('#download_all');
+        let deltaObject = {{ community.description | tojson | safe }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
 
-    downloadLink.addEventListener('click', function (e) {
-        e.preventDefault(); // 기본 링크 동작 방지
-        window.location.href = downloadLink.getAttribute('href'); // 파일 다운로드 시작
-        });
+        deltaObject = JSON.parse(deltaObject);
+        quillDescription.setContents(deltaObject);
     });
 </script>
 {% endblock %}

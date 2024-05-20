@@ -1,13 +1,17 @@
 from typing import Optional
 from beanie import Document
-
+from pydantic import BaseModel, HttpUrl, Field
+from datetime import datetime
 class CommonCode(Document):
     code_category: Optional[str] = None
     code_classification: Optional[str] = None
-    order: Optional[int] = None
+    order: Optional[int] = 1
     name: Optional[str] = None
     description: Optional[str] = None
     conformed: Optional[bool] = False   # 외부 의한 입력 시 사용 여부 판단 후 사용
+    create_date: datetime = Field(default_factory=datetime.now)
+    create_user_id:Optional[str] = None
+    create_user_name:Optional[str] = None
 
     class Settings:
         name = "common_codes"

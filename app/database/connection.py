@@ -92,16 +92,12 @@ class Database:
     # column 값으로 여러 Documents 가져오기
     async def getsbyconditions(self, conditions:dict = {}) -> [Any]:
         documents = await self.model.find(conditions).to_list()  # find({})
-        if documents:
-            return documents
-        return False    
+        return documents    
 
     # column 값으로 aggregate해 여러 Documents 가져오기
     async def aggregatebyconditions(self, conditions:dict) -> [Any]:
         documents = await self.model.aggregate(conditions).to_list()  # find({})
-        if documents:
-            return documents
-        return False    
+        return documents    
 
     # column 값으로 여러 Documents with pagination 가져오기
     async def getsbyconditionswithpagination(self

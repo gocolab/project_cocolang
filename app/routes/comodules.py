@@ -10,6 +10,8 @@ from app.models.users import User
 router = APIRouter(tags=["CoModules"])
 templates = Jinja2Templates(directory="app/templates/")
 
+from app.models.common_codes import CommonCode
+collection_common_codes = Database(CommonCode)
 # Assuming Database class and CoModule model are defined appropriately
 collection_comodule = Database(CoModule)
 
@@ -50,11 +52,59 @@ async def create(request: Request):
 
     comodule = CoModule(**comodule_data)
     result_id = await collection_comodule.save(comodule)
+    insert_common_codes_id = await conformed_comodule_name(comodule_data)
 
     context = await comodules_main(request)
     return templates.TemplateResponse("comodules/main.html"
                                       , context=context)
 
+# common_codes에 등록된 packages name 관리
+async def conformed_comodule_name(data):
+    """
+    Update MongoDB collection with new values if they do not exist.
+
+    :param data: Dictionary with 'language_name', 'framework_name', and 'database_name'.
+    :param collection: MongoDB collection object.
+    """
+    # Function to split and clean up the input values
+    def parse_values(values):
+        return [v.strip() for v in values.split('\r\n')]
+
+    # Extract and parse values from the input data
+    language_names = parse_values(data.get('language_name', ''))
+    framework_names = parse_values(data.get('framework_name', ''))
+    database_names = parse_values(data.get('database_name', ''))
+
+    # Create a mapping for the category and classification
+    classifications = {
+        'Languages': language_names,
+        'Frameworks': framework_names,
+        'Databases': database_names
+    }
+
+    insert_common_codes_id = []
+    for classification, values in classifications.items():
+        for value in values:
+            # Extract the name from the value, e.g., "Python(3.11)" -> "Python"
+            name = re.split(r'\s*\(.*\)', value)[0]
+
+            # Create a regular expression pattern for the name
+            # pattern = re.compile(re.escape(name), re.IGNORECASE)
+
+            # Check if the name exists in the collection
+            query = {"code_category": "comodules", "code_classification": classification, "name": {"$regex": name, "$options": "i"}}
+            if not await collection_common_codes.getsbyconditions(query):
+                # Insert the value if it doesn't exist
+                commoncode = CommonCode(
+                    code_category="comodules",
+                    code_classification=classification,
+                    name=name,
+                    create_user_id=data.get('create_user_id'),  # Add user ID if necessary
+                    create_user_name=data.get('create_user_name')  # Add user name if necessary
+                )
+                result_id = await collection_common_codes.save(commoncode)
+                insert_common_codes_id.append(result_id)
+    return insert_common_codes_id                
 
 @router.get("/list/{page_number}")
 @router.get("/list") # 검색 with pagination
@@ -101,8 +151,13 @@ async def update(request: Request, comodule_id: str):
     comodule = await collection_comodule.get(comodule_id)
     if comodule:
         comodule_data = dict(await request.form())
+        user = request.state.user
+        comodule_data["create_user_id"] = user['id']
+        comodule_data["create_user_name"] = user['name']
+
         _model = CoModule(**comodule_data)
         result = await collection_comodule.update(comodule_id, _model)
+        insert_common_codes_id = await conformed_comodule_name(comodule_data)
         context = await comodules_list(request)
         return templates.TemplateResponse("comodules/list.html"
                                           , context=context)

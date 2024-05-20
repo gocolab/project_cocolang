@@ -3,7 +3,7 @@
 {% block title %}community Details{% endblock %}
 {% block customize_css %}
 <!-- Include Quill stylesheet -->
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 <style>
     .quill-editor {
         height: 10rem;
@@ -16,27 +16,43 @@
 {% endblock %}
 
 {% block main_container %}
-<form action="" method="post" class="needs-validation" novalidate>
-    <input type="hidden" name="refer_comodules_id" value="{{community.refer_comodules_id}}">
-    <div class="row gap-3 px-5">
+<div class="row px-5">
+    <div class="card card-body col-3" id="detail">
+        <div class="col-5 fw-bold">visibility / Level</div>
+        <div class="col-7">{{comodule.visibility}} / lv.{{comodule.level}}</div>
+        <div class="col-5 fw-bold">Main Service</div>
+        <div class="col-7">{{comodule.title}}</div>
+        <div class="col-5 fw-bold">Language</div>
+        <div class="col-7">{{comodule.language_name}}</div>
+        <div class="col-5 fw-bold">Framework</div>
+        <div class="col-7">{{comodule.framework_name}}</div>
+        <div class="col-5 fw-bold">Database</div>
+        <div class="col-7">{{comodule.database_name}}</div>
+        <div class="col-5 fw-bold">Owner</div>
+        <div class="col-7">
+            {{comodule.create_user_name}}
+        </div>
+    </div>
+    <form class="col-9 row gy-2" action="" method="post" class="needs-validation" novalidate>
         <!-- Visibility -->
         <div class="form-group col-12 row">
-            <label class="form-label col-2">Share way:</label>
+            <label class="form-label col-2">Share way</label>
             <div class="col-3">
+                <input type="hidden" name="refer_comodules_id" value="{{community.refer_comodules_id}}">
                 <input type="radio" id="visibilityPublic" name="visibility" value="public" class="" {{ 'checked' if
                     community.visibility=='public' else '' }}>
                 <label for="visibilityPublic" class="">Public</label>
             </div>
             <div class="col-3">
-                <input type="radio" id="visibilityPrivate" name="visibility" value="private" class="" {{ 'checked'
-                    if community.visibility=='private' else '' }}>
+                <input type="radio" id="visibilityPrivate" name="visibility" value="private" class="" {{ 'checked' if
+                    community.visibility=='private' else '' }}>
                 <label for="visibilityPrivate">Private</label>
             </div>
         </div>
 
         <!-- Needs Level -->
         <div class="form-group col-2">
-            <label class="form-label">Needs Level:</label>
+            <label class="form-label">Needs Level</label>
             <select class="form-select" name="needs_level">
                 <option value="0" {{ 'selected' if community.needs_level=='0' else '' }}>
                     Lv. 0</option>
@@ -51,15 +67,15 @@
         </div>
 
         <!-- Recruitment Period -->
-        <div class="form-group col-3">
-            <label for="recruitment_period_start" class="form-label">Recruitment Period Start:</label>
+        <div class="form-group col-4">
+            <label for="recruitment_period_start" class="form-label">Recruitment Start</label>
             <input type="datetime-local" class="form-control" id="recruitment_period_start"
                 name="recruitment_period_start"
                 value="{{ community.recruitment_period_start.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_start else '' }}"
                 required>
         </div>
-        <div class="form-group col-3">
-            <label for="recruitment_period_end" class="form-label">Recruitment Period End:</label>
+        <div class="form-group col-4">
+            <label for="recruitment_period_end" class="form-label">Recruitment End</label>
             <input type="datetime-local" class="form-control" id="recruitment_period_end" name="recruitment_period_end"
                 value="{{ community.recruitment_period_end.strftime('%Y-%m-%d %H:%M') if community.recruitment_period_end else '' }}"
                 required>
@@ -67,33 +83,34 @@
 
         <!-- Recruitment Number -->
         <div class="form-group col-2">
-            <label for="recruitment_number" class="form-label">Recruit Numbers:</label>
+            <label for="recruitment_number" class="form-label">Numbers</label>
             <input type="number" class="form-control" id="recruitment_number" name="recruitment_number"
                 value="{{ community.recruitment_number if community.recruitment_number else 10 }}" required>
         </div>
 
         <!-- Activity Type -->
         <div class="form-group col-2">
-            <label for="activity_type" class="form-label">Activity Type:</label>
+            <label for="activity_type" class="form-label">Activity Type</label>
             <select class="form-select" id="activity_type" name="activity_type" required>
-                <option value="Code Review" {{ 'selected' if community.activity_type=='Code Review' }}>Code Review
+                <option value="CodeReview" {{ 'selected' if community.activity_type=='Code Review' }}>Code Review
                 </option>
-                <option value="Coding Test" {{ 'selected' if community.activity_type=='Coding Test' }}>Coding Test
+                <option value="CodingTest" {{ 'selected' if community.activity_type=='Coding Test' }}>Coding Test
                 </option>
-                <option value="Team Project" {{ 'selected' if community.activity_type=='Team Project' }}>Team Project
+                <option value="TeamProject" {{ 'selected' if community.activity_type=='Team Project' }}>Team
+                    Project
                 </option>
             </select>
         </div>
 
         <!-- Activity Period -->
-        <div class="form-group col-3">
-            <label for="activity_period_start" class="form-label">Activity Period Start:</label>
+        <div class="form-group col-4">
+            <label for="activity_period_start" class="form-label">Activity Start</label>
             <input type="datetime-local" class="form-control" id="activity_period_start" name="activity_period_start"
                 value="{{ community.activity_period_start.strftime('%Y-%m-%d %H:%M') if community.activity_period_start else now.strftime('%Y-%m-%d %H:%M') }}"
                 required>
         </div>
-        <div class="form-group col-3">
-            <label for="activity_period_end" class="form-label">Activity Period End:</label>
+        <div class="form-group col-4">
+            <label for="activity_period_end" class="form-label">Activity End</label>
             <input type="datetime-local" class="form-control" id="activity_period_end" name="activity_period_end"
                 value="{{ community.activity_period_end.strftime('%Y-%m-%d %H:%M') if community.activity_period_end else '' }}"
                 required>
@@ -101,20 +118,20 @@
 
         <!-- Title -->
         <div class="form-group col-12">
-            <label for="title" class="form-label">Title:</label>
+            <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title" value="{{community.title}}" required>
         </div>
 
         <!-- Description -->
         <div class="form-group col-12">
-            <label class="form-label">Description:</label>
+            <label class="form-label">Description</label>
             <div id="description_delta" class="quill-editor"></div>
             <input type="hidden" name="description" id="description">
         </div>
 
-        <div class="col-12 d-flex justify-content-end">
-            <input type="hidden" name="main_router" value="{{main_router}}">
+        <div class="form-group col-12 d-flex justify-content-end">
             <div class="form-group">
+                <input type="hidden" name="main_router" value="{{main_router}}">
                 {% if community.id or (community.id and "ADMIN" in request.state.user.roles) %}
                 <button type="submit" class="btn btn-danger" formaction="/communities/update/{{community.id}}">
                     Update
@@ -129,29 +146,29 @@
                 </button>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 
-{% endblock %}
+    {% endblock %}
 
-{% block foot_javascripts %}
-<!-- Include Quill library -->
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.js"></script>
+    {% block foot_javascripts %}
+    <!-- Include Quill library -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let deltaObject = {{ community.description if community.description else '{}' | tojson}}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let deltaObject = {{ community.description | tojson | safe if community.description else "{}" }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
 
         // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
         let quillSettings = {
             theme: 'snow'
         };
 
-        deltaObject = JSON.parse(deltaObject);
-
         let quillDescription = new Quill('#description_delta', quillSettings);
         // Delta 값을 편집기에 적용
-        quillDescription.setContents(deltaObject);
+        if (deltaObject){
+            deltaObject = JSON.parse(deltaObject);
+            quillDescription.setContents(deltaObject);
+        }
 
         // Submit handler
         let form = document.querySelector('form');
@@ -162,6 +179,6 @@
         };
 
     });
-</script>
+    </script>
 
-{% endblock %}
+    {% endblock %}

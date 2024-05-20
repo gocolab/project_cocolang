@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Request, HTTPException
 from typing import Optional
 from app.models.communities import Communities  # Communities 모델 import 가정
+from app.models.comodules import CoModule
 from app.database.connection import Database  # Database 클래스 import 가정
 from fastapi.templating import Jinja2Templates
 
@@ -10,27 +11,33 @@ templates = Jinja2Templates(directory="app/templates/")
 
 # Database 클래스와 Communities 모델을 적절히 정의했다고 가정
 collection_communities = Database(Communities)
+collection_comodules = Database(CoModule)
 
 @router.get("/form")
 @router.get("/update/{community_id}")
 async def form(request: Request, community_id: str = None):
     community = {}
+
     if community_id is not None:
         community = await collection_communities.get(community_id)
         if community is None:
             raise HTTPException(status_code=404, detail="Community not found")
+        refer_comodules_id = community.refer_comodules_id
     else :
         _dict = dict(request.query_params)
-        community['refer_comodules_id'] = _dict['refer_comodules_id']
+        refer_comodules_id = _dict['refer_comodules_id']
+        community['refer_comodules_id'] = refer_comodules_id
         community['visibility'] = _dict['visibility']
         community['recruitment_period_start'] = datetime.now()
         community['recruitment_period_end'] = datetime.now() + timedelta(days=6)
         community['activity_period_start'] = datetime.now() + timedelta(days=7)
         community['activity_period_end'] = datetime.now() + timedelta(days=21)
 
+    comodule = await collection_comodules.get(refer_comodules_id)
     return templates.TemplateResponse(name="communities/form.html",
-                                      context={'request': request,
-                                               'community': community})
+                                      context={'request': request
+                                               , 'community': community
+                                               , 'comodule':comodule})
 
 @router.post("/insert")
 async def create(request: Request):
@@ -62,9 +69,9 @@ async def main_conditions(request: Request, page_number):
     _dict = dict(request._query_params)
     search_word = ''
     if _dict:
-        search_word = _dict.get('search_word').strip()
+        search_word = _dict.get('search_word', '').strip()
     if not page_number:
-        page_number = int(_dict.get('page_number'))
+        page_number = int(_dict.get('page_number', 1))
 
     conditions = {}   # public or 
     conditions["$and"] = []
@@ -107,9 +114,12 @@ async def read(request: Request, community_id: str = None):
     if community is None:
         raise HTTPException(status_code=404, detail="Community not found")
 
+    comodule = await collection_comodules.get(community.refer_comodules_id)
+
     return templates.TemplateResponse("communities/read.html",
-                                      {"request": request,
-                                       "community": community})
+                                      {"request": request
+                                       , "community": community
+                                       , 'comodule':comodule})
 
 @router.post("/update/{community_id}")
 async def update(request: Request, community_id: str):

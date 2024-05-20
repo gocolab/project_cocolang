@@ -4,14 +4,14 @@ from app.database.connection import Database
 from app.models.common_codes import CommonCode
 collection_common_codes = Database(CommonCode)
 
-async def unique_comodules():
+async def unique_comodules(conformed:bool=True):
 
     # Initialize sets for tracking uniqueness
     unique_frameworks = []
     unique_languages = []
     unique_database = []
 
-    conditions = {'code_category':'comodules'}
+    conditions = {'code_category':'comodules', 'conformed':conformed}
     
     commoncode_list = await collection_common_codes.getsbyconditions(conditions)
 

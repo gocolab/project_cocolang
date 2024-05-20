@@ -3,7 +3,7 @@
 {% block title %}CoModule Details{% endblock %}
 {% block customize_css %}
 <!-- Include Quill stylesheet -->
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.snow.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 <style>
     .quill-editor {
         height: 10rem;
@@ -17,7 +17,7 @@
 
 {% block main_container %}
 <form action="" method="post" class="needs-validation" novalidate>
-    <div class="row gap-3 px-5">
+    <div class="row gap-2 px-5">
         <div class="form-group col-12 row">
             <div class="col-4">
                 <label class="col form-label">Language:</label>
@@ -30,7 +30,7 @@
                 <label class="form-label col" >Framework:</label>
                 <div class="col">
                     <textarea class="form-control quill-editor" name="framework_name" id="framework_name"
-                        placeholder="Jupyyrt Lab&#10;SpringBoot(3.11)">{{comodule.language_name}}</textarea>
+                        placeholder="Jupyter&#10;SpringBoot(3.11)">{{comodule.language_name}}</textarea>
                 </div>
             </div>
             <div class="col-4">
@@ -121,7 +121,7 @@
 
 {% block foot_javascripts %}
 <!-- Include Quill library -->
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-beta.0/dist/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
