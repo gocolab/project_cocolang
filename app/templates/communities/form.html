@@ -155,9 +155,7 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let deltaObject = {{ community.description | tojson | safe if community.description else "{}" }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
-
+    document.addEventListener('DOMContentLoaded', function () {
         // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
         let quillSettings = {
             theme: 'snow'
@@ -165,6 +163,7 @@
 
         let quillDescription = new Quill('#description_delta', quillSettings);
         // Delta 값을 편집기에 적용
+        let deltaObject = {{ community.description | tojson | safe if community.description else "{}" }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
         if (deltaObject){
             deltaObject = JSON.parse(deltaObject);
             quillDescription.setContents(deltaObject);

@@ -99,10 +99,11 @@
             }
         });
 
-        let deltaObject = JSON.parse({{ comodule.description | tojson }});
+        let deltaObject = {{ comodule.description | tojson | safe }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
+        deltaObject = JSON.parse(deltaObject);
         quillDescription.setContents(deltaObject);
-        let downloadLink = document.querySelector('#download_all');
 
+        let downloadLink = document.querySelector('#download_all');
         downloadLink.addEventListener('click', function (e) {
             e.preventDefault(); // 기본 링크 동작 방지
             window.location.href = downloadLink.getAttribute('href'); // 파일 다운로드 시작

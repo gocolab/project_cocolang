@@ -134,7 +134,6 @@
         });
 
         let deltaObject = {{ community.description | tojson | safe }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
-
         deltaObject = JSON.parse(deltaObject);
         quillDescription.setContents(deltaObject);
     });
