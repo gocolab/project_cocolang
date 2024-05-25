@@ -52,14 +52,14 @@ async def create(request: Request):
 
     comodule = CoModule(**comodule_data)
     result_id = await collection_comodule.save(comodule)
-    insert_common_codes_id = await conformed_comodule_name(comodule_data)
+    insert_common_codes_id = await confirmed_comodule_name(comodule_data)
 
     context = await comodules_main(request)
     return templates.TemplateResponse("comodules/main.html"
                                       , context=context)
 
 # common_codes에 등록된 packages name 관리
-async def conformed_comodule_name(data):
+async def confirmed_comodule_name(data):
     """
     Update MongoDB collection with new values if they do not exist.
 
@@ -157,7 +157,7 @@ async def update(request: Request, comodule_id: str):
 
         _model = CoModule(**comodule_data)
         result = await collection_comodule.update(comodule_id, _model)
-        insert_common_codes_id = await conformed_comodule_name(comodule_data)
+        insert_common_codes_id = await confirmed_comodule_name(comodule_data)
         context = await comodules_list(request)
         return templates.TemplateResponse("comodules/list.html"
                                           , context=context)
