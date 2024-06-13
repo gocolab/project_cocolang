@@ -7,8 +7,7 @@ import time
 
 # Excluded URL paths
 EXCLUDE_PATHS = [
-    "/css", "/images", "/js",
-    "/favicon.ico", "/errors",
+    "/errors",
     '/users/form',
     '/mains/list',
     "/devtemplates/list",
@@ -28,8 +27,16 @@ ROLE_BASED_ACCESS = {
     "ADMIN": ["/admins", '/commoncodes', '/users']
 }
 
+# Paths to static files mounted using app.mount
+STATIC_FILE_PATHS = ["/css", "/images", "/js",
+    "/favicon.ico",]
+
 # Middleware for token verification
 async def auth_middleware(request: Request, call_next):
+    # Check if the request path is a static file path
+    if any(request.url.path.startswith(path) for path in STATIC_FILE_PATHS):
+        return await call_next(request)
+        
     user = await userfromauthenticate(request)
     request.state.user = user
 

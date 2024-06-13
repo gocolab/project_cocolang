@@ -1,3 +1,48 @@
-* {
-    border-style: dotted;
+/* common.css */
+
+.quill-editor {
+    height: 10rem;
+}
+
+textarea::placeholder {
+    white-space: pre-line;
+}
+
+.vertical-lines-table td,
+.vertical-lines-table th {
+    border: none;
+    border-left: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+}
+
+.vertical-lines-table tr:first-child th {
+    border-top: none;
+}
+
+.vertical-lines-table {
+    border-collapse: separate;
+}
+
+.list-group-item:hover {
+    background-color: gainsboro;
+    cursor: pointer;
+}
+
+.max-width-td {
+    max-width: 15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#notification-container>.toast {
+    max-width: none;
+    width: auto;
+}
+
+.td-setup-min-width {
+    max-width: 7rem;
+}
+
+.toast-body {
+    white-space: pre-line;
 }

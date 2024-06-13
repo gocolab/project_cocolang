@@ -4,8 +4,12 @@ from app.middlewares import setup_middlewares
 from app.routers import setup_routers
 from app.database.database import init_db
 from app.error_handlers import setup_error_handlers
+from app.static_files import setup_static_files
 
 app = FastAPI()
+
+# Static files setup
+setup_static_files(app)
 
 # Middleware setup
 setup_middlewares(app)
