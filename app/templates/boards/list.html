@@ -4,26 +4,7 @@ Debugging Coding Test
 {% endblock %}
 
 {% block customize_css %}
-<style>
-  #notification-container>.toast {
-    max-width: none;
-    /* 최대 넓이 제한 없애기 */
-    width: auto;
-    /* 내용에 따라 넓이 자동 조정 */
-  }
-
-  .td-setup-min-width {
-    max-width: 7rem;
-    /* 원하는 최소 넓이 값으로 조정 */
-  }
-
-  .max-width-td {
-    max-width: 15rem; /* 원하는 최대 넓이로 설정 */
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-</style>
+<link href="/css/commons.css" rel="stylesheet" />
 {% endblock %}
 
 {% block main_container %}

@@ -12,12 +12,40 @@
     textarea::placeholder {
         white-space: pre-line;
     }
+
+        .tooltip-custom[data-bs-toggle="tooltip"]::before {
+            content: attr(data-bs-title);
+        }
+
+        .ql-editor {
+            font-size: 1.0rem; /* Set your desired default font size here */
+        }        
 </style>
 {% endblock %}
 
 {% block main_container %}
 <form action="" method="post" class="needs-validation" novalidate>
     <div class="row gap-2 px-5">
+        <div class="col-12 mt-5">
+            <div class="form-group row">
+                <label for="levelSlider" class="form-label col-form-label col-2">Level:</label>
+                <div class="col-10">
+                    <input type="range" class="form-range" id="levelSlider" min="1" max="10" step="1">
+                </div>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+                <span id="value1">1</span>
+                <span id="value2">2</span>
+                <span id="value3" data-bs-toggle="tooltip" data-bs-title="Tooltip for Level 3">3</span>
+                <span id="value4">4</span>
+                <span id="value5">5</span>
+                <span id="value6" data-bs-toggle="tooltip" data-bs-title="Tooltip for Level 6">6</span>
+                <span id="value7">7</span>
+                <span id="value8">8</span>
+                <span id="value9" data-bs-toggle="tooltip" data-bs-title="Tooltip for Level 9">9</span>
+                <span id="value10">10</span>
+            </div>
+        </div>        
         <div class="form-group col-12 row">
             <div class="col-4">
                 <label class="col form-label">Language:</label>
