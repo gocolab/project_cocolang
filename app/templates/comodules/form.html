@@ -4,23 +4,7 @@
 {% block customize_css %}
 <!-- Include Quill stylesheet -->
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-<style>
-    .quill-editor {
-        height: 10rem;
-    }
-
-    textarea::placeholder {
-        white-space: pre-line;
-    }
-
-        .tooltip-custom[data-bs-toggle="tooltip"]::before {
-            content: attr(data-bs-title);
-        }
-
-        .ql-editor {
-            font-size: 1.0rem; /* Set your desired default font size here */
-        }        
-</style>
+<link href="/css/quilleditors.css" rel="stylesheet" />
 {% endblock %}
 
 {% block main_container %}
@@ -153,29 +137,17 @@
 
 <script src="/js/utils.js"></script>
 
+<script src="/js/forms.js" defer></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
-        let quillSettings = {
-            theme: 'snow'
-        };
-        let quillDescription = new Quill('#description_delta', quillSettings);
-        // Delta 값을 편집기에 적용
-        let deltaObject = {{ comodule.description | tojson | safe if comodule.description else "{}" }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
-        if (!isEmptyObject(deltaObject)){
-            deltaObject = JSON.parse(deltaObject);
-            quillDescription.setContents(deltaObject);
-        }
-        quillDescription.setContents(deltaObject);        
+        let deltaObject = {{ comodule.description | tojson | safe if comodule.description else "{}" }};
+        initializeForm(deltaObject);
+    });
+</script>
 
-        // Submit handler
-        let form = document.querySelector('form');
-        form.onsubmit = function (event) {
-            let description_delta = document.querySelector('#description');
-            description_delta.value = JSON.stringify(quillDescription.getContents());
-            return true; // return false to cancel form action
-        };
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
         // JavaScript를 사용한 부트스트랩 검증 활성화
         (function () {
             'use strict'
@@ -197,8 +169,9 @@
                         form.classList.add('was-validated');
                     }, false)
                 })
-        })()
+        })()        
     });
+    
 </script>
 
 {% endblock %}

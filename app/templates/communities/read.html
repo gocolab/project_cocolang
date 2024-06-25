@@ -119,19 +119,13 @@
 <!-- Include Quill library -->
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
+<script src="/js/reads.js" defer></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        let quillDescription = new Quill('#description_delta', {
-            theme: 'snow',
-            readOnly: true, // 읽기 전용 모드 활성화
-            modules: {
-                toolbar: false // 툴바 제거
-            }
-        });
-
-        let deltaObject = {{ community.description | tojson | safe }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
-        deltaObject = JSON.parse(deltaObject);
-        quillDescription.setContents(deltaObject);
+        let deltaObject = {{ community.description | tojson | safe if community.description else "{}" }};
+        initializeRead(deltaObject);
     });
 </script>
+
 {% endblock %}

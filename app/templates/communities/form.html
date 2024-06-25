@@ -4,15 +4,7 @@
 {% block customize_css %}
 <!-- Include Quill stylesheet -->
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
-<style>
-    .quill-editor {
-        height: 10rem;
-    }
-
-    textarea::placeholder {
-        white-space: pre-line;
-    }
-</style>
+<link href="/css/quilleditors.css" rel="stylesheet" />
 {% endblock %}
 
 {% block main_container %}
@@ -154,30 +146,13 @@
     <!-- Include Quill library -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
+    <script src="/js/forms.js" defer></script>
+
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // deltaObject 값이 있으면 readOnly와 modules를 설정하고, 그렇지 않다면 기본 설정을 사용합니다.
-        let quillSettings = {
-            theme: 'snow'
-        };
-
-        let quillDescription = new Quill('#description_delta', quillSettings);
-        // Delta 값을 편집기에 적용
-        let deltaObject = {{ community.description | tojson | safe if community.description else "{}" }}; // 서버 사이드 템플릿으로부터 JSON 문자열을 받아옴
-        if (deltaObject){
-            deltaObject = JSON.parse(deltaObject);
-            quillDescription.setContents(deltaObject);
-        }
-
-        // Submit handler
-        let form = document.querySelector('form');
-        form.onsubmit = function (event) {
-            let description_delta = document.querySelector('#description');
-            description_delta.value = JSON.stringify(quillDescription.getContents());
-            return true; // return false to cancel form action
-        };
-
-    });
+        document.addEventListener('DOMContentLoaded', function () {
+            let deltaObject = {{ community.description | tojson | safe if community.description else "{}" }};
+            initializeForm(deltaObject);
+        });
     </script>
-
+    
     {% endblock %}
